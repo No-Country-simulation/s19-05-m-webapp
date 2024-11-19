@@ -24,6 +24,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "mysql2": "^3.11.4",
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20"
   }
