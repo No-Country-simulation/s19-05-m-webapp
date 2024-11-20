@@ -1,4 +1,10 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Role } from "./Role.entity";
 
 export enum ActiveStatus {
@@ -8,11 +14,8 @@ export enum ActiveStatus {
 
 @Entity() //por aca podemos ponerle "users" si queremos
 export class User {
-  @PrimaryColumn({
-    type: "varchar",
-    length: 100,
-  })
-  id_users!: string;
+  @PrimaryGeneratedColumn()
+  id_users!: number;
 
   @Column({
     type: "varchar",
