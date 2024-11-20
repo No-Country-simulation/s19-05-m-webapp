@@ -6,8 +6,10 @@ export class ProductController {
 
     constructor() {
         this.productService = new ProductService();
+        
         // Enlaza el contexto de los métodos
         this.getProductsWithLimitController = this.getProductsWithLimitController.bind(this);
+        this.getProductByIdController = this.getProductByIdController.bind(this);
     }
 
     async getProductsWithLimitController(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -20,6 +22,27 @@ export class ProductController {
 
             const products = await this.productService.getProductsWithLimit(limit);
             return res.json(products);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getProductByIdController(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { id } = req.params;
+
+            const productId = parseInt(id, 10);
+            if (isNaN(productId) || productId <= 0) {
+                return res.status(400).json({ error: "Invalid product ID" });
+            }
+
+            const product = await this.productService.getProductById(productId);
+
+            if (!product) {
+                return res.status(404).json({ error: "Product not found" });
+            }
+
+            return res.json(product);
         } catch (error) {
             next(error);
         }
