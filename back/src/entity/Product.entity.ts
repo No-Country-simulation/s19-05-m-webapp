@@ -1,32 +1,37 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Platforms } from "./Platforms.entity";
 
 @Entity()
 export class Product {
+
   @PrimaryGeneratedColumn()
   idProduct!: number;
 
-  @Column()
+  @Column({ length: 45 })
   title!: string;
 
   @Column("float")
   price!: number;
 
-  @Column()
+  @Column({ default: true })
   available!: boolean;
 
   @Column()
   description!: string;
   
-  @Column()
+  @Column({ length: 20 })
   type!: string;
   
   @Column()
   image!: string;
   
-  @Column()
+  @Column({ length: 20 })
   genre!: string;
 
-  @Column()
+  @Column("integer")
   stock!: number;
+
+  @OneToMany(() => Platforms, (platform) => platform.product)
+  platforms!: Platforms[];
 
 }
