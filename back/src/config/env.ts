@@ -10,3 +10,4 @@ export const MYSQL_DATABASE = process.env.MYSQL_DATABASE;
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const BASE_URL = process.env.BASE_URL;
+export const SECRET_KEY = process.env.SECRET_KEY;

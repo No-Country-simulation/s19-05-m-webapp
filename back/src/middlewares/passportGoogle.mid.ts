@@ -1,6 +1,8 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL } from "../config/env";
+import { createTokenUtil } from "../utils/token.util";
+import { createHashUtil } from "../utils/hash.util";
 
 passport.use("google", new GoogleStrategy(
     {

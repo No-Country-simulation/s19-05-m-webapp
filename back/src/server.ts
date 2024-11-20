@@ -3,6 +3,7 @@ import morgan from "morgan";
 import express from "express";
 import { errorHandler } from "./middlewares/errorHandler.mid";
 import { pathHandler } from "./middlewares/pathHandler.mid";
+import indexRouter from "./routers/index.router";
 
 const server = express();
 
@@ -13,7 +14,8 @@ server.use(morgan("dev"));
 // Sessions
 
 // Rutas aqui abajo.
-
+server.use("/api", indexRouter);
+// Manejo de errores.
 server.use(errorHandler);
 server.use(pathHandler);
 

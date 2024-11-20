@@ -1,6 +1,6 @@
 import server from "./server";
 import { PORT } from "./config/env";
-/*import { AppDataSource } from "./config/db-config";
+import { AppDataSource } from "./config/db-config";
 
 AppDataSource.initialize()
   .then(() => {
@@ -13,8 +13,9 @@ AppDataSource.initialize()
   .catch(error => {
     console.error('Error during Data Source initialization:', error);
   });
-*/
 
+/*
 server.listen(PORT, () => {
   console.log(`Server ready on port ${PORT}`);
 });
+*/
