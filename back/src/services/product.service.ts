@@ -1,10 +1,10 @@
-import { productRepository } from "../repositories/productRepository";
+import { productRepository } from "../repositories/product.repository";
 
 export class ProductService {
 
     async getProductsWithLimit(limit: number) {
         return await productRepository
-          .createQueryBuilder("product")
+          .createQueryBuilder("products")
           .take(limit) // Limita la cantidad de productos a devolver
           .getMany();
     }

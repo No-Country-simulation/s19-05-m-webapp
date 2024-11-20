@@ -69,7 +69,8 @@ src/
 </br>
 
 ### b) Diagrama de arquitectura
-![]()
+
+![Diagra Base de datos](https://github-production-user-asset-6210df.s3.amazonaws.com/53066396/388136896-8283b137-af13-4eb9-b9e4-4bfb4bd76ae0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20241120%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241120T185820Z&X-Amz-Expires=300&X-Amz-Signature=a1b55092996c8a5fd1db685761ebcbfdb9dd9f49d9d8c13d66d188aa65b480a7&X-Amz-SignedHeaders=host)
 
 </br>
 

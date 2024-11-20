@@ -9,12 +9,13 @@ const server = express();
 
 server.use(cors());
 server.use(express.json());
-server.use(express.urlencoded({ extended: true }));
+server.use(express.urlencoded({ extended: true })); // middelware para leer los params
 server.use(morgan("dev"));
 // Sessions
 
 // Rutas aqui abajo.
 server.use("/api", indexRouter);
+
 // Manejo de errores.
 server.use(errorHandler);
 server.use(pathHandler);
