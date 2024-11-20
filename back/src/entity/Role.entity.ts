@@ -6,7 +6,7 @@ export enum RoleName {
   CLIENT = "user", //o cliente
 }
 
-@Entity()
+@Entity() //tambien podemos asignar un nombre diferente
 export class Role {
   @PrimaryGeneratedColumn()
   id_role!: number;

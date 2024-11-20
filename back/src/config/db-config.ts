@@ -6,6 +6,7 @@ import { Product } from "../entity/Product.entity";
 import { User } from "../entity/Users.entity";
 import { Platforms } from "../entity/Platforms.entity";
 import { Role } from "../entity/Role.entity";
+
 config();
 
 export const AppDataSource = new DataSource({

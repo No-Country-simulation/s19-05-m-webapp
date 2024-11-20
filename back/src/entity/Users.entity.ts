@@ -6,7 +6,7 @@ export enum ActiveStatus {
   ACTIVE = 1,
 }
 
-@Entity() //por aca podemos ponerle "users" si precisamos un cambio
+@Entity() //por aca podemos ponerle "users" si queremos
 export class User {
   @PrimaryColumn({
     type: "varchar",
