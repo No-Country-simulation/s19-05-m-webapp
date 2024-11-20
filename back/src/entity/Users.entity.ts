@@ -1,31 +1,49 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Role } from "./Role.entity";
 
-export const enum UserStatus {
-  "active",
-  "inactive",
-  "pending",
+export enum ActiveStatus {
+  INACTIVE = 0,
+  ACTIVE = 1,
 }
 
-@Entity()
+@Entity() //por aca podemos ponerle "users" si precisamos un cambio
 export class User {
-  @PrimaryGeneratedColumn()
-  userId!: string;
+  @PrimaryColumn({
+    type: "varchar",
+    length: 100,
+  })
+  id_users!: string;
 
-  @Column()
+  @Column({
+    type: "varchar",
+    length: 45,
+  })
   name!: string;
 
-  @Column()
+  @Column({
+    type: "varchar",
+    length: 45,
+  })
   email!: string;
 
-  @Column()
-  active!: UserStatus;
+  @Column({
+    type: "tinyint",
+  })
+  active!: ActiveStatus;
 
-  @Column()
+  @Column({
+    type: "varchar",
+    length: 50,
+  })
   address!: string;
 
-  @Column()
-  phone!: number;
+  @Column({
+    type: "varchar",
+    length: 20,
+  })
+  phone!: string;
 
-  @Column()
-  role!: string;
+  @ManyToOne(() => Role, (role) => role.users)
+  @JoinColumn({ name: "role_id" })
+  role!: Role;
 }
