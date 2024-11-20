@@ -3,23 +3,30 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
-  productId!: string;
+  idProduct!: number;
 
   @Column()
-  name!: string;
+  title!: string;
 
   @Column("float")
   price!: number;
 
   @Column()
-  unitOfMeasurement!: string;
+  available!: boolean;
 
   @Column()
   description!: string;
+  
+  @Column()
+  type!: string;
+  
+  @Column()
+  image!: string;
+  
+  @Column()
+  genre!: string;
 
   @Column()
   stock!: number;
 
-  @Column()
-  imgUrl!: string;
 }
