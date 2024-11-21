@@ -5,6 +5,13 @@ import sessionRouter from "./sessions.router";
 
 const indexRouter = Router()
 
+/**
+ * @openapi
+ * /tasks:
+ *     get:
+ *         description: Tests
+ */
+
 indexRouter.use("/products", productRouter)
 indexRouter.use("/users", userRouter)
 indexRouter.use("/sessions", sessionRouter)
