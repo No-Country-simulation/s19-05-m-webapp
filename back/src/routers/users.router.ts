@@ -1,22 +1,36 @@
 import { Router, Request, Response } from "express";
-
+import { UserController } from "../controllers/users.controller";
 
 const userRouter = Router();
+const userController = new UserController();
 
-// creacion
-userRouter.get("/", (req: Request, res: Response) => {
-    res.send("Este es el GET de User para READ USERS.");
-});//readUsers)
+// Create User
+userRouter.post("/", userController.CreateUser);
 
-userRouter.post("/", (req: Request, res: Response) => {
-    res.send("Este es el POST de User para CREATE USERS.");
-});//createUser) 
+// Read all Users
+userRouter.get("/:id", (req: Request, res: Response) => {
+    res.send("Este es el POST de User para READ ALL USERS.");
+});
+
+// Read User by id
+userRouter.get("/:id", (req: Request, res: Response) => {
+    res.send("Este es el POST de User para READ USER BY ID.");
+});
+
+// Read User by email
+userRouter.get("/:email", (req: Request, res: Response) => {
+    res.send("Este es el POST de User para READ USERS BY EMAIL.");
+});
+
+// Update users
 userRouter.put("/:id", (req: Request, res: Response) => {
     res.send("Este es el PUT de User para UPDATE USERS.");
-});// updateUser)
+});
+
+// Delete users
 userRouter.delete("/:id", (req: Request, res: Response) => {
     res.send("Este es el DELETE de User para DESTROY USERS.");
-});// destroyUser)
+});
 
 
 
