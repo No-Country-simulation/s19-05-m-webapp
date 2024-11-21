@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 import { Role } from "./Role.entity";
 
-@Entity() //por aca podemos ponerle "users" si queremos
+@Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id_users!: number;
@@ -23,6 +23,12 @@ export class User {
     length: 45,
   })
   email!: string;
+
+  @Column({
+    type: "varchar",
+    length: 100, // Longitud suficiente para un hash (e.g., bcrypt)
+  })
+  password!: string;
 
   @Column({
     default: true,

@@ -1,80 +1,30 @@
 import { Router, Request, Response } from "express";
 import { UserController } from "../controllers/users.controller";
+import { isValidData } from "../middlewares/isValidData.mid";
+import { isUser } from "../middlewares/isUser.mid";
+import { hashPassword } from "../middlewares/hashPassword.mid";
 
 const userRouter = Router();
 const userController = new UserController();
 
 // Create User
-userRouter.post("/", userController.CreateUser);
+userRouter.post("/", isValidData, isUser, hashPassword, userController.CreateUser);
 
 // Read all Users
-userRouter.get("/:id", (req: Request, res: Response) => {
-    res.send("Este es el POST de User para READ ALL USERS.");
-});
+userRouter.get("/", userController.ReadAll);
 
 // Read User by id
-userRouter.get("/:id", (req: Request, res: Response) => {
-    res.send("Este es el POST de User para READ USER BY ID.");
-});
+userRouter.get("/:id", userController.ReadOnebyId);
 
 // Read User by email
-userRouter.get("/:email", (req: Request, res: Response) => {
-    res.send("Este es el POST de User para READ USERS BY EMAIL.");
-});
+userRouter.post("/readone", userController.ReadOnebyEmail);
 
 // Update users
-userRouter.put("/:id", (req: Request, res: Response) => {
-    res.send("Este es el PUT de User para UPDATE USERS.");
-});
+userRouter.put("/:id", userController.UpdateUser);
 
 // Delete users
-userRouter.delete("/:id", (req: Request, res: Response) => {
-    res.send("Este es el DELETE de User para DESTROY USERS.");
-});
+userRouter.delete("/:id", userController.DeleteUser);
 
 
 
 export default userRouter;
-
-/* Esta en js.
-async function createUser(req, res, next) {
-    try {
-        const message = "USER CREATED"
-        const data = req.body
-        const response = await create(data)
-        return res.status(201).json({ response, message })
-    } catch (error) {
-        return next(error)
-    }
-}
-async function readUsers(req, res, next) {
-    try {
-        const message = "USERS FOUND"
-        const response = await read()
-        return res.status(200).json({ response, message })
-    } catch (error) {
-        return next(error)
-    }
-}
-async function updateUser(req, res, next) {
-    try {
-        const { id } = req.params
-        const data = req.body
-        const message = "USER UPDATED"
-        const response = await update(id, data)
-        return res.status(200).json({ response, message })
-    } catch (error) {
-        return next(error)
-    }
-}
-async function destroyUser(req, res, next) {
-    try {
-        const { id } = req.params
-        const message = "USER DELETED"
-        const response = await destroy(id)
-        return res.status(200).json({ response, message })
-    } catch (error) {
-        return next(error)
-    }
-}
-*/
