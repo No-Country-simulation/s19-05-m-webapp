@@ -16,7 +16,7 @@ export class ProductService {
     async getProductById(id: number) {
         try {
             return await productRepository.findOne({
-                where: { idProduct: id }, // Usa `idProduct` en lugar de `id`
+                where: { id_product: id }, // Usa `idProduct` en lugar de `id`
                 relations: ["platforms"], // Incluye las plataformas relacionadas
             });
         } catch (error) {

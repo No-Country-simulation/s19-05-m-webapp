@@ -13,7 +13,7 @@ export class Platforms {
     @Column({ length: 50 })
     model: string;
 
-    @ManyToOne(() => Product, (product) => product.idProduct)
+    @ManyToOne(() => Product, (product) => product.id_product)
     product: Product;
 
 }
