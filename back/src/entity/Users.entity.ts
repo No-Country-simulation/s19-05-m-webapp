@@ -1,16 +1,11 @@
 import {
   Entity,
   Column,
-  ManyToOne,
   JoinColumn,
   PrimaryGeneratedColumn,
+  OneToOne,
 } from "typeorm";
 import { Role } from "./Role.entity";
-
-export enum ActiveStatus {
-  INACTIVE = 0,
-  ACTIVE = 1,
-}
 
 @Entity() //por aca podemos ponerle "users" si queremos
 export class User {
@@ -30,9 +25,9 @@ export class User {
   email!: string;
 
   @Column({
-    type: "tinyint",
+    default: true,
   })
-  active!: ActiveStatus;
+  active!: boolean;
 
   @Column({
     type: "varchar",
@@ -46,7 +41,7 @@ export class User {
   })
   phone!: string;
 
-  @ManyToOne(() => Role, (role) => role.users)
-  @JoinColumn({ name: "role_id" })
+  @OneToOne(() => Role, (role) => role.users)
+  @JoinColumn({ name: "role" })
   role!: Role;
 }
