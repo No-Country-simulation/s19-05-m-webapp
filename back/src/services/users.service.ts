@@ -21,7 +21,6 @@ export class UserService {
             const user = await userRepository.findOne({
                 where: { email }, // Asumiendo que tienes un campo 'email' en el modelo.
             });
-            if (!user) throw new Error(`User with email ${email} not found`);
             return user;
         } catch (error) {
             console.error("Error in UserService (readByEmail):", error);
