@@ -1,6 +1,11 @@
 import { Column, Entity,JoinColumn,ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Shopping } from "./Shopping.entity";
 
+export enum StatusCheckout {
+    PENDING = "PENDING",
+    PAID = "PAID",
+    CANCELED = "CANCELED",    
+}
 
 @Entity()
 export class Checkout {
@@ -8,8 +13,12 @@ export class Checkout {
     @PrimaryGeneratedColumn()
     id_checkout!: number;
 
-    @Column()
-    status!: string;
+    @Column({
+        type: "enum",
+        enum: StatusCheckout,
+        default: StatusCheckout.PENDING,
+    })
+    status!: StatusCheckout;
 
     @Column()
     date_checkout!: Date;
