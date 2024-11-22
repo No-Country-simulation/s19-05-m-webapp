@@ -5,6 +5,10 @@ h1 {
     padding-bottom: 20px;
 }
 
+p {
+    color: #fff;
+}
+
 .products-container {
     display: block;
 }
