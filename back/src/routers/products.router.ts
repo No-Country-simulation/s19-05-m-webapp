@@ -6,11 +6,18 @@ const productController = new ProductController();
 
 /**
  * @openapi
- * /api/products?limit{:number}:
+ * /api/products:
  *     get:
  *         description: Get all products
  */
-productRouter.get("", productController.getProductsWithLimitController);
+productRouter.get("", productController.getAllProductsController);
+/**
+ * @openapi
+ * /api/products?limit={number}:
+ *     get:
+ *         description: Get all products
+ */
+productRouter.get("/limited", productController.getProductsWithLimitController);
 /**
  * @openapi
  * /api/products/{id}:
@@ -20,7 +27,7 @@ productRouter.get("", productController.getProductsWithLimitController);
 productRouter.get("/:id", productController.getProductByIdController);
 /**
  * @openapi
- * /products/create-product:
+ * /products:
  *   post:
  *     summary: Crea un nuevo producto
  *     tags:
@@ -70,6 +77,6 @@ productRouter.put(
  *     get:
  *         description: Tests
  */
-productRouter.delete("/:id", productController.deleteProductController);Stashed changes
+productRouter.delete("/:id", productController.deleteProductController);
 
 export default productRouter;

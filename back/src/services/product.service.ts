@@ -2,6 +2,11 @@ import { productRepository } from "../repositories/product.repository";
 import { Product } from "../entity/Product.entity";
 
 export class ProductService {
+
+  async getAllProducts(): Promise<Product[]> {
+    return productRepository.find();
+  }
+
   async getProductsWithLimit(limit: number) {
     try {
       return await productRepository
