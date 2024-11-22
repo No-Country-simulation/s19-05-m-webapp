@@ -11,9 +11,9 @@ const getProducts = async () => {
   	}
 };
 
-const getProductById = async () => {
+const getProductById = async (id) => {
 	try {
-	  const response = await axios.get(`https://run.mocky.io/v3/3471c597-ba12-48db-8e58-357778755fa8`);
+	  const response = await axios.get(`https://apimocha.com/checkpointzone/products/${id}`);
 	  return response.data;
 	} catch (error) {
 	  console.log(error);
