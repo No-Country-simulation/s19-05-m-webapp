@@ -1,6 +1,8 @@
 import Card from "../card/Card";
+import Dropdown from "../dropdown/Dropdown";
 import productService from "../../services/products";
 import useFetch from "../../hooks/useFetch";
+import options from '../../utils/options';
 import "./products.css";
 
 const Products = () => {
@@ -8,8 +10,10 @@ const Products = () => {
 
     return (
         <>
-           <h1>Productos</h1>
-           <div className="products-container">
+            <h1>Productos</h1>
+            <Dropdown options={options.consoleOptions} />
+            <Dropdown options={options.categoryOptions}  />
+            <div className="products-container">
                 {
                     products && products.map((product, index) => (
                         <Card
