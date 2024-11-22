@@ -2,6 +2,7 @@
     background-position: center; 
     background-size: cover;
     border-radius: 18px 18px 0 0; 
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     height: 300px; 

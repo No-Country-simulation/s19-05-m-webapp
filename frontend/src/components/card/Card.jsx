@@ -2,9 +2,9 @@ import "./card.css";
 
 const imageUrl = "/crash-bandicoot.webp"; // para prueba
 
-const Card = ({ title, category, price }) => { // validar props
+const Card = ({ title, category, price, onClick }) => { // validar props
     return (
-        <div className="card" style={{ backgroundImage: `url(${imageUrl})` }}>
+        <div className="card" onClick={onClick} style={{ backgroundImage: `url(${imageUrl})` }}>
             <div className="card-content">
                 <h2 className="card-title">{title}</h2>
                 <p className="card-category">{category}</p>
