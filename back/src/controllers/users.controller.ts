@@ -75,7 +75,7 @@ export class UserController {
         try {
             const { id } = req.params;
             const user = await this.userService.deleteUser(parseInt(id));
-            return ControllerHandler.ok("Deleted user.", res, user)
+            return ControllerHandler.ok("Deleted user.", res, user);
         } catch (error) {
             console.error(error);
             next(error);

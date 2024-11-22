@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ProductService } from "../services/product.service";
 import { Product } from "../entity/Product.entity";
+import ControllerHandler from "../handlers/controllers.handler";
 
 export class ProductController {
   private readonly productService: ProductService;
@@ -116,6 +117,17 @@ export class ProductController {
       return res.json(updatedProduct);
     } catch (error) {
       console.error("Error in updateProductController:", error);
+      next(error);
+    }
+  }
+
+  async deleteProductController(req: Request, res: Response, next: NextFunction): Promise<any> {
+    try {
+      const { id } = req.params;
+      const product = await this.productService.deleteProduct(parseInt(id));
+      return ControllerHandler.ok("Deleted product.", res, product);
+    } catch (error) {
+      console.error(error);
       next(error);
     }
   }

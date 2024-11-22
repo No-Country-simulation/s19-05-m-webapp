@@ -18,5 +18,5 @@ export class Role {
   name!: RoleName;
 
   @OneToOne(() => User, (user) => user.role)
-  users!: User[];
+  users!: User;
 }

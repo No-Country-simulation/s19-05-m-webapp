@@ -56,4 +56,15 @@ export class ProductService {
       throw new Error("Failed to update product");
     }
   }
+
+  async deleteProduct(id: number) {
+    try {
+      const product = await productRepository.findOne({where: {id_product: id}});
+      if (!product) throw new Error(`Product with ID ${id} not found`);
+      return await productRepository.remove(product);
+    } catch (error) {
+      console.error("Error in ProductService (deleteProduct):", error);
+      throw new Error("Failed to delete product");
+    }
+  }
 }

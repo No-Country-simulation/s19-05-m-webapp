@@ -47,7 +47,7 @@ export class User {
   })
   phone!: string;
 
-  @OneToOne(() => Role, (role) => role.users)
+  @OneToOne(() => Role, (role) => role.id_role)
   @JoinColumn({ name: "role" })
   role!: Role;
 }
