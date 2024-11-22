@@ -11,9 +11,18 @@ const getProducts = async () => {
   	}
 };
 
+const getProductById = async () => {
+	try {
+	  const response = await axios.get(`https://run.mocky.io/v3/3471c597-ba12-48db-8e58-357778755fa8`);
+	  return response.data;
+	} catch (error) {
+	  console.log(error);
+	}
+};
+
 const productService = {
     getProducts,
-	// colocar los demás aquí
+	getProductById,
 };
 
 export default productService;
