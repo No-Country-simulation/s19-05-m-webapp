@@ -4,19 +4,72 @@ import { ProductController } from "../controllers/product.controller";
 const productRouter = Router();
 const productController = new ProductController();
 
+/**
+ * @openapi
+ * /api/products?limit{:number}:
+ *     get:
+ *         description: Get all products
+ */
 productRouter.get("/", productController.getProductsWithLimitController);
+/**
+ * @openapi
+ * /api/products/{id}:
+ *     get:
+ *         description: Get product by id
+ */
 productRouter.get("/:id", productController.getProductByIdController);
-
+/**
+ * @openapi
+ * /products/create-product:
+ *   post:
+ *     summary: Crea un nuevo producto
+ *     tags:
+ *       - Productos
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductInput'
+ *     responses:
+ *       201:
+ *         description: Producto creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Error en la solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Error interno del servidor
+ */
 productRouter.post(
   "/create-product",
   productController.createProductController
 );
-
+/**
+ * @openapi
+ * /tasks:
+ *     get:
+ *         description: Tests
+ */
 productRouter.put(
   "/update-product/:id",
   productController.updateProductController
 );
-
-productRouter.delete("/product/:id", productController.deleteProductController)
+/**
+ * @openapi
+ * /tasks:
+ *     get:
+ *         description: Tests
+ */
+productRouter.delete("/product/:id", productController.deleteProductController);
 
 export default productRouter;
