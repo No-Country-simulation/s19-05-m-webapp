@@ -10,7 +10,7 @@ const productController = new ProductController();
  *     get:
  *         description: Get all products
  */
-productRouter.get("/", productController.getProductsWithLimitController);
+productRouter.get("", productController.getProductsWithLimitController);
 /**
  * @openapi
  * /api/products/{id}:
@@ -51,7 +51,7 @@ productRouter.get("/:id", productController.getProductByIdController);
  *         description: Error interno del servidor
  */
 productRouter.post(
-  "/create-product",
+  "",
   productController.createProductController
 );
 /**
@@ -61,7 +61,7 @@ productRouter.post(
  *         description: Tests
  */
 productRouter.put(
-  "/update-product/:id",
+  "/:id",
   productController.updateProductController
 );
 /**
@@ -70,6 +70,6 @@ productRouter.put(
  *     get:
  *         description: Tests
  */
-productRouter.delete("/product/:id", productController.deleteProductController);
+productRouter.delete("/:id", productController.deleteProductController);Stashed changes
 
 export default productRouter;

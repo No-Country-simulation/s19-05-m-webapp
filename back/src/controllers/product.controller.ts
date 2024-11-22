@@ -16,6 +16,7 @@ export class ProductController {
 
     this.createProductController = this.createProductController.bind(this);
     this.updateProductController = this.updateProductController.bind(this);
+    this.deleteProductController = this.deleteProductController.bind(this);
   }
 
   async getProductsWithLimitController(
