@@ -1,0 +1,18 @@
+h1 {
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: 2px;
+    padding-bottom: 20px;
+}
+
+.products-container {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .products-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+}
