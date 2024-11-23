@@ -18,7 +18,10 @@ export class Shopping {
     @PrimaryColumn()
     products_id!: number;
 
-    @Column()
+    @Column({
+        type: "timestamp",
+        default: () => "CURRENT_TIMESTAMP"
+    })
     date_shopping!: Date;
 
     @Column({
@@ -30,11 +33,11 @@ export class Shopping {
 
     @ManyToOne(() => User, (user) => user.id_users)
     @JoinColumn({ name: "user_id" })
-    users!: User[];
+    users!: User;
 
     @ManyToOne(() => Product, (product) => product.id_product)
     @JoinColumn({ name: "products_id" })
-    products!: Product[];
+    products!: Product;
 
     @OneToMany(() => Checkout, (checkout) => checkout.shopping)
     checkout!: Checkout;
