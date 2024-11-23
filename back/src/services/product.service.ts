@@ -101,9 +101,7 @@ export class ProductService {
       throw new Error("Failed to fetch products by genre");
     }
   }
-
 }
 
-// Agregar logica para filtrado por genero y plataforma.
     
 
