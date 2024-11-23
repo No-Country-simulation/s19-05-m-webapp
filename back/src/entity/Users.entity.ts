@@ -1,18 +1,13 @@
 import {
   Entity,
   Column,
-  ManyToOne,
   JoinColumn,
   PrimaryGeneratedColumn,
+  OneToOne,
 } from "typeorm";
 import { Role } from "./Role.entity";
 
-export enum ActiveStatus {
-  INACTIVE = 0,
-  ACTIVE = 1,
-}
-
-@Entity() //por aca podemos ponerle "users" si queremos
+@Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id_users!: number;
@@ -30,9 +25,15 @@ export class User {
   email!: string;
 
   @Column({
-    type: "tinyint",
+    type: "varchar",
+    length: 100, // Longitud suficiente para un hash (e.g., bcrypt)
   })
-  active!: ActiveStatus;
+  password!: string;
+
+  @Column({
+    default: true,
+  })
+  active!: boolean;
 
   @Column({
     type: "varchar",
@@ -46,7 +47,7 @@ export class User {
   })
   phone!: string;
 
-  @ManyToOne(() => Role, (role) => role.users)
-  @JoinColumn({ name: "role_id" })
+  @OneToOne(() => Role, (role) => role.id_role)
+  @JoinColumn({ name: "role" })
   role!: Role;
 }

@@ -6,6 +6,8 @@ import { Product } from "../entity/Product.entity";
 import { User } from "../entity/Users.entity";
 import { Platforms } from "../entity/Platforms.entity";
 import { Role } from "../entity/Role.entity";
+import { Checkout } from "../entity/Checkout.entity";
+import { Shopping } from "../entity/Shopping.entity";
 
 config();
 
@@ -16,7 +18,7 @@ export const AppDataSource = new DataSource({
   username: process.env.MYSQLUSER || "root",
   password: process.env.MYSQLPASSWORD || "root",
   database: process.env.MYSQL_DATABASE || "back",
-  synchronize: true,
-  logging: true,
-  entities: [Product, Platforms, User, Role],
+  // synchronize: true,
+  // logging: true,
+  entities: [Product, Platforms, User, Role, Checkout, Shopping],
 });
