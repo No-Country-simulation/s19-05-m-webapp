@@ -4,12 +4,6 @@ import { ProductController } from "../controllers/product.controller";
 const productRouter = Router();
 const productController = new ProductController();
 
-<<<<<<< HEAD
-productRouter.get('/', productController.getProductsController);
-productRouter.get("/:id", productController.getProductByIdController);
-
-export default productRouter;
-=======
 /**
  * @openapi
  * /api/products:
@@ -84,6 +78,8 @@ productRouter.put(
  *         description: Tests
  */
 productRouter.delete("/:id", productController.deleteProductController);
+productRouter.get("/platform/:platform", productController.getProductsByPlatformController);
+productRouter.get("/genre/:genre", productController.getProductsByGenreController);
+
 
 export default productRouter;
->>>>>>> 0e976e738cc0ec1774053054192a4342fe22b6e2

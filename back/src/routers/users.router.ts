@@ -10,19 +10,6 @@ const userController = new UserController();
 // Create User
 userRouter.post("/", isValidData, isUser, hashPassword, userController.CreateUser);
 
-<<<<<<< HEAD
-userRouter.post("/", (req: Request, res: Response) => {
-    res.send("Este es el POST de User para CREATE USERS.");
-});//createUser) 
-
-userRouter.put("/:id", (req: Request, res: Response) => {
-    res.send("Este es el PUT de User para UPDATE USERS.");
-});// updateUser)
-
-userRouter.delete("/:id", (req: Request, res: Response) => {
-    res.send("Este es el DELETE de User para DESTROY USERS.");
-});// destroyUser)
-=======
 // Read all Users
 userRouter.get("/", userController.ReadAll);
 
@@ -37,7 +24,6 @@ userRouter.put("/:id", userController.UpdateUser);
 
 // Delete users
 userRouter.delete("/:id", userController.DeleteUser);
->>>>>>> 0e976e738cc0ec1774053054192a4342fe22b6e2
 
 
 

@@ -1,18 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { ProductService } from "../services/product.service";
-<<<<<<< HEAD
-import { error } from "console";
-
-export class ProductController {
-    private productService: ProductService;
-
-    constructor() {
-        this.productService = new ProductService(); // Instanciamos el servicio aquí.
-        
-        // Enlazamos los métodos del controlador
-        this.getProductsController = this.getProductsController.bind(this);
-        this.getProductByIdController = this.getProductByIdController.bind(this);
-=======
 import { Product } from "../entity/Product.entity";
 import ControllerHandler from "../handlers/controllers.handler";
 
@@ -28,6 +15,8 @@ export class ProductController {
     this.createProductController = this.createProductController.bind(this);
     this.updateProductController = this.updateProductController.bind(this);
     this.deleteProductController = this.deleteProductController.bind(this);
+    this.getProductsByPlatformController = this.getProductsByPlatformController.bind(this);
+    this.getProductsByGenreController = this.getProductsByGenreController.bind(this);
   }
 
   async getAllProductsController(req: Request, res: Response, next: NextFunction):Promise<any> {
@@ -39,41 +28,9 @@ export class ProductController {
 
     } catch (error) {
       next(error);
->>>>>>> 0e976e738cc0ec1774053054192a4342fe22b6e2
     }
   }
 
-<<<<<<< HEAD
-    async getProductsController(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            // Obtener los parámetros de la query: genre, platform y limit
-            const { genre, platform, limit } = req.query;
-
-            let limitParam: number | undefined;
-
-            if (limit) {
-                const parsedLimit = parseInt(limit as string, 10);
-                if (isNaN(parsedLimit) || parsedLimit <= 0) {
-                    res.status(400).json({
-                        error: "The 'limit' query parameter must be a positive number.",
-                    });
-                }
-                limitParam = parsedLimit;
-            }
-
-            // Llamar al servicio con los filtros de género y plataforma
-            const products = await this.productService.getProducts(
-                limitParam,
-                genre as string | undefined, // Puede ser undefined si no se pasa
-                platform as string | undefined // Puede ser undefined si no se pasa
-            );
-
-            res.status(200).json(products);
-        } catch (error) {
-            console.error("Error in getProductsController:", (error as Error).message);
-            next(error);
-        }
-=======
   async getProductsWithLimitController(
     req: Request,
     res: Response,
@@ -91,7 +48,6 @@ export class ProductController {
 
     } catch (error) {
       next(error);
->>>>>>> 0e976e738cc0ec1774053054192a4342fe22b6e2
     }
   }
 
@@ -180,9 +136,53 @@ export class ProductController {
       next(error);
     }
   }
+
+  async getProductsByPlatformController(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const { platform } = req.params;
+
+      if (!platform || typeof platform !== "string") {
+        return ControllerHandler.badRequest("Invalid platform", res);
+      }
+
+      const products = await this.productService.getProductsByPlatform(platform);
+      return ControllerHandler.ok(
+        `Products filtered by platform: ${platform}`,
+        res,
+        products
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getProductsByGenreController(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const { genre } = req.params;
+      console.log("Raw genre value:", genre);
+
+      if (!genre || typeof genre !== "string") {
+        console.error("Invalid genre value:", genre);
+        return ControllerHandler.badRequest("Invalid genre", res);
+      }
+
+      const products = await this.productService.getProductsByGenre(genre);
+      console.log("Products found:", products);
+      return ControllerHandler.ok(
+        `Products filtered by genre: ${genre}`,
+        res,
+        products
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 0e976e738cc0ec1774053054192a4342fe22b6e2

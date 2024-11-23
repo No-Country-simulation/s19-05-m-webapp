@@ -1,25 +1,32 @@
-import { errorHandler } from "../middlewares/errorHandler.mid";
 import { productRepository } from "../repositories/product.repository";
 import { Product } from "../entity/Product.entity";
 
 export class ProductService {
-    async getProductsWithLimit(limit: number) {
-        try {
-            return await productRepository
-                .createQueryBuilder("products")
-                .take(limit) // Limita la cantidad de productos a devolver
-                .getMany();
-        } catch (error) {
-            console.error("Error fetching products:", error);
-            throw new Error("Failed to fetch products"); // El error será capturado en el controlador
-        }
-    }
 
-  async getProductById(id: number) {
+  async getAllProducts(): Promise<Product[]> {
+    return await productRepository.find({
+      relations: ["platforms"], 
+    });
+  }
+
+  async getProductsWithLimit(limit: number) {
+    try {
+      return await productRepository
+        .createQueryBuilder("product")
+        .leftJoinAndSelect("product.platforms", "platform")
+        .take(limit) // Limita la cantidad de productos a devolver
+        .getMany();
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      throw new Error("Failed to fetch products");
+    }
+  }
+
+  async getProductById(id: number): Promise<Product | null> {
     try {
       return await productRepository.findOne({
-        where: { id_product: id }, // Usa `idProduct` en lugar de `id`
-        relations: ["platforms"], // Incluye las plataformas relacionadas
+        where: { id_product: id },
+        relations: ["platforms"], 
       });
     } catch (error) {
       console.error("Error in ProductService (getProductById):", error);
@@ -68,6 +75,33 @@ export class ProductService {
       throw new Error("Failed to delete product");
     }
   }
+
+  async getProductsByPlatform(platform: string): Promise<Product[]> {
+    try {
+      return await productRepository
+        .createQueryBuilder("product")
+        .innerJoinAndSelect("product.platforms", "platform")
+        .where("platform.name = :platform", { platform })
+        .getMany();
+    } catch (error) {
+      console.error("Error fetching products by platform:", error);
+      throw new Error("Failed to fetch products by platform");
+    }
+  }
+
+  async getProductsByGenre(genre: string): Promise<Product[]> {
+    try {
+        console.log("Searching for products with genre:", genre);
+      return await productRepository.find({
+        where: { genre },
+        relations: ["platforms"],
+      });
+    } catch (error) {
+      console.error("Error fetching products by genre:", error);
+      throw new Error("Failed to fetch products by genre");
+    }
+  }
+
 }
 
 // Agregar logica para filtrado por genero y plataforma.
