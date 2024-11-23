@@ -1,28 +1,45 @@
 import { Request, Response, NextFunction } from "express";
 import { ProductService } from "../services/product.service";
+import { error } from "console";
 
 export class ProductController {
-    private readonly productService: ProductService;
+    private productService: ProductService;
 
     constructor() {
-        this.productService = new ProductService();
+        this.productService = new ProductService(); // Instanciamos el servicio aquí.
         
-        // Enlaza el contexto de los métodos
-        this.getProductsWithLimitController = this.getProductsWithLimitController.bind(this);
+        // Enlazamos los métodos del controlador
+        this.getProductsController = this.getProductsController.bind(this);
         this.getProductByIdController = this.getProductByIdController.bind(this);
     }
 
-    async getProductsWithLimitController(req: Request, res: Response, next: NextFunction): Promise<any> {
+    async getProductsController(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const limit = parseInt(req.query.limit as string, 10);
+            // Obtener los parámetros de la query: genre, platform y limit
+            const { genre, platform, limit } = req.query;
 
-            if (isNaN(limit) || limit <= 0) {
-                return res.status(400).json({ error: "Limit must be a positive number" });
+            let limitParam: number | undefined;
+
+            if (limit) {
+                const parsedLimit = parseInt(limit as string, 10);
+                if (isNaN(parsedLimit) || parsedLimit <= 0) {
+                    res.status(400).json({
+                        error: "The 'limit' query parameter must be a positive number.",
+                    });
+                }
+                limitParam = parsedLimit;
             }
 
-            const products = await this.productService.getProductsWithLimit(limit);
-            return res.json(products);
+            // Llamar al servicio con los filtros de género y plataforma
+            const products = await this.productService.getProducts(
+                limitParam,
+                genre as string | undefined, // Puede ser undefined si no se pasa
+                platform as string | undefined // Puede ser undefined si no se pasa
+            );
+
+            res.status(200).json(products);
         } catch (error) {
+            console.error("Error in getProductsController:", (error as Error).message);
             next(error);
         }
     }
@@ -48,4 +65,5 @@ export class ProductController {
         }
     }
 }
+
 

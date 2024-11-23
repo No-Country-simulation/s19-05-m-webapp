@@ -11,9 +11,11 @@ userRouter.get("/", (req: Request, res: Response) => {
 userRouter.post("/", (req: Request, res: Response) => {
     res.send("Este es el POST de User para CREATE USERS.");
 });//createUser) 
+
 userRouter.put("/:id", (req: Request, res: Response) => {
     res.send("Este es el PUT de User para UPDATE USERS.");
 });// updateUser)
+
 userRouter.delete("/:id", (req: Request, res: Response) => {
     res.send("Este es el DELETE de User para DESTROY USERS.");
 });// destroyUser)

@@ -1,17 +1,38 @@
+import { errorHandler } from "../middlewares/errorHandler.mid";
 import { productRepository } from "../repositories/product.repository";
 
 export class ProductService {
-    async getProductsWithLimit(limit: number) {
+    async getProducts(limit?: number, genre?: string, platform?: string) {
         try {
-            return await productRepository
-                .createQueryBuilder("products")
-                .take(limit) // Limita la cantidad de productos a devolver
-                .getMany();
+            const queryBuilder = productRepository.createQueryBuilder("product");
+
+            // Unir con la tabla 'Platforms'
+            queryBuilder.leftJoinAndSelect("product.platforms", "platform");
+
+            // Filtros por género
+            if (genre) {
+                queryBuilder.andWhere("product.genre = :genre", { genre });
+            }
+
+            // Filtros por plataforma
+            if (platform) {
+                queryBuilder.andWhere("platform.name = :platform", { platform });
+            }
+
+            // Limitar los resultados si es necesario
+            if (limit) {
+                queryBuilder.take(limit);
+            }
+
+            // Ejecutar la consulta y obtener los productos
+            const products = await queryBuilder.getMany();
+
+            return products;
         } catch (error) {
             console.error("Error fetching products:", error);
-            throw new Error("Failed to fetch products"); // El error será capturado en el controlador
+            throw new Error("Failed to fetch products.");
         }
-    }
+    }   
 
     async getProductById(id: number) {
         try {
@@ -25,3 +46,7 @@ export class ProductService {
         }
     }
 }
+
+// Agregar logica para filtrado por genero y plataforma.
+    
+
