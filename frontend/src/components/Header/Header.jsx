@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import "./Header.css";
+import { useState } from "react";
 
 const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <header className="header-container">
       <div className="header-logo">
@@ -9,8 +12,18 @@ const Header = () => {
           <img src="logo.png" alt="checkpoint logo" />
         </Link>
       </div>
-      <nav className="header-nav">
-        <ul className="header-list">
+      <div
+        className="menu"
+        onClick={() => {
+          setMenuOpen(!menuOpen);
+        }}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <nav>
+        <ul className={menuOpen ? "open" : ""}>
           <div className="header-search">
             <button className="header-search-btn">
               <i class="bx bx-search-alt btn-search-p"></i>
