@@ -23,12 +23,62 @@ export class ShoppingController {
 		next: NextFunction
 	): Promise<any> {
 		try {
+			
 			const shoppings = await this.shoppingService.getAllShopping();
-			return ControllerHandler.ok(
-				"Shoppings retrieved successfully",
-				res,
-				shoppings
-			);
+
+			if (!shoppings || shoppings.length === 0) return ControllerHandler.ok("No shopping data available", res, []);
+	
+			const userProductsMap = new Map<string, any>();
+	
+			shoppings.forEach((shopping) => {
+				const key = shopping.users.email;
+	
+				if (!key) {
+					console.warn("Skipping shopping record with missing user email:", shopping);
+					return;
+				}
+	
+				if (userProductsMap.has(key)) {
+					
+					const entry = userProductsMap.get(key);
+
+					entry.products.push({
+						name: shopping.products.title,
+						image: shopping.products.image,
+						description: shopping.products.description,
+						price: shopping.products.price,
+						genre: shopping.products.genre,
+						// platform: shopping.products.platforms
+					});
+
+				} else {
+					userProductsMap.set(key, {
+						user: {
+							name: shopping.users.name,
+							phone: shopping.users.phone,
+							email: shopping.users.email,
+							address: shopping.users.address,
+						},
+						products: [
+							{
+								name: shopping.products.title,
+								image: shopping.products.image,
+								description: shopping.products.description,
+								price: shopping.products.price,
+								genre: shopping.products.genre,
+								// platform: shopping.products.platforms
+							},
+						],
+						date: shopping.date_shopping,
+						state: shopping.state,
+					});
+				}
+			});
+	
+			const formatted = Array.from(userProductsMap.values());
+
+			return ControllerHandler.ok("Shoppings retrieved successfully", res, formatted);
+
 		} catch (error) {
 			next(error);
 		}
