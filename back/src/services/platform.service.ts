@@ -1,5 +1,6 @@
 import { platformRepository } from "../repositories/platform.repository";
 import { Platforms } from "../entity/Platforms.entity";
+import { PlatfomsDto } from "../dto/platform.dto";
 
 export class PlatformService {
   // Obtener todas las plataformas
@@ -13,7 +14,7 @@ export class PlatformService {
   }
 
   // Crear una nueva plataforma
-  async createPlatform(data: Partial<Platforms>): Promise<Platforms> {
+  async createPlatform(data: PlatfomsDto): Promise<Platforms> {
     const newPlatform = platformRepository.create(data);
     return await platformRepository.save(newPlatform);
   }

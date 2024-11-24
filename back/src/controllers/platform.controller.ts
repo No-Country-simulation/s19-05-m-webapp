@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { PlatformService } from "../services/platform.service";
 import ControllerHandler from "../handlers/controllers.handler";
 import { Platforms } from "../entity/Platforms.entity";
+import { PlatfomsDto } from "../dto/platform.dto";
 
 export class PlatformController {
   private readonly platformService: PlatformService;
@@ -51,15 +52,7 @@ export class PlatformController {
   // Crear una nueva plataforma
   async createPlatformController(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      const platformData: Partial<Platforms> = req.body;
-
-      if (!platformData.name || typeof platformData.name !== "string") {
-        return ControllerHandler.badRequest("Name is required and must be a string", res);
-      }
-
-      if (!platformData.model || typeof platformData.model !== "string") {
-        return ControllerHandler.badRequest("Model is required and must be a string", res);
-      }
+      const platformData: PlatfomsDto = req.body;
 
       const newPlatform = await this.platformService.createPlatform(platformData);
 
