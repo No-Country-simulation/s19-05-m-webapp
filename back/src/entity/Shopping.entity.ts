@@ -1,45 +1,54 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+} from "typeorm";
 import { User } from "./Users.entity";
 import { Product } from "./Product.entity";
 import { Checkout } from "./Checkout.entity";
 
 export enum StateShopping {
-    ACTIVE = "active",
-    INACTIVE = "inactive"
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
 }
 
 @Entity()
-@Index(["user_id","products_id"], {unique: true})
+@Index(["user_id", "products_id"], { unique: true })
 export class Shopping {
-    
-    @PrimaryColumn()
-    user_id!: number;
-    
-    @PrimaryColumn()
-    products_id!: number;
+  @PrimaryColumn()
+  user_id!: number;
 
-    @Column({
-        type: "timestamp",
-        default: () => "CURRENT_TIMESTAMP"
-    })
-    date_shopping!: Date;
+  @PrimaryColumn()
+  products_id!: number;
 
-    @Column({
-        type: 'enum',
-        enum: StateShopping,
-        default: StateShopping.ACTIVE
-    })
-    state!: StateShopping;
+  @Column({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP",
+  })
+  date_shopping!: Date;
 
-    @ManyToOne(() => User, (user) => user.id_users)
-    @JoinColumn({ name: "user_id" })
-    users!: User;
+  @Column({
+    type: "enum",
+    enum: StateShopping,
+    default: StateShopping.ACTIVE,
+  })
+  state!: StateShopping;
 
-    @ManyToOne(() => Product, (product) => product.id_product)
-    @JoinColumn({ name: "products_id" })
-    products!: Product;
+  @Column()
+  quantity!: number;
 
-    @OneToMany(() => Checkout, (checkout) => checkout.shopping)
-    checkout!: Checkout;
+  @ManyToOne(() => User, (user) => user.id_users)
+  @JoinColumn({ name: "user_id" })
+  users!: User;
 
+  @ManyToOne(() => Product, (product) => product.id_product)
+  @JoinColumn({ name: "products_id" })
+  products!: Product;
+
+  @OneToMany(() => Checkout, (checkout) => checkout.shopping)
+  checkout!: Checkout;
 }
