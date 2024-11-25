@@ -1,16 +1,13 @@
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes/Routes";
 import "./App.css";
-import Home from "./pages/Home";
 
 const App = () => {
-  return (
-    <>
-      <div>E-Commerce</div>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </>
-  );
+    return (
+        <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+            <AppRoutes />
+        </BrowserRouter>
+    );
 };
 
 export default App;
