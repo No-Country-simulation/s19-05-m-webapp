@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import { join } from "path";
 import { DataSource } from "typeorm";
 import { config } from "dotenv";
 import { Product } from "../entity/Product.entity";
@@ -16,7 +17,7 @@ export const AppDataSource = new DataSource({
   username: process.env.MYSQLUSER || "root",
   password: process.env.MYSQLPASSWORD || "root",
   database: process.env.MYSQL_DATABASE || "back",
-  // synchronize: true,
-  // logging: true,
+  //synchronize: true,
+  //logging: true,
   entities: [Product, Platforms, User, Checkout, Shopping],
 });

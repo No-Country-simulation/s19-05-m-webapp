@@ -8,7 +8,7 @@ export const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "https://checkpoint-zone-api.onrender.com/api/",
       },
     ],
     components: {
