@@ -6,10 +6,12 @@ import "./table.css";
 const Table = ({ columns, data, admin = false }) => {
     const { isModalOpen, openModal, closeModal } = useModal();
     const [modalTitle, setModalTitle] = useState("");
+    const [modalHeight, setModalHeight] = useState("");
     
     const handleAction = (product, actionType) => {
         console.log(`${actionType} producto:`, product);
         setModalTitle(actionType === 'Editar' ? 'Editar Producto' : 'Eliminar Producto')
+        setModalHeight(actionType === 'Eliminar' ? '50vh' : '98vh');
         openModal();
     };
 
@@ -49,7 +51,8 @@ const Table = ({ columns, data, admin = false }) => {
             <Modal 
                 isOpen={isModalOpen} 
                 onClose={closeModal} 
-                title={modalTitle}>
+                title={modalTitle}
+                height={modalHeight}>
                 <div>
                     contenido modal
                 </div>

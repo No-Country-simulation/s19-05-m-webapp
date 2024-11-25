@@ -15,12 +15,10 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    height: 98vh;
     max-width: 90%;
     overflow-y: auto;
     padding: 20px;
     position: relative;
-    width: 400px;
 }
   
 .modal-divider {
