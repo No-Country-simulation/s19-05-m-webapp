@@ -1,3 +1,5 @@
+import options from "./options";
+
 const fields = [
   {
     name: "name",
@@ -27,19 +29,7 @@ const fields = [
     name: "country",
     label: "País",
     type: "select",
-    options: [
-      { value: "", label: "Seleccione un país", disabled: true },
-      { value: "Argentina", label: "Argentina" },
-      { value: "Bolivia", label: "Bolivia" },
-      { value: "Chile", label: "Chile" },
-      { value: "Colombia", label: "Colombia" },
-      { value: "Ecuador", label: "Ecuador" },
-      { value: "España", label: "España" },
-      { value: "Mexico", label: "México" },
-      { value: "Peru", label: "Perú" },
-      { value: "Uruguay", label: "Uruguay" },
-      { value: "Venezuela", label: "Venezuela" },
-    ],
+    options: options.countryOptions,
   },
 ];
 

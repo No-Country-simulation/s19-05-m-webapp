@@ -15,9 +15,23 @@ const categoryOptions = [
     { value: 'Deportivo' },
 ];
 
+const countryOptions = [
+    { value: 'Argentina'},
+    { value: 'Bolivia'},
+    { value: 'Chile' },
+    { value: 'Colombia' },
+    { value: 'Ecuador'},
+    { value: 'España' },
+    { value: 'Mexico' },
+    { value: 'Peru' },
+    { value: 'Uruguay'  },
+    { value: 'Venezuela' },
+]
+
 const options = {
     categoryOptions,
-    consoleOptions
+    consoleOptions,
+    countryOptions,
 }
 
 export default options;
