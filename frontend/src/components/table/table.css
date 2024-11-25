@@ -1,0 +1,35 @@
+.custom-table-wrapper {
+    overflow-x: auto; 
+}
+
+.custom-table {
+    background-color: white;
+    border-collapse: collapse;
+    width: 100%; 
+}
+
+.custom-table th,
+.custom-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.custom-table th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+@media (min-width: 769px) {
+    .custom-table {
+        width: 100%; 
+    }
+
+    .custom-table th,
+    .custom-table td {
+        border-bottom: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+}
