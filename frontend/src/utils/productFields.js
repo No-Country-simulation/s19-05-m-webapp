@@ -1,3 +1,5 @@
+import options from "./options";
+
 const fields = [
     { 
         name: "name", 
@@ -28,7 +30,19 @@ const fields = [
         label: "Stock", 
         type: "number", 
         placeholder: "Cantidad en stock" 
-    }
+    },
+    {
+        name: "console",
+        label: "Seleccionar consola",
+        type: "select",
+        options: options.consoleOptions,
+    },
+    {
+        name: "category",
+        label: "Seleccionar categoría",
+        type: "select",
+        options: options.categoryOptions,
+    },
 ];
 
 const initialValues = {
@@ -37,6 +51,8 @@ const initialValues = {
     description: "",
     image: "",
     stock: "",
+    console: "",
+    category: ""
 };
 
 const productFields = {
