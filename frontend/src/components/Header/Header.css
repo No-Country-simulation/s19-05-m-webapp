@@ -18,8 +18,11 @@ nav ul {
 
 .header-search {
   display: flex;
-  justify-content: center;
   margin: 0 0.5rem;
+}
+
+.header-search input {
+  color: var(--accent-color);
 }
 
 .header-search-btn {
@@ -45,6 +48,17 @@ nav ul {
 
 .header-search-prod:focus {
   outline: none;
+}
+
+.header-cart {
+  display: block;
+  text-decoration: none;
+  color: var(--second-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0 0.5rem;
+  transition: all 500ms ease;
+  font-size: 1.5rem;
 }
 
 .header-item-link {
