@@ -15,10 +15,29 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: 98vh;
     max-width: 90%;
+    overflow-y: auto;
     padding: 20px;
     position: relative;
     width: 400px;
+}
+  
+.modal-divider {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 10px 0 25px 0;
+}
+  
+.modal-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+  
+.modal-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
 }
   
 .modal-close-btn {
@@ -27,8 +46,5 @@
     color: #333;
     cursor: pointer;
     font-size: 20px;
-    position: absolute;
-    right: 10px;
-    top: 10px;
 }
   
