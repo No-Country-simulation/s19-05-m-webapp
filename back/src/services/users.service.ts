@@ -1,4 +1,5 @@
 import { userRepository } from "../repositories/users.repository";
+import { User } from "../entity/Users.entity";
 
 export class UserService {
     // Obtener usuario por ID
@@ -16,7 +17,7 @@ export class UserService {
     }
 
     // Obtener usuario por Email
-    async readByEmail(email: string) {
+    async readByEmail(email: string): Promise<User | null> {
         try {
             const user = await userRepository.findOne({
                 where: { email }, // Asumiendo que tienes un campo 'email' en el modelo.
@@ -39,7 +40,7 @@ export class UserService {
     }
 
     // Crear un nuevo usuario
-    async createUser(data: any) {
+    async createUser(data: any): Promise<any | null> {
         try {
             const newUser = userRepository.create(data);
             return await userRepository.save(newUser);
