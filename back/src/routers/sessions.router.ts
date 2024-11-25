@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-//import { passport } from "../middlewares/passportGoogle.mid"
+import passport from "../middlewares/passportGoogle.mid";
 
 
 const sessionRouter = Router();
@@ -21,6 +21,11 @@ sessionRouter.post("/online", (req: Request, res: Response) => {
 sessionRouter.post("/signout", (req: Request, res: Response) => {
     res.send("Este es el POST de Session para SIGNOUT.");
 });
+
+// Autenticar con Google.   /api/sessions/google va a llamar a la pantalla de consentimiento y se encarga de autenticar en google.
+sessionRouter.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }))
+
+
 
 /*
 sessionsRouter.post("/register", passport.authenticate("register", { session: false }), register)
