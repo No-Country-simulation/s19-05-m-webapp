@@ -8,7 +8,13 @@ const userRouter = Router();
 const userController = new UserController();
 
 // Create User
-userRouter.post("/", isValidData, isUser, hashPassword, userController.CreateUser);
+userRouter.post(
+  "/",
+  isValidData,
+  isUser,
+  hashPassword,
+  userController.CreateUser
+);
 
 // Read all Users
 userRouter.get("/", userController.ReadAll);
@@ -24,7 +30,5 @@ userRouter.put("/:id", userController.UpdateUser);
 
 // Delete users
 userRouter.delete("/:id", userController.DeleteUser);
-
-
 
 export default userRouter;

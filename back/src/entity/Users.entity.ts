@@ -5,8 +5,11 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
 } from "typeorm";
-import { Role } from "./Role.entity";
 
+export enum RoleName {
+  ADMIN = "ADMINISTRATOR",
+  CLIENT = "USER", //o cliente
+}
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -47,7 +50,10 @@ export class User {
   })
   phone!: string;
 
-  @OneToOne(() => Role, (role) => role.id_role)
-  @JoinColumn({ name: "role" })
-  role!: Role;
+  @Column({
+    type: "enum",
+    enum: RoleName,
+    default: RoleName.CLIENT, //por default "user"
+  })
+  role!: RoleName;
 }
