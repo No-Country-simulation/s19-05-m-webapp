@@ -1,0 +1,16 @@
+.form-group {
+    margin-bottom: 20px;
+}
+  
+input, select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 10px;
+    width: 100%;
+}
+
+.form-btn {
+    background-color: #4CAF50;
+    color: white;
+}
