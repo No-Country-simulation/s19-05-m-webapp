@@ -22,11 +22,11 @@ const Header = () => {
         <span></span>
         <span></span>
       </div>
-      <nav>
+      <nav className="header-nav">
         <ul className={menuOpen ? "open" : ""}>
           <div className="header-search">
             <button className="header-search-btn">
-              <i class="bx bx-search-alt btn-search-p"></i>
+              <i className="bx bx-search-alt btn-search-p"></i>
             </button>
             <input
               className="header-search-prod"
@@ -40,13 +40,18 @@ const Header = () => {
             </Link>
           </li>
           <li className="header-item">
-            <Link to="/" className="header-item-link">
-              Iniciar sesion
+            <Link to="/products" className="header-item-link">
+              Productos
+            </Link>
+          </li>
+          <li className="header-item">
+            <Link to="/" className="header-cart">
+              <i className="bx bxs-cart btn-cart"></i>
             </Link>
           </li>
           <li className="header-item">
             <Link to="/" className="header-item-link">
-              Productos
+              Iniciar sesion
             </Link>
           </li>
         </ul>

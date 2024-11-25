@@ -17,7 +17,7 @@
 .card-content {
     background-color: rgba(0, 0, 0, 0.9); 
     bottom: 0; 
-    clip-path: polygon(0% -0%, 110% 10%, 100% 100%, -10% 100%);
+    clip-path: polygon(0% -0%, 110% 10%, 100% 100%, -10% 150%);
     color: white;
     display: flex;
     flex-direction: column;
