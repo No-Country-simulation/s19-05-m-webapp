@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Table from "../table/Table";
@@ -11,6 +12,11 @@ import "./dashboard.css";
 const Dashboard = () => {
     const { isModalOpen, openModal, closeModal } = useModal();
     const { data: products } = useFetch(productService.getProducts);
+    const [filterType, setFilterType] = useState("all");
+
+    const filteredProducts = products?.filter(product => 
+        filterType === "all" ? product.stock > 0 : product.stock === 0
+    );
 
     const handleSubmit = (formValues) => {
         console.log("Producto creado:", formValues);
@@ -21,6 +27,8 @@ const Dashboard = () => {
         <>
             <h1>Dashboard Administrador</h1>
             <button onClick={openModal}>Crear producto</button>
+            <button onClick={() => setFilterType("all")}>Ver todos los productos</button>
+            <button onClick={() => setFilterType("outOfStock")}>Productos sin stock</button>
             <Modal 
                 isOpen={isModalOpen} 
                 onClose={closeModal} 
@@ -34,7 +42,7 @@ const Dashboard = () => {
             </Modal>
             <Table 
                 columns={columns.productsList}
-                data={products}  
+                data={filteredProducts}  
                 admin={true}
             />
         </>
