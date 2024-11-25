@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const getProducts = async () => {
   	try {
-    	const response = await axios.get(`https://run.mocky.io/v3/e1e64f1b-c530-4fe8-81b6-b242d4c0f4f7`);
+    	const response = await axios.get(`https://run.mocky.io/v3/7914dab8-6f4c-4505-8c66-f787ebebcc43`);
 		return response.data;
   	} catch (error) {
     	console.log(error);

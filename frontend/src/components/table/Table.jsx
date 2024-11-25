@@ -1,6 +1,7 @@
 import "./table.css";
 
 const Table = ({ columns, data }) => {
+    console.log(data)
 
     return (
         <div className="custom-table-wrapper ">
@@ -15,21 +16,15 @@ const Table = ({ columns, data }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Producto 1</td>
-                        <td>Producto 1</td>
-                        <td>Producto 1</td>
-                    </tr>
-                    <tr>
-                        <td>Producto 1</td>
-                        <td>Producto 1</td>
-                        <td>Producto 1</td>
-                    </tr>
-                    <tr>
-                        <td>Producto 1</td>
-                        <td>Producto 1</td>
-                        <td>Producto 1</td>
-                    </tr>
+                    {
+                        data?.map((product, index) => (
+                            <tr key={index}>
+                                <td>{product.name}</td>
+                                <td>{product.price}</td>
+                                <td>{product.stock}</td>
+                            </tr>
+                        ))
+                    }
                 </tbody>
             </table>
         </div>

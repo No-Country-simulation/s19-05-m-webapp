@@ -1,13 +1,16 @@
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Table from "../table/Table";
+import useFetch from "../../hooks/useFetch";
 import useModal from "../../hooks/useModal";
 import columns from "../../utils/tableAdmin";
 import productFields  from "../../utils/productFields";
+import productService from "../../services/products";
 import "./dashboard.css";
 
 const Dashboard = () => {
     const { isModalOpen, openModal, closeModal } = useModal();
+    const { data: products } = useFetch(productService.getProducts);
 
     const handleSubmit = (formValues) => {
         console.log("Producto creado:", formValues);
@@ -30,7 +33,8 @@ const Dashboard = () => {
                 />
             </Modal>
             <Table 
-                columns={columns.productsList} 
+                columns={columns.productsList}
+                data={products}  
             />
         </>
     );
