@@ -1,7 +1,17 @@
+import { useState } from "react";
+import Modal from "../modal/Modal";
+import useModal from "../../hooks/useModal";
 import "./table.css";
 
-const Table = ({ columns, data }) => {
-    console.log(data)
+const Table = ({ columns, data, admin = false }) => {
+    const { isModalOpen, openModal, closeModal } = useModal();
+    const [modalTitle, setModalTitle] = useState("");
+    
+    const handleAction = (product, actionType) => {
+        console.log(`${actionType} producto:`, product);
+        setModalTitle(actionType === 'Editar' ? 'Editar Producto' : 'Eliminar Producto')
+        openModal();
+    };
 
     return (
         <div className="custom-table-wrapper ">
@@ -22,11 +32,28 @@ const Table = ({ columns, data }) => {
                                 <td>{product.name}</td>
                                 <td>{product.price}</td>
                                 <td>{product.stock}</td>
+                                {
+                                    admin && ( 
+                                        <td>
+                                            <button onClick={() => handleAction(product, "Editar")}>😎</button>
+                                            <button onClick={() => handleAction(product, "Eliminar")}>😌</button>
+                                        </td>
+                                    )
+                                }
                             </tr>
                         ))
                     }
                 </tbody>
             </table>
+
+            <Modal 
+                isOpen={isModalOpen} 
+                onClose={closeModal} 
+                title={modalTitle}>
+                <div>
+                    contenido modal
+                </div>
+            </Modal>
         </div>
     );
 };

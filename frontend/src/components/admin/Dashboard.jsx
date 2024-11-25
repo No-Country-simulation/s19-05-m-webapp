@@ -35,6 +35,7 @@ const Dashboard = () => {
             <Table 
                 columns={columns.productsList}
                 data={products}  
+                admin={true}
             />
         </>
     );
