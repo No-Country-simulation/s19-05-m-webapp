@@ -1,6 +1,8 @@
 import Modal from "../modal/Modal";
-import useModal from "../../hooks/useModal";
 import Form from "../form/Form";
+import Table from "../table/Table";
+import useModal from "../../hooks/useModal";
+import columns from "../../utils/tableAdmin";
 import productFields  from "../../utils/productFields";
 import "./dashboard.css";
 
@@ -27,6 +29,9 @@ const Dashboard = () => {
                     buttonText="Crear"
                 />
             </Modal>
+            <Table 
+                columns={columns.productsList} 
+            />
         </>
     );
 };
