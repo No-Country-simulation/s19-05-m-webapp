@@ -48,6 +48,8 @@ export class ShoppingController {
 						description: shopping.products.description,
 						price: shopping.products.price,
 						genre: shopping.products.genre,
+						quantity: shopping.quantity,
+						state: shopping.state,
 						// platform: shopping.products.platforms
 					});
 
@@ -66,11 +68,12 @@ export class ShoppingController {
 								description: shopping.products.description,
 								price: shopping.products.price,
 								genre: shopping.products.genre,
+								quanity: shopping.quantity,
+								state: shopping.state,
 								// platform: shopping.products.platforms
 							},
 						],
-						date: shopping.date_shopping,
-						state: shopping.state,
+						date: shopping.date_shopping
 					});
 				}
 			});
@@ -90,31 +93,22 @@ export class ShoppingController {
 		next: NextFunction
 	): Promise<any> {
 		try {
-			const shoppingData: Partial<Shopping> = req.body;
 
-			if (
-				!shoppingData.user_id ||
-				typeof shoppingData.user_id !== "number"
-			)
+			const {user_id, products_id, quantity} = req.body;
+
+			if (!user_id || typeof user_id !== "number")
 				return ControllerHandler.badRequest("User ID is required", res);
 
-			if (
-				!shoppingData.products_id ||
-				typeof shoppingData.products_id !== "number"
-			)
-				return ControllerHandler.badRequest(
-					"Product ID is required",
-					res
-				);
+			if (!products_id || typeof products_id !== "number")
+				return ControllerHandler.badRequest("Product ID is required",res);
 
-			const newShopping = await this.shoppingService.createShopping(
-				shoppingData
-			);
-			return ControllerHandler.ok(
-				"Shopping created successfully",
-				res,
-				newShopping
-			);
+			if(!quantity || typeof quantity !== "number")
+				return ControllerHandler.badRequest("Quantity is required", res);
+
+			const newShopping = await this.shoppingService.createShopping({ user_id, products_id, quantity });
+
+			return ControllerHandler.ok("Shopping created successfully", res, newShopping);
+
 		} catch (error) {
 			next(error);
 		}
