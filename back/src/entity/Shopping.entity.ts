@@ -26,6 +26,7 @@ export class Shopping {
   products_id!: number;
 
   @Column({
+    // Corregir cuestiones de zona horarias para la correcta hora.
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP",
   })

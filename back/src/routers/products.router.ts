@@ -10,10 +10,10 @@ const productController = new ProductController();
  *     get:
  *         description: Get all products
  */
-productRouter.get("", productController.getAllProductsController);
+productRouter.get("/", productController.getAllProductsController);
 /**
  * @openapi
- * /api/products?limit={number}:
+ * /api/products/limited?limit={number}:
  *     get:
  *         description: Get all products
  */
