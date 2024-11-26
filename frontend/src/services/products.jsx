@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-// const BASE_URL = import.meta.env.VITE_BASE_URL; utilizar cuando el backend esté listo
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const getProducts = async () => {
   	try {
-    	const response = await axios.get(`https://run.mocky.io/v3/e1e64f1b-c530-4fe8-81b6-b242d4c0f4f7`);
-		return response.data;
+    	const response = await axios.get(`${BASE_URL}/products`);
+		return response.data.data;
   	} catch (error) {
     	console.log(error);
   	}
@@ -20,9 +20,19 @@ const getProductById = async (id) => {
 	}
 };
 
+const getProductsByGenre = async (genre) => {
+	try {
+		const response = await axios.get(`${BASE_URL}/products/genre/${genre}`);
+		return response.data.data;
+  	} catch (error) {
+		console.log(error);
+  	}
+}
+
 const productService = {
     getProducts,
 	getProductById,
+	getProductsByGenre,
 };
 
 export default productService;

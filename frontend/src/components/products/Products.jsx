@@ -9,11 +9,12 @@ import "./products.css";
 
 const Products = () => {
     const { data: products } = useFetch(productService.getProducts);
-    const [selectedOptions, setSelectedOptions] = useState({
-        console: '',  
-        category: '',     
-    });
     const navigate = useNavigate();
+    const [selectedOptions, setSelectedOptions] = useState({ console: '', genre: '' });
+    const { data: productsByGenre } = useFetch(
+        selectedOptions.genre ? productService.getProductsByGenre : null,
+        selectedOptions.genre
+    );
 
     const handleCard = (id) => {
         navigate(`/product/${id}`);
@@ -24,18 +25,19 @@ const Products = () => {
         setSelectedOptions((prevState) => ({
             ...prevState,
             [name]: value,  
-        }));
-        console.log(`${name} seleccionada:`, value);  
+        })); 
     };
 
     const clearFilters = () => {
         setSelectedOptions({
             console: '',
-            category: '',
+            genre: '',
         });
     };
 
-    const isFilterActive = selectedOptions.console || selectedOptions.category;
+    const isFilterActive = selectedOptions.console || selectedOptions.genre;
+
+    const productsToShow = selectedOptions.genre ? productsByGenre : products;
 
     return (
         <>
@@ -47,10 +49,10 @@ const Products = () => {
                     name="console" 
                 />
                 <Dropdown 
-                    options={options.categoryOptions} 
-                    value={selectedOptions.category} 
+                    options={options.genreOptions} 
+                    value={selectedOptions.genre} 
                     onChange={handleSelectChange} 
-                    name="category"
+                    name="genre"
                 />
                 {
                     isFilterActive && (
@@ -63,15 +65,19 @@ const Products = () => {
             <h1>Productos</h1>
             <div className="products-container">
                 {
-                    products && products.map((product, index) => (
-                        <Card
-                            key={index}
-                            title={product.title}
-                            category={product.category}
-                            price={product.price}
-                            onClick={() => handleCard(index)} 
-                        />
-                    ))
+                    productsToShow && productsToShow.length > 0 ? (
+                        productsToShow.map((product) => (
+                            <Card
+                                key={product.id_product}
+                                title={product.title}
+                                genre={product.genre}
+                                price={product.price}
+                                onClick={() => handleCard(product.id_product)} 
+                            />
+                        ))
+                    ) : (
+                        <p>No se encontraron productos que coincidan con los filtros seleccionados.</p>
+                    )
                 }
             </div>
         </>

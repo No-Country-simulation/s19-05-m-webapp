@@ -28,11 +28,16 @@
 }
 
 .card-title {
+    display: block; 
     font-weight: 500;
-    padding-top: 5px;
+    max-width: 100%;
+    overflow: hidden; 
+    padding-top: 5px;         
+    text-overflow: ellipsis;            
+    white-space: nowrap;             
 }
   
-.card-category {
+.card-genre {
     color: var(--accent-color);
     opacity: 50%;
     padding-bottom: 5px;
