@@ -16,9 +16,11 @@ const Products = () => {
 
     return (
         <>
+            <div className="products-dropdown">
+                <Dropdown options={options.consoleOptions} />
+                <Dropdown options={options.categoryOptions}  />
+            </div>
             <h1>Productos</h1>
-            <Dropdown options={options.consoleOptions} />
-            <Dropdown options={options.categoryOptions}  />
             <div className="products-container">
                 {
                     products && products.map((product, index) => (
@@ -37,4 +39,3 @@ const Products = () => {
 };
   
 export default Products;
-  
