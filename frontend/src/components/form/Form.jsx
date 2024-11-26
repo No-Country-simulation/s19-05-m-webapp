@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./form.css";
 import Dropdown from "../dropdown/Dropdown";
 
-const Form = ({ fields, onSubmit, initialValues, buttonText }) => {
+const Form = ({ fields, onSubmit, initialValues, buttonText, errors }) => {
   const [formValues, setFormValues] = useState(initialValues || {});
 
   const handleChange = (e) => {
@@ -40,6 +40,7 @@ const Form = ({ fields, onSubmit, initialValues, buttonText }) => {
               placeholder={field.placeholder || ""}
             />
           )}
+          {errors[field.name] && <p className="error-text">{errors[field.name]}</p>}
         </div>
       ))}
       <button className="form-btn">{buttonText}</button>
