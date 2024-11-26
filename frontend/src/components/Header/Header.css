@@ -5,6 +5,7 @@
   align-items: center;
   background-color: var(--first-color);
   top: 0;
+  z-index: 999;
 }
 
 nav ul {

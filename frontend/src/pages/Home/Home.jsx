@@ -1,6 +1,7 @@
 import React from "react";
 import "./Home.css";
 import Trends from "../../components/home/Trends";
+import Footer from "../../components/Footer/Footer";
 
 const Home = () => {
   return (
@@ -22,8 +23,35 @@ const Home = () => {
           </aside>
         </article>
       </section>
-      <section className="home-tendencias">
+      <section className="home-trends">
         <Trends />
+      </section>
+      <section className="about">
+        <article>
+          <p>
+            En Checkpoint Zone amamos los videojuegos tanto como tú. Aquí
+            encontrarás desde los últimos lanzamientos hasta esos clásicos que
+            siempre quieres volver a jugar. Nos encanta ser parte de tus
+            aventuras y ayudarte a llevar tu experiencia gamer al siguiente
+            nivel. Regístrate ahora y disfruta de descuentos exclusivos y accede
+            a contenido especial pensado solo para nuestra comunidad. ¡Haz de
+            cada compra tu próximo checkpoint!
+          </p>
+        </article>
+        <img className="about-img" src="/about-img.png" alt="about" />
+      </section>
+      <section className="categories">
+        <article className="categories-card">
+          <img className="img-1" src="home-avatar-1.png" alt="Avatar 1" />
+          <img className="img-2" src="/home-avatar-2.png" alt="Avatar 2" />
+          <div className="categories-content">
+            <h2>Observa todas las categorias de juegos que hay disponibles</h2>
+            <h5>
+              Tenemos gran diversidad de géneros de juegos, échale un vistazo
+            </h5>
+            <button className="categories-btn">Ver Categorias</button>
+          </div>
+        </article>
       </section>
     </div>
   );
