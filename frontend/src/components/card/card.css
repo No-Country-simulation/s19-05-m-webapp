@@ -50,6 +50,7 @@
     border: 1px solid var(--second-color);
     border-radius: 8px;
     color: var(--second-color);
+    font-family: var(--text-font), sans-serif;
     font-size: 16px;
     padding: 10px 16px;
 }
