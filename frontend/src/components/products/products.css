@@ -1,13 +1,12 @@
 h1 {
-    color: #fff;
     font-weight: 500;
     letter-spacing: 2px;
     padding: 50px 0;
     text-align: center;
 }
 
-p {
-    color: #fff;
+h1, p {
+    color: var(--accent-color);
 }
 
 .products-dropdown {
@@ -22,10 +21,15 @@ p {
     border-radius: 8px;
     box-shadow: 0 3px 15px -5px var(--second-color);
     color: var(--second-color);
+    font-size: 16px;
     margin-top: 5px;
     outline: none;
     padding: 10px;
     width: 100%;
+}
+
+.products-dropdown option {
+    background-color: var(--first-color);
 }
 
 .products-container {
@@ -44,12 +48,12 @@ p {
     }
 
     h1 {
-        padding-bottom: 25px;
+        padding-bottom: 30px;
         text-align: left;
     }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1024px) {
     .products-dropdown select {
         width: 30%;
     }
