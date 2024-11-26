@@ -16,9 +16,9 @@ const Products = () => {
 
     return (
         <>
-           <div className="products-dropdown">
+            <div className="products-dropdown">
                 <Dropdown options={options.consoleOptions} />
-                <Dropdown options={options.categoryOptions} />
+                <Dropdown options={options.categoryOptions}  />
             </div>
             <h1>Productos</h1>
             <div className="products-container">
@@ -39,4 +39,3 @@ const Products = () => {
 };
   
 export default Products;
-  
