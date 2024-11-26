@@ -20,7 +20,10 @@ export class Checkout {
     })
     status!: StatusCheckout;
 
-    @Column()
+    @Column({
+        type: "timestamp",
+        default: () => "CURRENT_TIMESTAMP",
+    })
     date_checkout!: Date;
 
     @Column()

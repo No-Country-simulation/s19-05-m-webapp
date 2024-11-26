@@ -49,8 +49,8 @@ export class ShoppingController {
 						price: shopping.products.price,
 						genre: shopping.products.genre,
 						quantity: shopping.quantity,
-						state: shopping.state,
-						// platform: shopping.products.platforms
+						platform: shopping.products.platforms ? shopping.products.platforms : "No platform specified",
+						state: shopping.state
 					});
 
 				} else {
@@ -68,12 +68,11 @@ export class ShoppingController {
 								description: shopping.products.description,
 								price: shopping.products.price,
 								genre: shopping.products.genre,
-								quanity: shopping.quantity,
+								quantity: shopping.quantity,
+								platform: shopping.products.platforms ? shopping.products.platforms : "No platform specified",
 								state: shopping.state,
-								// platform: shopping.products.platforms
 							},
-						],
-						date: shopping.date_shopping
+						]
 					});
 				}
 			});
