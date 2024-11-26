@@ -16,7 +16,7 @@ const fields = [
     { 
         name: "description", 
         label: "Descripción", 
-        type: "text", 
+        type: "textarea", 
         placeholder: "Descripción del producto" 
     },
     { 

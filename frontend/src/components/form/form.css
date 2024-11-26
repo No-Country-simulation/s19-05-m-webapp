@@ -2,9 +2,11 @@
     margin-bottom: 20px;
 }
   
-input, select {
+input, select, textarea {
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-family: var(--text-font), sans-serif;
+    font-size: 15px;
     margin-top: 5px;
     padding: 10px;
     width: 100%;
