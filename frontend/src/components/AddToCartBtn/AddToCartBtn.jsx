@@ -9,12 +9,14 @@ function AddToCartButton({ product }) {
     const addToCart = () => {
         if (product.stock > 0) {
             dispatch({ type: 'ADD_ITEM', payload: product });
+            console.log("Agregado");
         } else {
             alert('El producto no tiene stock disponible.');
         }
     };
 
     return (
+        //Modificar el icono cart acá
         <button onClick={addToCart} disabled={product.stock === 0}>
             Añadir al carrito
         </button>

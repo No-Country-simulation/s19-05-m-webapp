@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import "./Header.css";
 import { useState } from "react";
+import useModal from "../../hooks/useModal";
+import Modal from "../modal/Modal";
+import Cart from "../Cart/Cart";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
     <header className="header-container">
@@ -46,7 +50,13 @@ const Header = () => {
           </li>
           <li className="header-item">
             <Link to="/" className="header-cart">
-              <i className="bx bxs-cart btn-cart"></i>
+              <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
+              <Modal 
+                isOpen={isModalOpen} 
+                onClose={closeModal} 
+              >
+                  <Cart/>
+                </Modal>
             </Link>
           </li>
           <li className="header-item">
