@@ -10,7 +10,7 @@ export class PlatformService {
 
   // Obtener una plataforma por ID
   async getPlatformById(id: number): Promise<Platforms | null> {
-    return await platformRepository.findOne({ where: { idPlatform: id } });
+    return await platformRepository.findOne({ where: { id_platform: id } });
   }
 
   // Crear una nueva plataforma

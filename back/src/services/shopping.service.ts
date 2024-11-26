@@ -1,6 +1,6 @@
 import { AppDataSource } from "../config/db-config";
 import { Product } from "../entity/Product.entity";
-import { Shopping } from "../entity/Shopping.entity";
+import { Shopping, StateShopping } from "../entity/Shopping.entity";
 import { shoppingRepository } from "../repositories/shopping.repository";
 
 export class ShoppingService {
@@ -76,13 +76,54 @@ export class ShoppingService {
             await shoppingRepository.save(shoppingRecord);
 
             return shoppingRepository.findOne({
-                where: { user_id: user, products_id: product },
-                relations: ["users", "products"]
+                where: { user_id: user, products_id: product }
             });
             
         } catch (error) {
-            console.error("Error updating shopping: ", error);
+            console.error("Error in updateShopping: ", error);
             throw new Error("Error updating shopping");
         }
+    }
+
+    // Simulación de un servicio de pago externo
+    private async simulatePayment(): Promise<{ status: string }> {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+            resolve({ status: "success" }); // Simula un pago exitoso
+            }, 1000);
+        });
+    }
+
+    async paymentPurchases(user: number):Promise<any> {
+
+        try {
+            // Simulación del estado del pago
+            const paymentResponse = await this.simulatePayment();
+      
+            if (paymentResponse.status !== "success") {
+              throw new Error("Payment failed. Cannot update shopping status.");
+            }
+
+            const pendingShoppings = await shoppingRepository.find({
+              where: { user_id: user, state: StateShopping.PENDING },
+            });
+      
+            if (!pendingShoppings || pendingShoppings.length === 0) throw new Error(`No pending shopping records found for user ID ${user}.`);
+      
+            for (const shopping of pendingShoppings) {
+              shopping.state = StateShopping.COMPLETED;
+              await shoppingRepository.save(shopping);
+            }
+      
+            return {
+              message: "Payment successful. Shopping statuses updated to 'COMPLETED'.",
+              updatedRecords: pendingShoppings,
+            };
+            
+          } catch (error) {
+            console.error("Error in paymentPurchases:", error);
+            throw new Error("An unexpected error occurred.");
+          }
+
     }
 }

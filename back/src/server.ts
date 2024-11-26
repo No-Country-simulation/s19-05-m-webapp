@@ -5,9 +5,7 @@ import { errorHandler } from "./middlewares/errorHandler.mid";
 import { pathHandler } from "./middlewares/pathHandler.mid";
 import indexRouter from "./routers/index.router";
 
-import swaggerUi from "swagger-ui-express";
-import swaggerJSDoc from "swagger-jsdoc";
-import { options } from "./swaggerConfig"
+import { setupSwagger } from "./swagger/config"
 
 const server = express();
 
@@ -17,12 +15,9 @@ server.use(express.urlencoded({ extended: true })); // middelware para leer los 
 server.use(morgan("dev"));
 // Sessions
 
-//SwaggerDocument
-const specs = swaggerJSDoc(options); 
-
 // Rutas aqui abajo.
+setupSwagger(server);
 server.use("/api", indexRouter);
-server.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Manejo de errores.
 server.use(errorHandler);

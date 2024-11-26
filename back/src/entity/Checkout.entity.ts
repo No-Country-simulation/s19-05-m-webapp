@@ -2,9 +2,8 @@ import { Column, Entity,JoinColumn,ManyToOne, PrimaryGeneratedColumn } from "typ
 import { Shopping } from "./Shopping.entity";
 
 export enum StatusCheckout {
-    PENDING = "PENDING",
     PAID = "PAID",
-    CANCELED = "CANCELED",    
+    DECLINED = "DECLINED",    
 }
 
 @Entity()
@@ -15,8 +14,7 @@ export class Checkout {
 
     @Column({
         type: "enum",
-        enum: StatusCheckout,
-        default: StatusCheckout.PENDING,
+        enum: StatusCheckout
     })
     status!: StatusCheckout;
 

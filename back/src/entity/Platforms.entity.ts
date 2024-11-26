@@ -5,7 +5,7 @@ import { Product } from "./Product.entity";
 export class Platforms {
 
     @PrimaryGeneratedColumn()
-    idPlatform!: number;
+    id_platform!: number;
 
     @Column({ length: 50 })
     name: string;

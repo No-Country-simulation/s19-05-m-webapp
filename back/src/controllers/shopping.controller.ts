@@ -15,6 +15,7 @@ export class ShoppingController {
 			this.createShoppingController.bind(this);
 		this.updateShoppingController =
 			this.updateShoppingController.bind(this);
+		this.paymentPurchasesController = this.paymentPurchasesController.bind(this);
 	}
 
 	async getAllShoppingController(
@@ -149,6 +150,18 @@ export class ShoppingController {
 				res,
 				updatedShopping
 			);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async paymentPurchasesController(req: Request, res: Response, next: NextFunction): Promise<any> {
+		try {
+			const { user } = req.params;
+			const user_id = parseInt(user, 10);
+			if(isNaN(user_id)) return ControllerHandler.badRequest("User ID is required and must be a valid number", res);
+			const payment = await this.shoppingService.paymentPurchases(user_id);
+			return ControllerHandler.ok("Payment processed successfully", res, payment);
 		} catch (error) {
 			next(error);
 		}
