@@ -1,5 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
+import ProductsGlobal from "./slices/products.slices";
 
-configureStore({
-  reducer,
+const store = configureStore({
+  reducer: { ProductsGlobal },
 });
+
+export default store;

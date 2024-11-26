@@ -1,0 +1,70 @@
+/*************** HeroImage *************/
+
+.hero-img {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  /* background-attachment: fixed; */
+}
+
+.hero-img-aside {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-title {
+  font-family: var(--title-font);
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 3rem;
+  color: var(--accent-color);
+}
+
+.hero-p {
+  font-family: var(--subtitle-font);
+  font-weight: 400;
+  line-height: 1rem;
+  font-size: 0.9rem;
+}
+
+.hero-btn {
+  text-decoration: none;
+  color: var(--second-color);
+  background-color: var(--first-color);
+  border: 1px solid var(--second-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0 0.5rem;
+  transition: all 500ms ease;
+}
+
+.hero-btn:hover {
+  color: var(--first-color);
+  background-color: var(--second-color);
+}
+
+@media (min-width: 768px) {
+  .hero-img-aside {
+    width: 50%;
+  }
+
+  .hero-img-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .hero-p {
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+
+  .hero-btn {
+    display: block;
+  }
+}

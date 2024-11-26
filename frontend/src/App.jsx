@@ -1,9 +1,12 @@
+import AppRoutes from "./routes/Routes";
 import "./App.css";
+import Header from "./components/Header/Header";
 
 const App = () => {
   return (
     <>
-      <div>E-Commerce</div>
+      <Header />
+      <AppRoutes />
     </>
   );
 };

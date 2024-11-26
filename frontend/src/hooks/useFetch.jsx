@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useFetch = (api) => {
+const useFetch = (api, params = null) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(null);
@@ -8,17 +8,17 @@ const useFetch = (api) => {
     useEffect(() => {
         const getData = async () => {
             try {
-                const result = await api();  
+                const result = await api(params);  
                 setData(result);  
             } catch (error) {
-                setHasError('Error...');  // pasar error de la llamada
+                setHasError(error);
             } finally {
                 setLoading(false); 
             }
         };
 
         getData();
-    }, [api]);
+    }, [api, params]);
 
     return { data, loading, hasError }; 
 };
