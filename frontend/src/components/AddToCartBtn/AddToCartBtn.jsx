@@ -4,6 +4,7 @@ import { useCart } from '../CartContext/CartContext';
 function AddToCartButton({ product }) {
     //Usa el contexto para poder "mandar" las acciones
     const { dispatch } = useCart();
+    
 
     const addToCart = () => {
         if (product.stock > 0) {

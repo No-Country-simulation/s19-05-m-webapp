@@ -23,7 +23,8 @@
 
 // export default Cart;
 import React from 'react';
-import { useCart } from './CartContext';
+import { useCart } from '../CartContext/CartContext';
+
 
 function Cart() {
     const { state, dispatch } = useCart();
