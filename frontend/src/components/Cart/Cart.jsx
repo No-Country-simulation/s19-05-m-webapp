@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCart } from '../CartContext/CartContext';
+import './cart.css';
 
 function Cart() {
     const { state, dispatch } = useCart();
@@ -19,7 +20,7 @@ function Cart() {
     const total = state.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     return (
-        <div>
+        <div className='cart'>
             <h2>Carrito de Compras</h2>
             {state.length === 0 && <p>Tu carrito está vacío.</p>}
             {state.map((item) => (
