@@ -1,28 +1,11 @@
 import React from "react";
 import "./Home.css";
 import Trends from "../../components/home/Trends";
-import Footer from "../../components/Footer/Footer";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
     <div className="home page-container">
-      {/*    <section className="hero-home">
-        <article
-          className="hero-img"
-          style={{ backgroundImage: 'url("hero-img.png")' }}
-        >
-          <aside className="hero-img-aside">
-            <div className="hero-img-content">
-              <h2 className="hero-title">Minecraft</h2>
-              <p className="hero-p">
-                Es un juego de mundo abierto donde los jugadores pueden
-                explorar, construir y sobrevivir en un entorno hecho de bloques.
-              </p>
-              <button className="hero-btn">Obtenlo Ahora</button>
-            </div>
-          </aside>
-        </article>
-      </section> */}
       <section className="hero-home">
         <article
           className="hero-img"
@@ -39,7 +22,9 @@ const Home = () => {
                 supervivencia. Con sus distintos modos de juego y opciones
                 multijugador, es una experiencia para todas las edades.
               </p>
-              <button className="hero-btn">Obtenlo Ahora</button>
+              <Link to="/products" className="hero-btn">
+                Obtenlo Ahora
+              </Link>
             </div>
           </aside>
         </article>
@@ -70,7 +55,10 @@ const Home = () => {
             <h5>
               Tenemos gran diversidad de géneros de juegos, échale un vistazo
             </h5>
-            <button className="categories-btn">Ver Categorias</button>
+            <Link to="/products" className="categories-btn">
+              Ver Categorias
+            </Link>
+            {/* <button className="categories-btn">Ver Categorias</button> */}
           </div>
         </article>
       </section>

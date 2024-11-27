@@ -158,7 +158,8 @@
   background-color: var(--second-color);
   border: 1px solid var(--second-color);
   border-radius: 0.5rem;
-  padding: 0.5rem;
+  border-radius: 1.4rem;
+  padding: 0.8rem;
   margin: 0 0.5rem;
   transition: all 500ms ease;
 }
