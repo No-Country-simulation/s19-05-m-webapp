@@ -6,7 +6,7 @@ import Footer from "../../components/Footer/Footer";
 const Home = () => {
   return (
     <div className="home page-container">
-      <section className="hero-home">
+      {/*    <section className="hero-home">
         <article
           className="hero-img"
           style={{ backgroundImage: 'url("hero-img.png")' }}
@@ -17,6 +17,27 @@ const Home = () => {
               <p className="hero-p">
                 Es un juego de mundo abierto donde los jugadores pueden
                 explorar, construir y sobrevivir en un entorno hecho de bloques.
+              </p>
+              <button className="hero-btn">Obtenlo Ahora</button>
+            </div>
+          </aside>
+        </article>
+      </section> */}
+      <section className="hero-home">
+        <article
+          className="hero-img"
+          style={{ backgroundImage: 'url("hero-img.png")' }}
+        >
+          <aside className="hero-img-opacity">
+            <div className="hero-img-content">
+              <h2 className="hero-title">Minecraft</h2>
+              <p className="hero-p">
+                Es un juego de mundo abierto donde los jugadores pueden
+                explorar, construir y sobrevivir en un entorno hecho de bloques.
+                Ofrece infinitas posibilidades de creatividad, desde crear
+                estructuras increíbles hasta enfrentar desafíos en modo
+                supervivencia. Con sus distintos modos de juego y opciones
+                multijugador, es una experiencia para todas las edades.
               </p>
               <button className="hero-btn">Obtenlo Ahora</button>
             </div>

@@ -10,7 +10,7 @@ const Header = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
-    <header className="header-container">
+    <header className="header-container page-container">
       <div className="header-logo">
         <Link to="/">
           <img src="logo.png" alt="checkpoint logo" />
@@ -51,12 +51,9 @@ const Header = () => {
           <li className="header-item">
             <Link to="/" className="header-cart">
               <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
-              <Modal 
-                isOpen={isModalOpen} 
-                onClose={closeModal} 
-              >
-                  <Cart/>
-                </Modal>
+              <Modal isOpen={isModalOpen} onClose={closeModal}>
+                <Cart />
+              </Modal>
             </Link>
           </li>
           <li className="header-item">
