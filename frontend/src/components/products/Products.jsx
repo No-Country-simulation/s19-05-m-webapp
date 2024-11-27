@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../card/Card";
 import Dropdown from "../dropdown/Dropdown";
@@ -10,6 +10,8 @@ import "./products.css";
 const Products = () => {
     const { data: products } = useFetch(productService.getProducts);
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [loading, setLoading] = useState(false);  
+    const [page, setPage] = useState(1);
     const navigate = useNavigate();
     const [selectedOptions, setSelectedOptions] = useState({ platform: '', genre: '', model: '' });
     const { data: productsByGenre } = useFetch(
@@ -52,8 +54,28 @@ const Products = () => {
             );
         }
 
-        setFilteredProducts(productsToShow || []);
-    }, [selectedOptions, products, productsByGenre, productsByPlatform]);
+        setFilteredProducts(productsToShow?.slice(0, page * 10));
+    }, [selectedOptions, products, productsByGenre, productsByPlatform, page]);
+
+    const loadMoreProducts = useCallback(() => {
+        if (loading) return;
+        setLoading(true);
+        setPage((prevPage) => prevPage + 1);
+        setLoading(false);
+    }, [loading]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                loadMoreProducts();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [loadMoreProducts]);
+    
 
     const clearFilters = () => {
         setSelectedOptions({ platform: '', genre: '', model: '' });
@@ -111,6 +133,7 @@ const Products = () => {
                         <p>No se encontraron productos que coincidan con los filtros seleccionados.</p>
                     )
                 }
+                {loading && <p style={{color:'red'}}>Cargando más productos...</p>}
             </div>
         </>
     );
