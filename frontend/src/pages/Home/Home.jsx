@@ -32,7 +32,7 @@ const Home = () => {
       <section className="home-trends">
         <Trends />
       </section>
-      <section className="about">
+      <section className="about mt">
         <article>
           <p>
             En Checkpoint Zone amamos los videojuegos tanto como tú. Aquí
@@ -46,7 +46,7 @@ const Home = () => {
         </article>
         <img className="about-img" src="/about-img.png" alt="about" />
       </section>
-      <section className="categories">
+      <section className="categories mt">
         <article className="categories-card">
           <img className="img-1" src="home-avatar-1.png" alt="Avatar 1" />
           <img className="img-2" src="/home-avatar-2.png" alt="Avatar 2" />

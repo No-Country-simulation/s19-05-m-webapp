@@ -16,15 +16,21 @@ const Header = () => {
           <img src="logo.png" alt="checkpoint logo" />
         </Link>
       </div>
+      <div className="header-cart">
+        <Link to="/">
+          <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
+          <Modal isOpen={isModalOpen} onClose={closeModal}>
+            <Cart />
+          </Modal>
+        </Link>
+      </div>
       <div
         className="menu"
         onClick={() => {
           setMenuOpen(!menuOpen);
         }}
       >
-        <span></span>
-        <span></span>
-        <span></span>
+        <i className="bx bx-user-circle bx-user"></i>
       </div>
       <nav className="header-nav">
         <ul className={menuOpen ? "open" : ""}>
@@ -48,14 +54,14 @@ const Header = () => {
               Productos
             </Link>
           </li>
-          <li className="header-item">
-            <Link to="/" className="header-cart">
+          {/* <li className="header-item">
+            <Link to="/" className="header-cart d-none">
               <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
               <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <Cart />
               </Modal>
             </Link>
-          </li>
+          </li> */}
           <li className="header-item">
             <Link to="/" className="header-item-link">
               Iniciar sesion
