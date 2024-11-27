@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../card/Card";
 import Dropdown from "../dropdown/Dropdown";
@@ -9,11 +9,16 @@ import "./products.css";
 
 const Products = () => {
     const { data: products } = useFetch(productService.getProducts);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const navigate = useNavigate();
-    const [selectedOptions, setSelectedOptions] = useState({ console: '', genre: '' });
+    const [selectedOptions, setSelectedOptions] = useState({ platform: '', genre: '', model: '' });
     const { data: productsByGenre } = useFetch(
         selectedOptions.genre ? productService.getProductsByGenre : null,
         selectedOptions.genre
+    );
+    const { data: productsByPlatform } = useFetch(
+        selectedOptions.platform ? productService.getProductsByPlatform : null,
+        selectedOptions.platform
     );
 
     const handleCard = (id) => {
@@ -28,25 +33,42 @@ const Products = () => {
         })); 
     };
 
+    useEffect(() => {
+        let productsToShow = products;
+
+        if (selectedOptions.genre && productsByGenre) {
+            productsToShow = productsByGenre;
+        }
+
+        if (selectedOptions.platform && productsToShow) {
+            productsToShow = productsToShow.filter(product => 
+                product.platforms.some(platform => platform.name === selectedOptions.platform)
+            );
+        }
+
+        if (selectedOptions.model && productsToShow) {
+            productsToShow = productsToShow.filter((product) =>
+                product.platforms.some(platform => platform.model === selectedOptions.model)
+            );
+        }
+
+        setFilteredProducts(productsToShow || []);
+    }, [selectedOptions, products, productsByGenre, productsByPlatform]);
+
     const clearFilters = () => {
-        setSelectedOptions({
-            console: '',
-            genre: '',
-        });
+        setSelectedOptions({ platform: '', genre: '', model: '' });
     };
 
-    const isFilterActive = selectedOptions.console || selectedOptions.genre;
-
-    const productsToShow = selectedOptions.genre ? productsByGenre : products;
+    const isFilterActive = selectedOptions.platform || selectedOptions.genre;
 
     return (
         <>
             <div className="products-dropdown">
                 <Dropdown 
-                    options={options.consoleOptions} 
-                    value={selectedOptions.console} 
+                    options={options.platformOptions} 
+                    value={selectedOptions.platform} 
                     onChange={handleSelectChange} 
-                    name="console" 
+                    name="platform" 
                 />
                 <Dropdown 
                     options={options.genreOptions} 
@@ -54,6 +76,16 @@ const Products = () => {
                     onChange={handleSelectChange} 
                     name="genre"
                 />
+                {
+                    selectedOptions.platform && (
+                        <Dropdown 
+                            options={options.modelOptions} 
+                            value={selectedOptions.model} 
+                            onChange={handleSelectChange} 
+                            name="model"
+                        />
+                    )
+                }
                 {
                     isFilterActive && (
                         <button className="clear-filters-btn" onClick={clearFilters}>
@@ -65,8 +97,8 @@ const Products = () => {
             <h1>Productos</h1>
             <div className="products-container">
                 {
-                    productsToShow && productsToShow.length > 0 ? (
-                        productsToShow.map((product) => (
+                    filteredProducts && filteredProducts.length > 0 ? (
+                        filteredProducts.map((product) => (
                             <Card
                                 key={product.id_product}
                                 title={product.title}

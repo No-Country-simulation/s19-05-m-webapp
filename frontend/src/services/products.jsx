@@ -29,10 +29,20 @@ const getProductsByGenre = async (genre) => {
   	}
 }
 
+const getProductsByPlatform = async (platform) => {
+	try {
+		const response = await axios.get(`${BASE_URL}/products/platform/${platform}`);
+		return response.data.data;
+  	} catch (error) {
+		console.log(error);
+  	}
+}
+
 const productService = {
     getProducts,
 	getProductById,
 	getProductsByGenre,
+	getProductsByPlatform,
 };
 
 export default productService;
