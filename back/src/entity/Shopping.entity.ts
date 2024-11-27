@@ -12,8 +12,9 @@ import { Product } from "./Product.entity";
 import { Checkout } from "./Checkout.entity";
 
 export enum StateShopping {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED"
 }
 
 @Entity()
@@ -26,15 +27,9 @@ export class Shopping {
   products_id!: number;
 
   @Column({
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP",
-  })
-  date_shopping!: Date;
-
-  @Column({
     type: "enum",
     enum: StateShopping,
-    default: StateShopping.ACTIVE,
+    default: StateShopping.PENDING,
   })
   state!: StateShopping;
 

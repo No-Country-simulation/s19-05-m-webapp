@@ -7,13 +7,6 @@ import shoppingRouter from "./shopping.router";
 
 const indexRouter = Router()
 
-/**
- * @openapi
- * /tasks:
- *     get:
- *         description: Tests
- */
-
 indexRouter.use("/products", productRouter)
 indexRouter.use("/users", userRouter)
 indexRouter.use("/sessions", sessionRouter)
