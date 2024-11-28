@@ -40,9 +40,9 @@ const getProductsByPlatform = async (platform) => {
 
 const productService = {
     getProducts,
-	getProductById,
-	getProductsByGenre,
-	getProductsByPlatform,
+	  getProductById,
+	  getProductsByGenre,
+	  getProductsByPlatform,
 };
 
 export default productService;

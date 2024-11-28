@@ -24,6 +24,7 @@ const genreOptions = [
 ];
 
 const countryOptions = [
+    { value: 'Países' },
     { value: 'Argentina'},
     { value: 'Bolivia'},
     { value: 'Chile' },
