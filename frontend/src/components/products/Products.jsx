@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "../card/Card";
 import Dropdown from "../dropdown/Dropdown";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
+import Loader from "../loader/Loader";
 import productService from "../../services/products";
 import useFetch from "../../hooks/useFetch";
 import useReset from "../../hooks/useReset";
@@ -11,26 +12,26 @@ import useFilteredProducts from "../../hooks/useFilteredProducts";
 import "./products.css";
 
 const Products = () => {
-    const { data: products } = useFetch(productService.getProducts);
-    const { page, loading, loadMore, resetPagination } = usePagination();
+    const { data: products, loading: productsLoading } = useFetch(productService.getProducts);
+    const { page, loading: paginationLoading, loadMore, resetPagination } = usePagination();
     const navigate = useNavigate();
 
     const { values: selectedOptions, handleChange, reset } = useReset(
         { platform: '', genre: '', model: '' }
     );
     
-    const { data: productsByGenre } = useFetch(
+    const { data: productsByGenre, loading: genreLoading } = useFetch(
         selectedOptions.genre ? productService.getProductsByGenre : null,
         selectedOptions.genre
     );
 
-    const { data: productsByPlatform } = useFetch(
+    const { data: productsByPlatform, loading: platformLoading } = useFetch(
         selectedOptions.platform ? productService.getProductsByPlatform : null,
         selectedOptions.platform
     );
 
-    const filteredProducts = useFilteredProducts(
-        selectedOptions, products, productsByGenre, productsByPlatform, page
+    const filteredProducts = useFilteredProducts(selectedOptions, products, 
+        productsByGenre, productsByPlatform, page,
     );
 
     const handleCard = (id) => {
@@ -75,8 +76,10 @@ const Products = () => {
             </div>
             <h1>Productos</h1>
             <div className="products-container">
-                {
-                    filteredProducts && filteredProducts.length > 0 ? (
+            {
+                    productsLoading || genreLoading || platformLoading ? (
+                        <Loader /> 
+                    ) : filteredProducts && filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
                             <Card
                                 key={product.id_product}
@@ -90,13 +93,15 @@ const Products = () => {
                         <p>No se encontraron productos que coincidan con los filtros seleccionados.</p>
                     )
                 }
-                {loading && <p>Cargando más productos...</p>}
             </div>
             <InfiniteScroll 
                 onLoadMore={loadMore} 
                 hasMore={filteredProducts?.length < products?.length} 
-                loading={loading} 
+                loading={paginationLoading} 
             />
+            {
+                paginationLoading && <Loader />
+            }
         </>
     );
 };
