@@ -33,6 +33,34 @@ productRouter.get("", productController.getAllProductsController);
 
 /**
  * @swagger
+ * /api/products/{id}:
+ *   get:
+ *     summary: Retrieve a specific product by ID.
+ *     tags: [Product]
+ *     description: This endpoint retrieves the details of a specific product based on its unique ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The unique ID of the product to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The product details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: Product not found.
+ *       500:
+ *         description: Internal server error.
+ */
+productRouter.get("/:id", productController.getProductByIdController);
+
+/**
+ * @swagger
  * /api/products/limited?limit={number}:
  *   get:
  *     summary: Returns a limited list of products.
