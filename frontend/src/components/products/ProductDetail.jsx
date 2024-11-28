@@ -25,7 +25,7 @@ const ProductDetail = () => {
                         <p>Nintendo</p>
                         <p>Disponible: {product.stock}</p>
                         <p>${product.price}</p>
-                        <AddToCartButton product={product} />
+                        <AddToCartButton product={product}/>
                         <p>Comprar</p>
                     </>
                 ) 
