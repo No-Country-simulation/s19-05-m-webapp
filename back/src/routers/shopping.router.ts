@@ -3,49 +3,6 @@ import { ShoppingController } from "../controllers/shopping.controller";
 
 const shoppingRouter = Router();
 const shoppingController = new ShoppingController();
-/**
- * @swagger
- * components:
- *   schemas:
- *     Shopping:
- *       type: object
- *       required:
- *         - user_id
- *         - products_id
- *         - state
- *         - quantity
- *       properties:
- *         user_id:
- *           type: integer
- *           description: The ID of the user associated with the shopping
- *         products_id:
- *           type: integer
- *           description: The ID of the product in the shopping cart
- *         state:
- *           type: string
- *           description: The state of the shopping, can be "PENDING", "COMPLETED", or "CANCELLED"
- *           enum:
- *             - "PENDING"
- *             - "COMPLETED"
- *             - "CANCELLED"
- *           default: "PENDING"
- *         quantity:
- *           type: integer
- *           description: The quantity of the product in the shopping cart
- *         users:
- *           $ref: '#/components/schemas/User'  # Referencia al esquema de la entidad User
- *         products:
- *           $ref: '#/components/schemas/Product'  # Referencia al esquema de la entidad Product
- *         checkout:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Checkout'  # Referencia al esquema de la entidad Checkout
- *       example:
- *         user_id: 1
- *         products_id: 101
- *         state: "PENDING"
- *         quantity: 2
- */
 
 /**
  * @swagger
@@ -78,6 +35,26 @@ shoppingRouter.get("", shoppingController.getAllShoppingController);
  *   post:
  *     summary: Creates a new shopping cart for a user.
  *     tags: [Shopping]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: integer
+ *                 description: The ID of the user creating the shopping cart.
+ *               products_id:
+ *                 type: integer
+ *                 description: The ID of the product being added to the cart.
+ *               quantity:
+ *                 type: integer
+ *                 description: The quantity of the product being added to the cart.
+ *             required:
+ *               - user_id
+ *               - products_id
+ *               - quantity
  *     responses:
  *       201:
  *         description: The shopping cart has been successfully created.
@@ -85,6 +62,10 @@ shoppingRouter.get("", shoppingController.getAllShoppingController);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Shopping'
+ *       400:
+ *         description: Bad request due to invalid data in the request body.
+ *       500:
+ *         description: Internal server error.
  */
 shoppingRouter.post("", shoppingController.createShoppingController);
 
@@ -149,5 +130,50 @@ shoppingRouter.put("/:user/:product", shoppingController.updateShoppingControlle
  *         description: Internal server error.
  */
 shoppingRouter.patch("/:user", shoppingController.paymentPurchasesController);
+
+/**
+ * @swagger
+ * /api/shopping/{user}/{product}:
+ *   delete:
+ *     summary: Removes a specific product from a user's shopping cart.
+ *     tags: [Shopping]
+ *     parameters:
+ *       - in: path
+ *         name: user
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the user whose shopping cart is being modified.
+ *       - in: path
+ *         name: product
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the product to be removed from the shopping cart.
+ *     responses:
+ *       200:
+ *         description: The product was successfully removed from the shopping cart.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Product removed from shopping cart successfully."
+ *       404:
+ *         description: The specified product or user was not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "User or product not found."
+ *       500:
+ *         description: Internal server error.
+ */
+shoppingRouter.delete("/:user/:product", shoppingController.deleteShoppingController);
 
 export default shoppingRouter;

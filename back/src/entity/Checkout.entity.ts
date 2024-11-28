@@ -30,11 +30,11 @@ export class Checkout {
     @Column()
     shopping_products!: number;
 
-    @ManyToOne(() => Shopping)
+    @ManyToOne(() => Shopping, { eager: true })
     @JoinColumn([
         { name: "shopping_user", referencedColumnName: "user_id" },
         { name: "shopping_products", referencedColumnName: "products_id" }
     ])
-    shopping!: Shopping[];
+    shopping!: Shopping;
 
 }

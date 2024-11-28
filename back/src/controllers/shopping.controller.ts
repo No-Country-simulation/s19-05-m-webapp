@@ -2,27 +2,69 @@ import { Request, Response, NextFunction } from "express";
 import { ShoppingService } from "../services/shopping.service";
 import ControllerHandler from "../handlers/controllers.handler";
 import { Shopping } from "../entity/Shopping.entity";
+import { AppDataSource } from "../config/db-config";
+import { CheckoutService } from "../services/checkout.service";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Shopping:
+ *       type: object
+ *       required:
+ *         - user_id
+ *         - products_id
+ *         - state
+ *         - quantity
+ *       properties:
+ *         user_id:
+ *           type: integer
+ *           description: The ID of the user associated with the shopping
+ *         products_id:
+ *           type: integer
+ *           description: The ID of the product in the shopping cart
+ *         state:
+ *           type: string
+ *           description: The state of the shopping, can be "PENDING", "COMPLETED", or "CANCELLED"
+ *           enum:
+ *             - "PENDING"
+ *             - "COMPLETED"
+ *             - "CANCELLED"
+ *           default: "PENDING"
+ *         quantity:
+ *           type: integer
+ *           description: The quantity of the product in the shopping cart
+ *         users:
+ *           $ref: '#/components/schemas/User'  # Referencia al esquema de la entidad User
+ *         products:
+ *           $ref: '#/components/schemas/Product'  # Referencia al esquema de la entidad Product
+ *         checkout:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Checkout'  # Referencia al esquema de la entidad Checkout
+ *       example:
+ *         user_id: 1
+ *         products_id: 101
+ *         state: "PENDING"
+ *         quantity: 2
+ */
 export class ShoppingController {
+	
 	private readonly shoppingService: ShoppingService;
 
 	constructor() {
-		this.shoppingService = new ShoppingService();
 
-		this.getAllShoppingController =
-			this.getAllShoppingController.bind(this);
-		this.createShoppingController =
-			this.createShoppingController.bind(this);
-		this.updateShoppingController =
-			this.updateShoppingController.bind(this);
+		const checkoutService = new CheckoutService(AppDataSource);
+		this.shoppingService = new ShoppingService(checkoutService);
+
 		this.paymentPurchasesController = this.paymentPurchasesController.bind(this);
+		this.getAllShoppingController = this.getAllShoppingController.bind(this);
+		this.createShoppingController = this.createShoppingController.bind(this);
+		this.updateShoppingController = this.updateShoppingController.bind(this);
+		this.deleteShoppingController = this.deleteShoppingController.bind(this);
 	}
 
-	async getAllShoppingController(
-		req: Request,
-		res: Response,
-		next: NextFunction
-	): Promise<any> {
+	async getAllShoppingController(req: Request, res: Response, next: NextFunction): Promise<any> {
 		try {
 			
 			const shoppings = await this.shoppingService.getAllShopping();
@@ -87,11 +129,7 @@ export class ShoppingController {
 		}
 	}
 
-	async createShoppingController(
-		req: Request,
-		res: Response,
-		next: NextFunction
-	): Promise<any> {
+	async createShoppingController( req: Request, res: Response, next: NextFunction): Promise<any> {
 		try {
 
 			const {user_id, products_id, quantity} = req.body;
@@ -114,11 +152,7 @@ export class ShoppingController {
 		}
 	}
 
-	async updateShoppingController(
-		req: Request,
-		res: Response,
-		next: NextFunction
-	): Promise<any> {
+	async updateShoppingController(req: Request, res: Response, next: NextFunction): Promise<any> {
 		try {
             
 			const { user, product } = req.params;
@@ -127,10 +161,7 @@ export class ShoppingController {
 			const product_id = parseInt(product, 10);
 
 			if (isNaN(user_id) || isNaN(product_id)) {
-				return ControllerHandler.badRequest(
-					"User ID and Product ID must be valid numbers",
-					res
-				);
+				return ControllerHandler.badRequest("User ID and Product ID must be valid numbers",res);
 			}
 
 			const shoppingData: Partial<Shopping> = req.body;
@@ -151,6 +182,21 @@ export class ShoppingController {
 				updatedShopping
 			);
 		} catch (error) {
+			next(error);
+		}
+	}
+
+	async deleteShoppingController(req: Request, res: Response, next: NextFunction): Promise<any> {
+		try {
+
+			const { user, product } = req.params;
+			const user_id = parseInt(user, 10);
+			const product_id = parseInt(product, 10);
+			if (isNaN(user_id) || isNaN(product_id)) return ControllerHandler.badRequest("User ID and Product ID must be valid numbers",res);
+			const deletedShopping = await this.shoppingService.deleteShopping(user_id, product_id);
+			return ControllerHandler.ok("Shopping deleted successfully", res, deletedShopping);
+
+		} catch(error){
 			next(error);
 		}
 	}

@@ -3,6 +3,67 @@ import { ProductService } from "../services/product.service";
 import { Product } from "../entity/Product.entity";
 import ControllerHandler from "../handlers/controllers.handler";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - title
+ *         - price
+ *         - description
+ *         - type
+ *         - image
+ *         - genre
+ *         - stock
+ *       properties:
+ *         id_product:
+ *           type: integer
+ *           description: The auto-generated ID of the product
+ *         title:
+ *           type: string
+ *           description: The title of the product
+ *           maxLength: 45
+ *         price:
+ *           type: number
+ *           format: float
+ *           description: The price of the product
+ *         available:
+ *           type: boolean
+ *           description: Indicates if the product is available for sale
+ *           default: true
+ *         description:
+ *           type: string
+ *           description: A detailed description of the product
+ *         type:
+ *           type: string
+ *           description: The type/category of the product
+ *           maxLength: 20
+ *         image:
+ *           type: string
+ *           description: URL or path to the product image
+ *         genre:
+ *           type: string
+ *           description: The genre of the product (e.g., for games or media)
+ *           maxLength: 20
+ *         stock:
+ *           type: integer
+ *           description: The number of items in stock for this product
+ *         platforms:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Platforms'
+ *           description: A list of platforms associated with the product
+ *       example:
+ *         title: "Product Title"
+ *         price: 99.99
+ *         description: "A great product."
+ *         type: "Electronics"
+ *         image: "/images/product.jpg"
+ *         genre: "Action"
+ *         stock: 100
+ */
 export class ProductController {
   private readonly productService: ProductService;
 

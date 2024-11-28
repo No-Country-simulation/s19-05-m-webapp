@@ -6,64 +6,6 @@ import { hashPassword } from "../middlewares/hashPassword.mid";
 
 const userRouter = Router();
 const userController = new UserController();
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       required:
- *         - name
- *         - email
- *         - password
- *         - address
- *         - phone
- *         - role
- *       properties:
- *         id_users:
- *           type: integer
- *           description: The auto-generated ID of the user
- *         name:
- *           type: string
- *           description: The name of the user
- *           maxLength: 45
- *         email:
- *           type: string
- *           description: The email address of the user
- *           maxLength: 45
- *         password:
- *           type: string
- *           description: The password of the user (hashed)
- *           maxLength: 100
- *         active:
- *           type: boolean
- *           description: Indicates if the user is active or not
- *           default: true
- *         address:
- *           type: string
- *           description: The address of the user
- *           maxLength: 50
- *         phone:
- *           type: string
- *           description: The phone number of the user
- *           maxLength: 20
- *         role:
- *           type: string
- *           description: The role of the user, can be either "ADMINISTRATOR" or "USER"
- *           enum:
- *             - "ADMINISTRATOR"
- *             - "USER"
- *           default: "USER"
- *       example:
- *         id_users: 1
- *         name: "John Doe"
- *         email: "johndoe@example.com"
- *         password: "$2a$12$samplehashedpasswordhere"
- *         active: true
- *         address: "123 Main St, Springfield"
- *         phone: "123-456-7890"
- *         role: "USER"
- */
 
 /**
  * @swagger
