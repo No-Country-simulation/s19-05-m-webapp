@@ -62,9 +62,9 @@ const Header = () => {
               </Modal>
             </Link>
           </li> */}
-          <li className="header-item">
+          <li className="header-item" id="iniciar-sesion-header">
             <Link to="/" className="header-item-link">
-              Iniciar sesion
+              Iniciar sesión
             </Link>
           </li>
         </ul>

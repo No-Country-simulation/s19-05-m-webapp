@@ -21,18 +21,20 @@ const GoogleAuth = () => {
     useEffect(() => {
         /* global google */
         google.accounts.id.initialize({
-            client_id: "152919958051-h2t2jisgn1hl97egdrst3uphhecsqp7s.apps.googleusercontent.com",
+            client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
             callback: handleCallbackResponse,
         })
-            
+
         google.accounts.id.renderButton(
             document.getElementById("logInButton"),
             { theme: "filled_blue", size: "large" }
         )
         if (user) {
             document.getElementById("logInButton").style.display = "none";
+            document.getElementById("iniciar-sesion-header").style.display = "none";
         } else {
             document.getElementById("logInButton").style.display = "block";
+            document.getElementById("iniciar-sesion-header").style.display = "block";
         }
     }, [user]);
 
