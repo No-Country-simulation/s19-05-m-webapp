@@ -1,14 +1,35 @@
 import { Link } from "react-router-dom";
 import "./Header.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useModal from "../../hooks/useModal";
+import useLogin from "../../hooks/useLogin";
 import Modal from "../modal/Modal";
 import Cart from "../Cart/Cart";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/slices/auth.slices";
+import GoogleAuth from "../GoogleAuth/GoogleAuth"
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { isLoginOpen, openLogin, closeLogin } = useLogin();
 
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+
+    function handleSignOut(event) {
+        dispatch(logout());
+        google.accounts.id.disableAutoSelect();
+    }
+
+    useEffect(() => {
+      if (user) {
+          document.getElementById("iniciar-sesion-header").style.display = "none";
+      } else {
+          document.getElementById("iniciar-sesion-header").style.display = "block";
+      }
+  }, [user]);
+  
   return (
     <header className="header-container page-container">
       <div className="header-logo">
@@ -63,10 +84,16 @@ const Header = () => {
             </Link>
           </li> */}
           <li className="header-item" id="iniciar-sesion-header">
-            <Link to="/" className="header-item-link">
-              Iniciar sesión
-            </Link>
+            <Link to="/" className="header-item-link" onClick={openLogin}>
+              Iniciar sesión</Link>
+              <GoogleAuth isOpen={isLoginOpen} onClose={closeLogin} />
+            
           </li>
+            {user && (
+                    <li className="header-item" onClick={handleSignOut}>
+                      <Link to="/" className="header-item-link">Desconectarse</Link>
+                    </li>
+                 )}
         </ul>
       </nav>
     </header>
