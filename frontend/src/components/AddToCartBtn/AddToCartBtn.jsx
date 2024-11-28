@@ -5,7 +5,7 @@ import { Toaster, toast } from 'sonner';
 function AddToCartButton({ product }) {
     //Usa el contexto para poder "mandar" las acciones
     const { dispatch } = useCart();
-    
+
 
     const addToCart = () => {
         if (product.stock > 0) {
@@ -19,16 +19,18 @@ function AddToCartButton({ product }) {
     return (
         //Modificar el icono cart acá
         <>
-        <Toaster
-            richColors
-            position="top-center" />
-        <button onClick={() => {
-            addToCart()
+            <Toaster
+                richColors
+                //closeButton
+                position="top-center"
+            />
+            <button onClick={() => {
+                addToCart()
             }
-        }
-        disabled={product.stock === 0}>
-        Añadir al carrito
-        </button>
+            }
+                disabled={product.stock === 0}>
+                Añadir al carrito
+            </button>
         </>
     );
 }

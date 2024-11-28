@@ -33,8 +33,10 @@ const cartReducer = (state, action) => { //Estado actual y acción sobre como mo
 //Children = quienes consumen el contexto
 export const CartProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, []);
+    const totalQuantity = state.reduce((total, item) => total + item.quantity, 0);
+
     return (
-        <CartContext.Provider value={{ state, dispatch }}>
+        <CartContext.Provider value={{ state, dispatch, totalQuantity }}>
             {children}
         </CartContext.Provider>
     );

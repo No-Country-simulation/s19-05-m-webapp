@@ -4,10 +4,12 @@ import { useState } from "react";
 import useModal from "../../hooks/useModal";
 import Modal from "../modal/Modal";
 import Cart from "../Cart/Cart";
+import { useCart } from "../CartContext/CartContext";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { totalQuantity } = useCart();
 
   return (
     <header className="header-container page-container">
@@ -17,12 +19,13 @@ const Header = () => {
         </Link>
       </div>
       <div className="header-cart">
-        <Link to="/">
           <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
+          {totalQuantity > 0 && ( 
+            <span className="cart-count">{totalQuantity}</span>
+          )}
           <Modal isOpen={isModalOpen} onClose={closeModal}>
             <Cart />
           </Modal>
-        </Link>
       </div>
       <div
         className="menu"
