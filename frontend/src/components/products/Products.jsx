@@ -12,7 +12,7 @@ import useFilteredProducts from "../../hooks/useFilteredProducts";
 import "./products.css";
 
 const Products = () => {
-    const { data: products, loading: productsLoading } = useFetch(productService.getProducts);
+    const { data: products, loading: productsLoading, hasError: productsError } = useFetch(productService.getProducts);
     const { page, loading: paginationLoading, loadMore, resetPagination } = usePagination();
     const navigate = useNavigate();
 
@@ -20,12 +20,12 @@ const Products = () => {
         { platform: '', genre: '', model: '' }
     );
     
-    const { data: productsByGenre, loading: genreLoading } = useFetch(
+    const { data: productsByGenre, loading: genreLoading, hasError: genreError } = useFetch(
         selectedOptions.genre ? productService.getProductsByGenre : null,
         selectedOptions.genre
     );
 
-    const { data: productsByPlatform, loading: platformLoading } = useFetch(
+    const { data: productsByPlatform, loading: platformLoading, hasError : platformError } = useFetch(
         selectedOptions.platform ? productService.getProductsByPlatform : null,
         selectedOptions.platform
     );
@@ -56,7 +56,7 @@ const Products = () => {
                     name="genre"
                 />
                 {
-                    selectedOptions.platform && (
+                    selectedOptions.platform && productsByPlatform && (
                         <Dropdown 
                             options={options.modelOptions} 
                             value={selectedOptions.model} 
@@ -76,8 +76,10 @@ const Products = () => {
             </div>
             <h1>Productos</h1>
             <div className="products-container">
-            {
-                    productsLoading || genreLoading || platformLoading ? (
+                {
+                    productsError || genreError || platformError ? (
+                        <p>{ productsError || genreError || platformError }</p>
+                    ) : productsLoading || genreLoading || platformLoading ? (
                         <Loader /> 
                     ) : filteredProducts && filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
@@ -89,9 +91,9 @@ const Products = () => {
                                 onClick={() => handleCard(product.id_product)} 
                             />
                         ))
-                    ) : (
+                    ) : (isFilterActive && filteredProducts.length === 0) ? (
                         <p>No se encontraron productos que coincidan con los filtros seleccionados.</p>
-                    )
+                    ) : null
                 }
             </div>
             <InfiniteScroll 

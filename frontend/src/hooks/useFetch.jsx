@@ -6,6 +6,8 @@ const useFetch = (api, params = null) => {
     const [hasError, setHasError] = useState(null);
 
     useEffect(() => {
+        if (!api) return;
+
         const getData = async () => {
             setLoading(true);  
             setHasError(null);  
@@ -15,13 +17,16 @@ const useFetch = (api, params = null) => {
                 const result = await api(params);
                 setData(result);  
             } catch (error) {
-                setHasError(error);
+                console.log(error)
+                const errorMessage = error.message || "Ha ocurrido un error inesperado.";
+                setHasError(errorMessage);
             } finally {
                 setLoading(false);  
             }
         };
 
         getData();
+
     }, [api, params]);
 
     return { data, loading, hasError }; 
