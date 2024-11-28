@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import productsReducer from "./slices/products.slices";
+import ProductsGlobal from "./slices/products.slices";
+import Shipping from "./slices/shipping.slice";
+import shippingMiddleware from "./middlewares/shipping.middleware";
 import authReducer from "./slices/auth.slices";
 
 const store = configureStore({
-  reducer: { 
-    auth: authReducer,
-    products: productsReducer,
-  },
+  reducer: { ProductsGlobal, Shipping, authReducer },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(shippingMiddleware),
 });
 
 export default store;

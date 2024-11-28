@@ -1,12 +1,35 @@
 h1 {
-    color: #fff;
     font-weight: 500;
     letter-spacing: 2px;
-    padding-bottom: 20px;
+    padding: 50px 0;
+    text-align: center;
 }
 
-p {
-    color: #fff;
+h1, p {
+    color: var(--accent-color);
+}
+
+.products-dropdown {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.products-dropdown select {
+    background-color: transparent;
+    border: 1px solid var(--second-color);
+    border-radius: 8px;
+    box-shadow: 0 3px 15px -5px var(--second-color);
+    color: var(--second-color);
+    font-size: 16px;
+    margin-top: 5px;
+    outline: none;
+    padding: 10px;
+    width: 100%;
+}
+
+.products-dropdown option {
+    background-color: var(--first-color);
 }
 
 .products-container {
@@ -18,5 +41,20 @@ p {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+    }
+
+    .products-dropdown {
+        flex-wrap: nowrap;
+    }
+
+    h1 {
+        padding-bottom: 30px;
+        text-align: left;
+    }
+}
+
+@media (min-width: 1024px) {
+    .products-dropdown select {
+        width: 30%;
     }
 }

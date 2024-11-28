@@ -1,0 +1,44 @@
+/* Estilo para la sección de Términos y Condiciones */
+.terms-section {
+  background-color: var(--first-color);
+  color: var(--accent-color);
+  padding: 40px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.terms-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.terms-section h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  color: var(--accent-color);
+  margin-bottom: 20px;
+}
+
+.terms-content {
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.terms-section h3 {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  color: var(--accent-color);
+}
+
+.terms-section p {
+  margin-bottom: 15px;
+  color: var(--accent-color);
+}
+
+.terms-section a {
+  color: var(--second-color);
+  text-decoration: none;
+}
+
+.terms-section a:hover {
+  text-decoration: underline;
+}

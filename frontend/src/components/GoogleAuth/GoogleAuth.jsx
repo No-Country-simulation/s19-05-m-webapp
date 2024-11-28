@@ -43,7 +43,7 @@ const GoogleAuth = () => {
                 <div id="logInButton"></div>
                 {user && (
                     <>
-                        <button onClick={handleSignOut}>Sign Out</button>
+                        <button onClick={handleSignOut}>Desconectarse</button>
                         <div>
                             <img src={user.picture} alt="User avatar" style={{width:100}}/>
                             <h3>{user.name}</h3>

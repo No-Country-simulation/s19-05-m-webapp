@@ -1,0 +1,42 @@
+.remember-contain label {
+  margin-top: 0.8rem;
+  display: inline-flex;
+}
+
+input,
+input[type="text"] {
+  background-color: var(--optional-color);
+  color: var(--accent-color);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--optional-color) inset;
+  -webkit-text-fill-color: var(--accent-color);
+}
+
+input:-webkit-autofill {
+  background-color: var(--optional-color) !important;
+  color: var(--accent-color);
+}
+
+select,
+select:focus option {
+  background-color: var(--optional-color);
+  color: var(--accent-color);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--optional-color) inset;
+  -webkit-text-fill-color: var(--accent-color);
+}
+
+label, h2 {
+  color: white;
+}
