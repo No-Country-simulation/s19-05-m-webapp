@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, logout } from "../../store/slices/auth.slices";
 import "./GoogleAuth.css";
 
-const GoogleAuth = () => {
+const Registro = () => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
 
@@ -16,7 +16,6 @@ const GoogleAuth = () => {
 
     function handleSignOut(event) {
         dispatch(logout());
-        google.accounts.id.disableAutoSelect();
     }
 
     useEffect(() => {
@@ -24,25 +23,24 @@ const GoogleAuth = () => {
         google.accounts.id.initialize({
             client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
             callback: handleCallbackResponse,
+            context: "signup"
         })
 
         google.accounts.id.renderButton(
             document.getElementById("logInButton"),
-            { theme: "filled_blue", size: "large" }
+            { theme: "filled_blue", size: "large", text: "signup_with" }
         )
         if (user) {
             document.getElementById("logInButton").style.display = "none";
-            document.getElementById("iniciar-sesion-header").style.display = "none";
         } else {
             document.getElementById("logInButton").style.display = "block";
-            document.getElementById("iniciar-sesion-header").style.display = "block";
         }
     }, [user]);
 
     return (
         <div id="logInDiv">
             <div id="logIn-container">
-                <h1>Iniciar Sesión</h1>
+                <h1>Regístrate</h1>
                 <div id="logInButton"></div>
                 {user && (
                     <>
@@ -53,8 +51,8 @@ const GoogleAuth = () => {
                         </div>
                     </>
                  )}
-                <Link to="/registro" id="link-login">
-                ¿No estás registrado? Regístrate aquí.
+                <Link to="/login" id="link-login">
+                ¿Ya estás registrado? Inicia sesión.
                 </Link>
                 <div id="triangle-login"></div>
             </div>
@@ -63,4 +61,4 @@ const GoogleAuth = () => {
     )
 }
 
-export default GoogleAuth
+export default Registro
