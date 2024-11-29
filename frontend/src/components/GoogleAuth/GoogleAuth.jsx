@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/auth.slices";
 import "./GoogleAuth.css";
 
@@ -40,7 +40,7 @@ const GoogleAuth = ({isOpen, onClose}) => {
                 <div id="logIn-container">
                     <h1>Iniciar Sesión</h1>
                     <div id="logInButton"></div>
-                    <Link to="/registro" id="link-login">
+                    <Link to="/registro" id="link-login" onClick={handleOverlayClick}>
                     ¿No estás registrado? Regístrate aquí.
                     </Link>
                     <div id="triangle-login"></div>
