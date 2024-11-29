@@ -9,7 +9,7 @@ const Card = ({ title, genre, price, onClick }) => {
                 <h2 className="card-title">{title}</h2>
                 <p className="card-genre">{genre}</p>
                 <div className="card-bottom">
-                    <button className="card-button">Comprar</button>
+                    <button className="card-button">Detalle</button>
                     <span className="card-price">${price} </span>
                 </div>
             </div>
