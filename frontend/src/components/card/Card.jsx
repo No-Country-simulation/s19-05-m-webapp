@@ -1,15 +1,15 @@
 import "./card.css";
 
-const imageUrl = "/crash-bandicoot.webp"; // para prueba
+const imageUrl = "/crash-bandicoot.webp"; 
 
-const Card = ({ title, category, price, onClick }) => { // validar props
+const Card = ({ title, genre, price, onClick }) => { 
     return (
         <div className="card" onClick={onClick} style={{ backgroundImage: `url(${imageUrl})` }}>
             <div className="card-content">
                 <h2 className="card-title">{title}</h2>
-                <p className="card-category">{category}</p>
+                <p className="card-genre">{genre}</p>
                 <div className="card-bottom">
-                    <button className="card-button">Comprar</button>
+                    <button className="card-button">Detalle</button>
                     <span className="card-price">${price} </span>
                 </div>
             </div>

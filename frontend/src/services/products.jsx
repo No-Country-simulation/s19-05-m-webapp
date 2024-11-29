@@ -1,28 +1,48 @@
 import axios from 'axios';
 
-// const BASE_URL = import.meta.env.VITE_BASE_URL; utilizar cuando el backend esté listo
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const getProducts = async () => {
-  	try {
-    	const response = await axios.get(`https://run.mocky.io/v3/7914dab8-6f4c-4505-8c66-f787ebebcc43`);
-		return response.data;
-  	} catch (error) {
-    	console.log(error);
-  	}
+	try {
+		const response = await axios.get(`${BASE_URL}/products`);
+		return response.data.data;
+	} catch {
+		throw new Error("No se pudo cargar los productos. Inténtalo de nuevo más tarde.");
+	}
 };
 
 const getProductById = async (id) => {
 	try {
-	  const response = await axios.get(`https://apimocha.com/checkpointzone/products/${id}`);
-	  return response.data;
-	} catch (error) {
-	  console.log(error);
+	  	const response = await axios.get(`${BASE_URL}/products/${id}`);
+	  	return response.data.data;
+	} catch {
+		throw new Error("No se pudo obtener información del producto. Inténtalo de nuevo más tarde.");
 	}
 };
 
+const getProductsByGenre = async (genre) => {
+	try {
+		const response = await axios.get(`${BASE_URL}/products/genre/${genre}`);
+		return response.data.data;
+	} catch {
+		throw new Error("No se pudo cargar los productos por género. Inténtalo de nuevo más tarde.");
+	}
+}
+
+const getProductsByPlatform = async (platform) => {
+	try {
+		const response = await axios.get(`${BASE_URL}/products/platform/${platform}`);
+		return response.data.data;
+	} catch {
+		throw new Error("No se pudo cargar los productos por plataforma. Inténtalo de nuevo más tarde.");
+	}
+}
+
 const productService = {
-    getProducts,
+	getProducts,
 	getProductById,
+	getProductsByGenre,
+	getProductsByPlatform,
 };
 
 export default productService;

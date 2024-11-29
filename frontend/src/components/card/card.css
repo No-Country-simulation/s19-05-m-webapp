@@ -28,11 +28,16 @@
 }
 
 .card-title {
+    display: block; 
     font-weight: 500;
-    padding-top: 5px;
+    max-width: 100%;
+    overflow: hidden; 
+    padding-top: 5px;         
+    text-overflow: ellipsis;            
+    white-space: nowrap;             
 }
   
-.card-category {
+.card-genre {
     color: var(--accent-color);
     opacity: 50%;
     padding-bottom: 5px;
@@ -50,6 +55,7 @@
     border: 1px solid var(--second-color);
     border-radius: 8px;
     color: var(--second-color);
+    font-family: var(--text-font), sans-serif;
     font-size: 16px;
     padding: 10px 16px;
 }
@@ -71,6 +77,20 @@
 @media (min-width: 992px) {
     .card {
         width: 23%; 
+    }
+    
+    .card-price {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card {
+        width: 23%; 
+    }
+
+    .card-price {
+        font-size: 2.3rem;
     }
 }
   

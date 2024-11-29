@@ -1,21 +1,30 @@
-const consoleOptions = [
-    { value: 'Consolas' },
-    { value: 'PC' },
+const platformOptions = [
+    { value: 'Plataformas' },
+    { value: 'Nintendo Switch' },
     { value: 'PlayStation' },
-    { value: 'Xbox' },
-    { value: 'Nintendo' },
+    { value: 'PC' }
 ];
 
-const categoryOptions = [
-    { value: 'Categorías' },
-    { value: 'Aventura' },
-    { value: 'Carreras' },
-    { value: 'Acción' },
-    { value: 'Arcade' },
-    { value: 'Deportivo' },
+const modelOptions = [
+    { value: 'Modelos' },
+    { value: 'Standard Model' },
+    { value: 'OLED Model' },
+    { value: 'PlayStation 5' },
+    { value: 'PlayStation 4' },
+    { value: 'Windows 10' },
+];
+
+const genreOptions = [
+    { value: 'Generos' },
+    { value: 'Fantasy' },
+    { value: 'Family' },
+    { value: 'Sports' },
+    { value: 'Adventure' },
+    { value: 'Sci-Fi' },
 ];
 
 const countryOptions = [
+    { value: 'Países' },
     { value: 'Argentina'},
     { value: 'Bolivia'},
     { value: 'Chile' },
@@ -29,8 +38,9 @@ const countryOptions = [
 ]
 
 const options = {
-    categoryOptions,
-    consoleOptions,
+    genreOptions,
+    platformOptions,
+    modelOptions,
     countryOptions,
 }
 
