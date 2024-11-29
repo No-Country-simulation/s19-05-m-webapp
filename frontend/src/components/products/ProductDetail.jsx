@@ -15,11 +15,11 @@ const ProductDetail = () => {
 
     return (
         <>
-            <header className="header-product-detail" 
-                style={{ backgroundImage: `url(${imageUrl})` }}></header>
+            <div className="product-detail" 
+                style={{ backgroundImage: `url(${imageUrl})` }}></div>
 
             <div className="page-container">
-                <div className="product-detail">
+                <div className="">
                     {
                         loading ? <p>Cargando...</p> 
                         : product && (

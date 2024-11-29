@@ -76,22 +76,12 @@
 
 /***** Detalle del producto *****/
 
-.header-product-detail {
-    background-position: top;
+.product-detail {
+    background-position: center;
     background-repeat: no-repeat;
     background-size: cover; 
-    height: 30vh;
-    position: relative;
-}
-
-.product-detail {
-    background-color: var(--accent-color);
-    border-radius: 8px;
-    left: 0;
-    padding: 30px 10px;
-    position: absolute;
-    top: 50%;
-    margin: 0 10px;
+    height: 100vh;
+    filter: brightness(0.5);
 }
 
 .product-detail h1 {

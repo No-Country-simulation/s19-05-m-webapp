@@ -10,10 +10,10 @@ const Header = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
-    <header className="header-container page-container">
+    <header className="header-container">
       <div className="header-logo">
         <Link to="/">
-          <img src="logo.png" alt="checkpoint logo" />
+          <img src="/logo.png" alt="checkpoint logo" />
         </Link>
       </div>
       <div className="header-cart">
