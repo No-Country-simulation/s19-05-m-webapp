@@ -5,7 +5,7 @@ export const Checkout = ({ onNext, products, totalAmount }) => {
       {products.map((product, index) => (
         <div key={index} className="summary-item">
           <p>
-            {product.name} ({product.platform}) - {product.quantity}x{" "}
+            {product.title} {/* ({product.platform}) */} - {product.quantity}x{" "}
             {product.price.toFixed(2)}$
           </p>
         </div>
