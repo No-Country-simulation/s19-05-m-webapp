@@ -1,0 +1,50 @@
+/* Estilo para la sección de Política de Privacidad */
+.privacy-section {
+  background-color: var(--first-color);
+  padding: 50px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.privacy-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.privacy-section h2 {
+  font-size: 2.5rem;
+  color: var(--accent-color);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.privacy-section h3 {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  margin-top: 20px;
+}
+
+.privacy-section p,
+.privacy-section ul {
+  font-size: 1.1rem;
+  color: var(--accent-color);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.privacy-section ul {
+  padding-left: 20px;
+}
+
+.privacy-section ul li {
+  list-style: disc;
+  margin-bottom: 10px;
+}
+
+.privacy-section a {
+  color: var(--second-color);
+  text-decoration: none;
+}
+
+.privacy-section a:hover {
+  text-decoration: underline;
+}
