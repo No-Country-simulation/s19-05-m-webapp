@@ -9,6 +9,10 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { isModalOpen, openModal, closeModal } = useModal();
 
+  const handleLinkClick = () => {
+    setMenuOpen(false);
+  };
+
   return (
     <header className="header-container page-container">
       <div className="header-logo">
@@ -30,9 +34,13 @@ const Header = () => {
           setMenuOpen(!menuOpen);
         }}
       >
-        <i className="bx bx-user-circle bx-user"></i>
+        {menuOpen ? (
+          <i className="bx bx-x-circle bx-close"></i>
+        ) : (
+          <i className="bx bx-user-circle bx-user"></i>
+        )}
       </div>
-      <nav className="header-nav">
+      <nav className={`header-nav ${menuOpen ? "open" : ""}`}>
         <ul className={menuOpen ? "open" : ""}>
           <div className="header-search">
             <button className="header-search-btn">
@@ -45,26 +53,26 @@ const Header = () => {
             />
           </div>
           <li className="header-item">
-            <Link to="/" className="header-item-link">
+            <Link to="/" className="header-item-link" onClick={handleLinkClick}>
               Inicio
             </Link>
           </li>
           <li className="header-item">
-            <Link to="/products" className="header-item-link">
+            <Link
+              to="/products"
+              className="header-item-link"
+              onClick={handleLinkClick}
+            >
               Productos
             </Link>
           </li>
-          {/* <li className="header-item">
-            <Link to="/" className="header-cart d-none">
-              <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
-              <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <Cart />
-              </Modal>
-            </Link>
-          </li> */}
           <li className="header-item">
-            <Link to="/" className="header-item-link">
-              Iniciar sesion
+            <Link
+              to="/login"
+              className="header-item-link"
+              onClick={handleLinkClick}
+            >
+              Iniciar sesión
             </Link>
           </li>
         </ul>
