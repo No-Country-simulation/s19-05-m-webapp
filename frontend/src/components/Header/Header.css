@@ -84,8 +84,9 @@
   border: 1px solid var(--second-color);
   border-radius: 0.5rem;
   padding: 0.5rem;
-  margin: 0.2rem 0.5rem;
+  margin: 0.2rem auto;
   transition: all 500ms ease;
+  cursor: pointer;
 }
 
 .header-item-link:hover {
@@ -127,6 +128,10 @@ nav ul.open {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .header-username {
+    color: var(--second-color);
   }
 
   .header-cart {
