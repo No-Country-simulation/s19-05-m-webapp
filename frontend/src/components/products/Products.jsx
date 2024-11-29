@@ -12,7 +12,8 @@ import useFilteredProducts from "../../hooks/useFilteredProducts";
 import "./products.css";
 
 const Products = () => {
-    const { data: products, loading: productsLoading, hasError: productsError } = useFetch(productService.getProducts);
+    const { data: products, loading: productsLoading, 
+        hasError: productsError, setHasError: setProductsError} = useFetch(productService.getProducts);
     const { page, loading: paginationLoading, loadMore, resetPagination } = usePagination();
     const navigate = useNavigate();
 
@@ -20,12 +21,14 @@ const Products = () => {
         { platform: '', genre: '', model: '' }
     );
     
-    const { data: productsByGenre, loading: genreLoading, hasError: genreError } = useFetch(
+    const { data: productsByGenre, loading: genreLoading, 
+        hasError: genreError, setHasError: setGenreError } = useFetch(
         selectedOptions.genre ? productService.getProductsByGenre : null,
         selectedOptions.genre
     );
 
-    const { data: productsByPlatform, loading: platformLoading, hasError : platformError } = useFetch(
+    const { data: productsByPlatform, loading: platformLoading, 
+        hasError: platformError, setHasError: setPlatformError } = useFetch(
         selectedOptions.platform ? productService.getProductsByPlatform : null,
         selectedOptions.platform
     );
@@ -40,6 +43,14 @@ const Products = () => {
 
     const isFilterActive = selectedOptions.platform || selectedOptions.genre;
 
+    const handleResetFilters = () => {
+        reset();
+        resetPagination();
+        setProductsError(null); 
+        setGenreError(null);
+        setPlatformError(null);
+    };
+
     return (
         <>
             <div className="products-dropdown">
@@ -48,12 +59,14 @@ const Products = () => {
                     value={selectedOptions.platform} 
                     onChange={handleChange} 
                     name="platform" 
+                    disabled={!!productsError || !!genreError || !!platformError}
                 />
                 <Dropdown 
                     options={options.genreOptions} 
                     value={selectedOptions.genre} 
                     onChange={handleChange} 
                     name="genre"
+                    disabled={!!productsError || !!genreError || !!platformError}
                 />
                 {
                     selectedOptions.platform && productsByPlatform && (
@@ -62,13 +75,14 @@ const Products = () => {
                             value={selectedOptions.model} 
                             onChange={handleChange} 
                             name="model"
+                            disabled={!!productsError || !!genreError || !!platformError}
                         />
                     )
                 }
                 {
                     isFilterActive && (
                         <button className="clear-filters-btn" 
-                            onClick={() => { reset(); resetPagination(); }}>
+                            onClick={handleResetFilters}>
                             Borrar filtros
                         </button>
                     )
