@@ -3,6 +3,8 @@ import { UserController } from "../controllers/users.controller";
 import { isValidData } from "../middlewares/isValidData.mid";
 import { isUser } from "../middlewares/isUser.mid";
 import { hashPassword } from "../middlewares/hashPassword.mid";
+import { adminMiddleware } from "../middlewares/admin.middleware";
+import { authJWTMiddleware } from "../middlewares/auth.middleware";
 
 const userRouter = Router();
 const userController = new UserController();
@@ -68,6 +70,8 @@ userRouter.post(
   userController.CreateUser
 );
 
+userRouter.post("/login", userController.loginController);
+
 /**
  * @swagger
  * /api/users:
@@ -86,7 +90,10 @@ userRouter.post(
  *       500:
  *         description: Internal server error.
  */
-userRouter.get("/", userController.ReadAll);
+userRouter.get(
+  "/",
+  /* authJWTMiddleware, adminMiddleware, */ userController.ReadAll //descomentar los middlewares si se necesita
+);
 
 /**
  * @swagger
