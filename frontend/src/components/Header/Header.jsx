@@ -83,16 +83,19 @@ const Header = () => {
               </Modal>
             </Link>
           </li> */}
-          <li className="header-item" id="iniciar-sesion-header">
-            <Link to="/" className="header-item-link" onClick={openLogin}>
-              Iniciar sesión</Link>
-              <GoogleAuth isOpen={isLoginOpen} onClose={closeLogin} />
-            
+          <li className="header-item header-item-link" id="iniciar-sesion-header" onClick={openLogin}>
+              Iniciar sesión
           </li>
+          <GoogleAuth isOpen={isLoginOpen} onClose={closeLogin} />
             {user && (
-                    <li className="header-item" onClick={handleSignOut}>
-                      <Link to="/" className="header-item-link">Desconectarse</Link>
+                    <>
+                    <li className="header-item header-item-link" onClick={handleSignOut}>
+                      Desconectarse
                     </li>
+                    <li className="header-username">
+                      {user.name}
+                    </li>
+                    </>
                  )}
         </ul>
       </nav>
