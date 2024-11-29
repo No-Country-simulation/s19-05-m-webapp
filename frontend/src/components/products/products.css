@@ -48,7 +48,8 @@ h1, p {
     .products-container {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: space-evenly;
+        margin: 0 -10px;
     }
 
     .products-dropdown {
@@ -58,6 +59,12 @@ h1, p {
     h1 {
         padding-bottom: 30px;
         text-align: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .products-container {
+        margin: 0 -20px;
     }
 }
 

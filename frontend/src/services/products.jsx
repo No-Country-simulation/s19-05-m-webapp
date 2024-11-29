@@ -13,8 +13,8 @@ const getProducts = async () => {
 
 const getProductById = async (id) => {
 	try {
-	  const response = await axios.get(`https://apimocha.com/checkpointzone/products/${id}`);
-	  return response.data;
+	  	const response = await axios.get(`${BASE_URL}/products/${id}`);
+	  	return response.data.data;
 	} catch {
 		throw new Error("No se pudo obtener información del producto. Inténtalo de nuevo más tarde.");
 	}

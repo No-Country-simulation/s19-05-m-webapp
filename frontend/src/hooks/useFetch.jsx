@@ -29,7 +29,7 @@ const useFetch = (api, params = null) => {
 
     }, [api, params]);
 
-    return { data, loading, hasError }; 
+    return { data, loading, hasError, setHasError }; 
 };
 
 export default useFetch;
