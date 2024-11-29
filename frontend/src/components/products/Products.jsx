@@ -88,7 +88,7 @@ const Products = () => {
                     )
                 }
             </div>
-            <h1>Productos</h1>
+            <h1 className="products-title">Productos</h1>
             <div className="products-container">
                 {
                     productsError || genreError || platformError ? (
