@@ -25,10 +25,12 @@ const Dashboard = () => {
 
     return (
         <>
-            <h1>Dashboard Administrador</h1>
-            <button onClick={openModal}>Crear producto</button>
-            <button onClick={() => setFilterType("all")}>Ver todos los productos</button>
-            <button onClick={() => setFilterType("outOfStock")}>Productos sin stock</button>
+            <h1 className="admin-title">Dashboard Administrador</h1>
+            <div className="admin-buttons">
+                <button onClick={openModal}>Crear producto</button>
+                <button onClick={() => setFilterType("all")}>Ver todos los productos</button>
+                <button onClick={() => setFilterType("outOfStock")}>Productos sin stock</button>
+            </div>
             <Modal 
                 isOpen={isModalOpen} 
                 onClose={closeModal} 
