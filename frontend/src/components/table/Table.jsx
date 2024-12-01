@@ -29,16 +29,27 @@ const Table = ({ columns, data, admin = false }) => {
                 </thead>
                 <tbody>
                     {
-                        data?.map((product, index) => (
-                            <tr key={index}>
-                                <td>{product.name}</td>
-                                <td>{product.price}</td>
-                                <td>{product.stock}</td>
+                        data?.map((product) => (
+                            <tr key={product.id}>
                                 {
-                                    admin && ( 
-                                        <td>
-                                            <button onClick={() => handleAction(product, "Editar")}>😎</button>
-                                            <button onClick={() => handleAction(product, "Eliminar")}>😌</button>
+                                    Object.keys(product)
+                                        .filter((key) => key !== "id") 
+                                        .map((key) => (
+                                            <td key={key}>{product[key]}</td> 
+                                        )
+                                    )
+                                }
+                                {
+                                    admin && (
+                                        <td className="container-admin-buttons">
+                                        <button className="btn-edit" 
+                                            onClick={() => handleAction(product, "Editar")}>
+                                            <i className="bx bx-edit"></i>
+                                        </button>
+                                        <button className="btn-delete" 
+                                            onClick={() => handleAction(product, "Eliminar")}>
+                                            <i className="bx bx-trash"></i>
+                                        </button>
                                         </td>
                                     )
                                 }
@@ -47,7 +58,6 @@ const Table = ({ columns, data, admin = false }) => {
                     }
                 </tbody>
             </table>
-
             <Modal 
                 isOpen={isModalOpen} 
                 onClose={closeModal} 
