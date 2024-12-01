@@ -1,5 +1,5 @@
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Payment = ({ onGoBack, products, totalAmount }) => {
   const navigate = useNavigate();
@@ -11,7 +11,8 @@ export const Payment = ({ onGoBack, products, totalAmount }) => {
         {products.map((product, index) => (
           <div key={index} className="summary-item">
             <p>
-              {product.name} ({product.platform}) - {product.quantity}x{" "}
+              {product.title}
+              {/*  ({product.platform}) */} - {product.quantity}x{" "}
               {product.price.toFixed(2)}$
             </p>
           </div>
@@ -45,21 +46,26 @@ export const Payment = ({ onGoBack, products, totalAmount }) => {
             }}
             onApprove={(data, actions) => {
               return actions.order.capture().then((details) => {
+                const transactionId = details.id;
+                console.log("Transaction Id:", transactionId);
                 alert(
-                  `Transacción completada por ${details.payer.name.given_name}`
+                  `Transacción completada por ${details.payer.name.given_name}. 
+                  ID de la transacción: ${transactionId}`
                 );
-                navigate("/");
+                /* navigate("/");  */
               });
             }}
           />
         </div>
         <p className="terms">
           Haciendo clic en &quot;Pagar&quot; reconozco haber aceptado los{" "}
-          <a href="#terms">términos y condiciones</a>, y la{" "}
-          <a href="#privacy">política de privacidad</a>.
+          <Link to={"/terms"}>términos y condiciones</Link>, y la{" "}
+          <Link to={"/politics"}>política de privacidad</Link>.
         </p>
       </div>
-      <button className="back-button" onClick={onGoBack}>Regresar</button>
+      <button className="back-button" onClick={onGoBack}>
+        Regresar
+      </button>
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import React from 'react';
 import { useCart } from '../CartContext/CartContext';
+import "./addToCartButton.css";
 
 function AddToCartButton({ product }) {
     //Usa el contexto para poder "mandar" las acciones
@@ -17,8 +17,8 @@ function AddToCartButton({ product }) {
 
     return (
         //Modificar el icono cart acá
-        <button onClick={addToCart} disabled={product.stock === 0}>
-            Añadir al carrito
+        <button className="add-cart" onClick={addToCart} disabled={product.stock === 0}>
+            <i className="bx bxs-cart"></i> Añadir al carrito
         </button>
     );
 }
