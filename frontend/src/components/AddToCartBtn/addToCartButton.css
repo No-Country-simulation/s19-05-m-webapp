@@ -1,0 +1,23 @@
+.add-cart {
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid var(--second-color);
+    border-radius: 8px;
+    color: var(--second-color);
+    display: flex;
+    font-family: var(--text-font);
+    font-size: 16px;
+    margin: 0 auto;
+    padding: 10px 30px;
+    transition: all 500ms ease;
+}
+
+.add-cart .bxs-cart {
+    font-size: 20px;
+    padding-right: 8px;
+}
+
+.add-cart:hover {
+    background-color: var(--second-color);
+    color: var(--first-color);
+}
