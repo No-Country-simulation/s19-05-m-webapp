@@ -84,6 +84,7 @@
     display: flex;
     justify-content: center;
     position: relative;
+    
 }
 
 .product-detail .overlay {
@@ -124,10 +125,28 @@
 }
 
 .detail-section-3 {
+    align-items: center;
     display: flex;
     font-size: 18px;
     gap: 16px;
     padding: 20px 0;
+}
+
+.detail-section-3 p:last-child {
+    color: var(--second-color);
+    font-size: 2em;
+}
+
+.text-error {
+    color: var(--accent-color);
+    text-align: center;
+    padding: 50px 10px;
+}
+
+@media (min-width: 768px) {
+    .detail-section-3 {
+        gap: 30px;
+    }
 }
 
 @media (min-width: 1024px) {
