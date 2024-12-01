@@ -3,25 +3,11 @@ import { useState } from "react";
 import { CheckoutForm } from "../components/checkout/CheckoutForm";
 import { Payment } from "../components/checkout/Payment";
 import { Checkout } from "../components/checkout/Checkout";
-
-const products = [
-  {
-    name: "Minecraft: Java & Bedrock Edition",
-    quantity: 2,
-    price: 14.49,
-    platform: "Other",
-  },
-  { name: "7 Days to Die", quantity: 1, price: 17.18, platform: "Steam" },
-  {
-    name: "S.T.A.L.K.E.R. 2: Heart of Chornobyl",
-    quantity: 1,
-    price: 47.69,
-    platform: "Steam",
-  },
-];
+import { useCart } from "../components/CartContext/CartContext";
 
 export const CheckoutPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const { state: products } = useCart();
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const previousStep = () =>

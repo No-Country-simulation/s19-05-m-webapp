@@ -18,8 +18,7 @@ export const CheckoutForm = ({ onGoBack, onFormSubmit }) => {
         dispatch(setShipping(formValues));
         localStorage.setItem("shipping", JSON.stringify(formValues));
         setErrors({});
-        onFormSubmit();
-        console.log({ formValues });
+        onFormSubmit();        
       })
       .catch((validationErrors) => {
         const formattedErrors = {};

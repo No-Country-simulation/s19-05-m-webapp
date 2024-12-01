@@ -13,22 +13,22 @@ const Trends = () => {
     navigate(`/product/${id}`);
   };
 
-  console.log(products);
-
   return (
     <>
       <h2 className="subtitle">Tendencias</h2>
       <div className="products-container">
         {products &&
-          products.map((product, index) => (
-            <Card
-              key={index}
-              title={product.title}
-              category={product.category}
-              price={product.price}
-              onClick={() => handleCard(index)}
-            />
-          ))}
+          products
+            .slice(0, 4)
+            .map((product, index) => (
+              <Card
+                key={index}
+                title={product.title}
+                category={product.category}
+                price={product.price}
+                onClick={() => handleCard(index)}
+              />
+            ))}
       </div>
     </>
   );

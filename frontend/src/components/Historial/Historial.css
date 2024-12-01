@@ -1,0 +1,12 @@
+#tabla-historial {
+    width: 90%;
+    background-color: white;
+    text-align: center;
+    margin: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#tabla-historial>thead>tr>th{
+    border-bottom: 1px solid black;
+}
