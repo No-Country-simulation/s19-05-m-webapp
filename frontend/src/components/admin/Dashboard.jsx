@@ -7,20 +7,37 @@ import useModal from "../../hooks/useModal";
 import columns from "../../utils/tableAdmin";
 import productFields  from "../../utils/productFields";
 import productService from "../../services/products";
+import createProductSchema from "../../validations/createProduct.schema";
 import "./dashboard.css";
 
 const Dashboard = () => {
     const { isModalOpen, openModal, closeModal } = useModal();
     const { data: products } = useFetch(productService.getProducts);
     const [filterType, setFilterType] = useState("all");
+    const [errors, setErrors] = useState({});
 
     const filteredProducts = products?.filter(product => 
         filterType === "all" ? product.stock > 0 : product.stock === 0
     );
 
+    const handleCloseModal = () => {
+        setErrors({}); 
+        closeModal();  
+    };
+
     const handleSubmit = (formValues) => {
+        createProductSchema
+        .validate(formValues, { abortEarly: false })
+        .then(() => { console.log('probando'), closeModal(); })
+        .catch((validationErrors) => {
+            const formattedErrors = {};
+            validationErrors.inner.forEach((error) => {
+                formattedErrors[error.path] = error.message;
+            });
+            setErrors(formattedErrors);
+        });
+        
         console.log("Producto creado:", formValues);
-        closeModal(); 
     };
 
     return (
@@ -33,7 +50,7 @@ const Dashboard = () => {
             </div>
             <Modal 
                 isOpen={isModalOpen} 
-                onClose={closeModal} 
+                onClose={handleCloseModal} 
                 title="Crear producto">
                 <Form
                     fields={productFields.fields} 
@@ -41,6 +58,7 @@ const Dashboard = () => {
                     initialValues={productFields.initialValues}
                     className="btn-action-admin"
                     buttonText="Crear producto"
+                    errors={errors}
                 />
             </Modal>
             <Table 

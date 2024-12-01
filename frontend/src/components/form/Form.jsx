@@ -8,12 +8,32 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+    
+        if (name === 'price') {
+            let cleanedValue = value.replace(/[^0-9]/g, '');
+    
+            if (cleanedValue) {
+                let numericValue = (parseInt(cleanedValue, 10) || 0) * 0.01;
+                let formattedValue = numericValue.toFixed(2);
+                
+                setFormValues({
+                    ...formValues,
+                    [name]: formattedValue,
+                });
+            } else {
+                setFormValues({
+                    ...formValues,
+                    [name]: '',
+                });
+            }
+        } else {
             setFormValues({
-            ...formValues,
-            [name]: value,
-        });
+                ...formValues,
+                [name]: value,
+            });
+        }
     };
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit(formValues);
@@ -57,28 +77,3 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
 };
 
 export default Form;
-
-
-/* 
-  
-   
-           
-                    
-                        <input
-                            type={field.type || "text"}
-                            id={field.name}
-                            name={field.name}
-                            value={formValues[field.name] || ""}
-                            onChange={handleChange}
-                            placeholder={field.placeholder || ""}
-                        />
-                    </div>
-                ))
-            }
-            <button className="form-btn">{buttonText}</button>
-        </form>
-    );
-};
-  
-
-*/

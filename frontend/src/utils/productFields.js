@@ -2,7 +2,7 @@ import options from "./options";
 
 const fields = [
     { 
-        name: "name", 
+        name: "title", 
         label: "Nombre del Producto", 
         type: "text", 
         placeholder: "Ingresa el nombre del producto" 
@@ -10,8 +10,8 @@ const fields = [
     { 
         name: "price", 
         label: "Precio", 
-        type: "number", 
-        placeholder: "Ingresa el precio" 
+        type: "text", 
+        placeholder: "0.00" 
     },
     { 
         name: "description", 
@@ -29,7 +29,7 @@ const fields = [
         name: "stock", 
         label: "Stock", 
         type: "number", 
-        placeholder: "Cantidad en stock" 
+        placeholder: "0" 
     },
     {
         name: "name",
