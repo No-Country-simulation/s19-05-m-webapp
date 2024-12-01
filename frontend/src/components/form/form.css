@@ -12,11 +12,22 @@ input, select, textarea {
     width: 100%;
 }
 
-.form-btn {
-    background-color: #4CAF50;
-    color: white;
+.btn-action-admin {
+    background-color: transparent !important;
+    border: 1px solid var(--second-color);
+    color: var(--second-color) !important;
+    font-family: var(--text-font);
+    font-size: 16px;
+    padding: 10px;  
+    transition: all 500ms ease;
+    width: 100%;
+    
 }
 
+.btn-action-admin:hover {
+    background-color: var(--second-color) !important;
+    color: var(--first-color) !important;
+}
 
 .input-error {
     border: 1px solid #dc2626;

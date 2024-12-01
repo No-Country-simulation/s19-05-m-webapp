@@ -39,7 +39,8 @@ const Dashboard = () => {
                     fields={productFields.fields} 
                     onSubmit={handleSubmit}
                     initialValues={productFields.initialValues}
-                    buttonText="Crear"
+                    className="btn-action-admin"
+                    buttonText="Crear producto"
                 />
             </Modal>
             <Table 

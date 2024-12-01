@@ -32,16 +32,22 @@ const fields = [
         placeholder: "Cantidad en stock" 
     },
     {
-        name: "console",
-        label: "Seleccionar consola",
+        name: "name",
+        label: "Seleccionar Plataforma",
         type: "select",
-        options: options.consoleOptions,
+        options: options.platformOptions,
     },
     {
-        name: "category",
-        label: "Seleccionar categoría",
+        name: "model",
+        label: "Seleccionar Modelo",
         type: "select",
-        options: options.categoryOptions,
+        options: options.modelOptions,
+    },
+    {
+        name: "genre",
+        label: "Seleccionar Género",
+        type: "select",
+        options: options.genreOptions,
     },
 ];
 
