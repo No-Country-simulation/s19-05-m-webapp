@@ -3,7 +3,7 @@ import { useState } from "react";
 import { CheckoutForm } from "../components/checkout/CheckoutForm";
 import { Payment } from "../components/checkout/Payment";
 import { Checkout } from "../components/checkout/Checkout";
-import { useCart } from "../components/CartContext/CartContext";
+import { useCart } from "../contexts/CartContext/CartContext";
 
 export const CheckoutPage = () => {
   const [currentStep, setCurrentStep] = useState(1);

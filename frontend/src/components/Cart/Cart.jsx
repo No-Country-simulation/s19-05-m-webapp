@@ -1,9 +1,11 @@
 import React from 'react';
-import { useCart } from '../CartContext/CartContext';
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../contexts/CartContext/CartContext';
 import './cart.css';
 
-function Cart() {
+function Cart({onClose}) {
     const { state, dispatch } = useCart();
+    const navigate = useNavigate();
 
     const removeItem = (id) => {
         dispatch({ type: 'REMOVE_ITEM', payload: { id } });
@@ -19,9 +21,13 @@ function Cart() {
 
     const total = state.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+    const handleCheckout = () => {
+        onClose();
+        navigate('/checkout');
+    };
+
     return (
         <div className='cart'>
-            <h2>Carrito de Compras</h2>
             {state.length === 0 && <p>Tu carrito está vacío.</p>}
             {state.map((item) => (
                 <div key={item.id}>
@@ -41,6 +47,9 @@ function Cart() {
                 </div>
             ))}
             <h3>Total del carrito: ${total.toFixed(2)}</h3>
+            <div className=''>
+                <button onClick={handleCheckout}>Comprar</button>
+            </div>
         </div>
     );
 }
