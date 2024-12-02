@@ -150,6 +150,7 @@ nav ul.open {
     align-items: center;
     margin: 0;
     height: 2rem;
+    min-height: 0;
   }
 
   .header-search {
