@@ -39,9 +39,9 @@ const Home = () => {
             encontrarás desde los últimos lanzamientos hasta esos clásicos que
             siempre quieres volver a jugar. Nos encanta ser parte de tus
             aventuras y ayudarte a llevar tu experiencia gamer al siguiente
-            nivel. Regístrate ahora y disfruta de descuentos exclusivos y accede
-            a contenido especial pensado solo para nuestra comunidad. ¡Haz de
-            cada compra tu próximo checkpoint!
+            nivel. Regístrate ahora y disfruta de descuentos exclusivos, acumula
+            puntos por tus compras y accede a contenido especial pensado solo
+            para nuestra comunidad. ¡Haz de cada compra tu próximo checkpoint!
           </p>
         </article>
         <img className="about-img" src="/about-img.png" alt="about" />
@@ -58,7 +58,6 @@ const Home = () => {
             <Link to="/products" className="categories-btn">
               Ver Categorias
             </Link>
-            {/* <button className="categories-btn">Ver Categorias</button> */}
           </div>
         </article>
       </section>

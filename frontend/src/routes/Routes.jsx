@@ -7,6 +7,7 @@ import About from "../pages/About/About";
 import Politics from "../pages/Politics/Politics";
 import Terms from "../pages/Terms/Terms";
 import Registro from "../components/GoogleAuth/Registro";
+import Admin from "../pages/Admin";
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
       <Route path="/product/:id" element={<ProductDetailPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/registro" element={<Registro />} />
+      <Route path="/admin" element={<Admin />} />
     </Routes>
   );
 };

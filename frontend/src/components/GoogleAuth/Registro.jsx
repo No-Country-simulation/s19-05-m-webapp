@@ -47,10 +47,34 @@ const Registro = () => {
         }
     };
 
-    function handleCallbackResponse(response) {
-        var userObject = jwtDecode(response.credential);
-        dispatch(setUser(userObject));
+  function handleCallbackResponse(response) {
+    var userObject = jwtDecode(response.credential);
+    dispatch(setUser(userObject));
+  }
+
+  function handleSignOut(event) {
+    dispatch(logout());
+  }
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleCallbackResponse,
+      context: "signup",
+    });
+
+    google.accounts.id.renderButton(document.getElementById("logInButton"), {
+      theme: "filled_blue",
+      size: "large",
+      text: "signup_with",
+    });
+    if (user) {
+      document.getElementById("logInButton").style.display = "none";
+    } else {
+      document.getElementById("logInButton");
     }
+  }, [user]);
 
     useEffect(() => {
         google.accounts.id.initialize({
@@ -117,4 +141,4 @@ const Registro = () => {
     )
 }
 
-export default Registro
+export default Registro;
