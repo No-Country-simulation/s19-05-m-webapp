@@ -1,18 +1,35 @@
 import { useState } from "react";
 import Modal from "../modal/Modal";
+import Form from "../form/Form";
 import useModal from "../../hooks/useModal";
+import productFields from "../../utils/productFields";
+import createProductSchema from "../../validations/createProduct.schema";
+import validateForm from "../../utils/validateForm";
 import "./table.css";
 
 const Table = ({ columns, data, admin = false }) => {
     const { isModalOpen, openModal, closeModal } = useModal();
     const [modalTitle, setModalTitle] = useState("");
     const [modalHeight, setModalHeight] = useState("");
+    const [currentProduct, setCurrentProduct] = useState(null);
+    const [errors, setErrors] = useState({});
     
     const handleAction = (product, actionType) => {
         console.log(`${actionType} producto:`, product);
+        setCurrentProduct(product);
         setModalTitle(actionType === 'Editar' ? 'Editar Producto' : 'Eliminar Producto')
         setModalHeight(actionType === 'Eliminar' ? '50vh' : '98vh');
         openModal();
+    };
+
+    const handleSubmit = async (formValues) => {
+        const validationResult = await validateForm(formValues, createProductSchema);
+    
+        if (validationResult.isValid) {
+            console.log('se válido bien')
+        } else {
+            setErrors(validationResult.errors); 
+        }
     };
 
     return (
@@ -64,7 +81,17 @@ const Table = ({ columns, data, admin = false }) => {
                 title={modalTitle}
                 height={modalHeight}>
                 <div>
-                    contenido modal
+                    {
+                        modalTitle === 'Editar Producto' && currentProduct && (
+                            <Form
+                                fields={productFields.fields} 
+                                onSubmit={handleSubmit}
+                                initialValues={currentProduct}
+                                className="btn-action-admin"
+                                buttonText="Actualizar producto"
+                                errors={errors}
+                            />
+                    )}
                 </div>
             </Modal>
         </div>

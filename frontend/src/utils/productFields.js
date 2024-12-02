@@ -57,8 +57,9 @@ const initialValues = {
     description: "",
     image: "",
     stock: "",
-    console: "",
-    category: ""
+    platform: "",
+    genre: "",
+    model: ""
 };
 
 const productFields = {

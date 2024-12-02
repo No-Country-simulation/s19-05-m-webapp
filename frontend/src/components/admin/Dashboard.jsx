@@ -9,6 +9,7 @@ import columns from "../../utils/tableAdmin";
 import productFields  from "../../utils/productFields";
 import productService from "../../services/products";
 import createProductSchema from "../../validations/createProduct.schema";
+import validateForm from "../../utils/validateForm";
 import "./dashboard.css";
 
 const Dashboard = () => {
@@ -28,21 +29,16 @@ const Dashboard = () => {
         closeModal();  
     };
 
-    const handleSubmit = (formValues) => {
-        createProductSchema
-        .validate(formValues, { abortEarly: false })
-        .then(() => { 
-            setNewProduct(formValues); 
-        })
-        .catch((validationErrors) => {
-            const formattedErrors = {};
-            validationErrors.inner.forEach((error) => {
-                formattedErrors[error.path] = error.message;
-            });
-            setErrors(formattedErrors);
-        });
+    const handleSubmit = async (formValues) => {
+        const validationResult = await validateForm(formValues, createProductSchema);
+    
+        if (validationResult.isValid) {
+            setNewProduct(formValues);  
+        } else {
+            setErrors(validationResult.errors); 
+        }
     };
-
+    
     useEffect(() => {
         if (newProduct) {
             createProduct();
