@@ -1,3 +1,14 @@
 .cart p{
-    color: #000;
+    color: var(--first-color)
+}
+.cart h2{
+    color: var(--optional-color)
+}
+.cart h4, h3 {
+    color: var(--second-color)
+}
+
+.cart input{
+    background-color: var(--accent-color);
+    color: var(--first-color);
 }

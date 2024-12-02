@@ -5,6 +5,7 @@ import useModal from "../../hooks/useModal";
 import useLogin from "../../hooks/useLogin";
 import Modal from "../modal/Modal";
 import Cart from "../Cart/Cart";
+import { useCart } from "../../contexts/CartContext/CartContext";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/auth.slices";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
@@ -13,6 +14,7 @@ const Header = () => {
   const [inputSearch, setInputSearch] = useState();
   const [menuOpen, setMenuOpen] = useState(false);
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { totalQuantity } = useCart();
   const { isLoginOpen, openLogin, closeLogin } = useLogin();
 
   const handleLinkClick = () => {
@@ -56,12 +58,13 @@ const Header = () => {
         </Link>
       </div>
       <div className="header-cart">
-        <Link to="/">
           <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <Cart />
+          {totalQuantity > 0 && ( 
+            <span className="cart-count">{totalQuantity}</span>
+          )}
+          <Modal isOpen={isModalOpen} onClose={closeModal} title="Carrito de compras">
+            <Cart onClose={closeModal}/>
           </Modal>
-        </Link>
       </div>
       <div
         className="menu"
