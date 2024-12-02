@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Table from "../table/Table";
 import useFetch from "../../hooks/useFetch";
+import useCrud from "../../hooks/useCrud";
 import useModal from "../../hooks/useModal";
 import columns from "../../utils/tableAdmin";
 import productFields  from "../../utils/productFields";
@@ -13,6 +14,8 @@ import "./dashboard.css";
 const Dashboard = () => {
     const { isModalOpen, openModal, closeModal } = useModal();
     const { data: products } = useFetch(productService.getProducts);
+    const [newProduct, setNewProduct] = useState(null);  
+    const { req: createProduct, res: createRes } = useCrud(productService.createProduct, newProduct);
     const [filterType, setFilterType] = useState("all");
     const [errors, setErrors] = useState({});
 
@@ -28,7 +31,9 @@ const Dashboard = () => {
     const handleSubmit = (formValues) => {
         createProductSchema
         .validate(formValues, { abortEarly: false })
-        .then(() => { console.log('probando'), closeModal(); })
+        .then(() => { 
+            setNewProduct(formValues); 
+        })
         .catch((validationErrors) => {
             const formattedErrors = {};
             validationErrors.inner.forEach((error) => {
@@ -36,9 +41,15 @@ const Dashboard = () => {
             });
             setErrors(formattedErrors);
         });
-        
-        console.log("Producto creado:", formValues);
     };
+
+    useEffect(() => {
+        if (newProduct) {
+            createProduct();
+            handleCloseModal();
+            console.log('hola')
+        }
+    }, [newProduct]);
 
     return (
         <>
