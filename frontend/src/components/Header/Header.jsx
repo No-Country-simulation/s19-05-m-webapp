@@ -24,7 +24,7 @@ const Header = () => {
             <span className="cart-count">{totalQuantity}</span>
           )}
           <Modal isOpen={isModalOpen} onClose={closeModal} title="Carrito de compras">
-            <Cart />
+            <Cart onClose={closeModal}/>
           </Modal>
       </div>
       <div
