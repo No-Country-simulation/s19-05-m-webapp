@@ -6,8 +6,17 @@
     height: 50px; 
     margin: 0 auto; 
     width: 50px; 
-  }
-  
+}
+ 
+.loader-product-detail {
+    margin-top: 20%;
+}
+
+@media (min-width: 768px) {
+    .loader-product-detail {
+        margin-top: 5%;
+    }
+}
 
 @keyframes spin {
     0% {
