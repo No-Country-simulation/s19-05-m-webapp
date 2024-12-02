@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../card/Card";
 import Dropdown from "../dropdown/Dropdown";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
@@ -10,12 +10,14 @@ import usePagination from "../../hooks/usePagination";
 import options from '../../utils/options';
 import useFilteredProducts from "../../hooks/useFilteredProducts";
 import "./products.css";
+import { useEffect } from "react";
 
 const Products = () => {
     const { data: products, loading: productsLoading, 
         hasError: productsError, setHasError: setProductsError} = useFetch(productService.getProducts);
     const { page, loading: paginationLoading, loadMore, resetPagination } = usePagination();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const { values: selectedOptions, handleChange, reset } = useReset(
         { platform: '', genre: '', model: '' }
@@ -33,7 +35,7 @@ const Products = () => {
         selectedOptions.platform
     );
 
-    const filteredProducts = useFilteredProducts(selectedOptions, products, 
+    let filteredProducts = useFilteredProducts(selectedOptions, products, 
         productsByGenre, productsByPlatform, page,
     );
 
@@ -50,6 +52,18 @@ const Products = () => {
         setGenreError(null);
         setPlatformError(null);
     };
+
+    const searchParams = new URLSearchParams(location.search); 
+    const searchQuery = searchParams.get('search')?.toLowerCase() || '';
+    console.log(searchQuery) 
+
+    
+        filteredProducts = filteredProducts?.filter(product => 
+            product.title.toLowerCase().includes(searchQuery)
+        );
+    
+
+
 
     return (
         <>

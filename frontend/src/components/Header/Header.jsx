@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import { useState, useEffect, useRef } from "react";
 import useModal from "../../hooks/useModal";
@@ -18,7 +18,8 @@ const Header = () => {
   const handleLinkClick = () => {
     setMenuOpen(false);
   };
-
+  
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
 
@@ -29,15 +30,17 @@ const Header = () => {
 
   /* *********Search**************** */
 
-  const { productsGlobal } = useSelector((state) => state);
-
   const inputValue = useRef();
 
-  const handleChangeSearch = () => {
-    setInputSearch(inputValue.current.value);
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      const searchTerm = inputValue.current.value;
+      if (searchTerm.trim()) {
+        navigate(`/products?search=${searchTerm.trim()}`); // Redirige a la página de productos con el término de búsqueda
+      }
+    }
   };
 
-  console.log(productsGlobal);
 
   /* ************************* */
   useEffect(() => {
@@ -78,12 +81,12 @@ const Header = () => {
       <nav className={`header-nav ${menuOpen ? "open" : ""}`}>
         <ul className={menuOpen ? "open" : ""}>
           <div className="header-search">
-            <button className="header-search-btn">
+            <button className="header-search-btn" onClick={handleSearch}>
               <i className="bx bx-search-alt btn-search-p"></i>
             </button>
             <input
               ref={inputValue}
-              onChange={handleChangeSearch}
+              onKeyDown={handleSearch}
               className="header-search-prod"
               type="text"
               placeholder="Minecraft, Pubg..."
