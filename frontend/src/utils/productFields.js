@@ -1,6 +1,8 @@
+import options from "./options";
+
 const fields = [
     { 
-        name: "name", 
+        name: "title", 
         label: "Nombre del Producto", 
         type: "text", 
         placeholder: "Ingresa el nombre del producto" 
@@ -8,13 +10,13 @@ const fields = [
     { 
         name: "price", 
         label: "Precio", 
-        type: "number", 
-        placeholder: "Ingresa el precio" 
+        type: "text", 
+        placeholder: "0.00" 
     },
     { 
         name: "description", 
         label: "Descripción", 
-        type: "text", 
+        type: "textarea", 
         placeholder: "Descripción del producto" 
     },
     { 
@@ -27,8 +29,26 @@ const fields = [
         name: "stock", 
         label: "Stock", 
         type: "number", 
-        placeholder: "Cantidad en stock" 
-    }
+        placeholder: "0" 
+    },
+    {
+        name: "name",
+        label: "Seleccionar Plataforma",
+        type: "select",
+        options: options.platformOptions,
+    },
+    {
+        name: "model",
+        label: "Seleccionar Modelo",
+        type: "select",
+        options: options.modelOptions,
+    },
+    {
+        name: "genre",
+        label: "Seleccionar Género",
+        type: "select",
+        options: options.genreOptions,
+    },
 ];
 
 const initialValues = {
@@ -37,6 +57,9 @@ const initialValues = {
     description: "",
     image: "",
     stock: "",
+    platform: "",
+    genre: "",
+    model: ""
 };
 
 const productFields = {

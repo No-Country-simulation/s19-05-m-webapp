@@ -10,6 +10,10 @@ const productsList = [
     { 
         header: 'Stock', 
         field: 'stock' 
+    },
+    { 
+        header: 'Acciones', 
+        field: 'actions' 
     }
 ];
 

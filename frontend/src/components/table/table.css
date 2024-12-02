@@ -3,33 +3,59 @@
 }
 
 .custom-table {
-    background-color: white;
     border-collapse: collapse;
     width: 100%; 
 }
 
-.custom-table th,
 .custom-table td {
-    border-bottom: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
+    color: var(--accent-color);
+    text-align: center;
 }
 
 .custom-table th {
-    background-color: #4CAF50;
-    color: white;
+    border-bottom: 1px solid var(--second-color);
+    color: var(--second-color);
     font-weight: bold;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 12px;
+}
+
+.custom-table tr:nth-child(even) {
+    background-color: rgba(224, 224, 224, 0.05); 
+}
+
+.container-admin-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.custom-table .btn-edit,
+.custom-table .btn-delete {
+    align-items: center;
+    background-color: transparent;
+    border-radius: 50%;
+    color: #ffc36b;
+    display: flex;
+    font-size: 16px;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+}
+
+.custom-table .btn-edit {
+    border: 2px solid #3498db;
+}
+
+.custom-table .btn-delete {
+    border: 2px solid #e74c3c;
 }
 
 @media (min-width: 769px) {
     .custom-table {
         width: 100%; 
-    }
-
-    .custom-table th,
-    .custom-table td {
-        border-bottom: 1px solid #ddd;
-        padding: 12px;
-        text-align: left;
     }
 }

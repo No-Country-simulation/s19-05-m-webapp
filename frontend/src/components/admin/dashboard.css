@@ -1,10 +1,42 @@
-h1 {
+.admin-title {
     color: white;
+    font-weight: 500;
+    letter-spacing: 2px;
+    padding-bottom: 30px;
+    text-align: center;
 }
 
-button {
-    background-color: var(--second-color);
-    border-radius: 5px;
-    color: var(--first-color);
-    padding: 10px 20px;
+.admin-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 40px;
+}
+
+.admin-buttons button {
+    background-color: transparent;
+    border: 1px solid var(--second-color);
+    border-radius: 8px;
+    box-shadow: 0 3px 15px -5px var(--second-color);
+    color: var(--second-color);
+    font-family: var(--text-font);
+    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .admin-title {
+        text-align: left;
+    }
+
+    .admin-buttons {
+        flex-wrap: nowrap;
+    }
+}
+
+@media (min-width: 992px) {
+    .admin-buttons button {
+        width: 25%;
+    }
 }
