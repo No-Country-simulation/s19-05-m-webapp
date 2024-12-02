@@ -13,8 +13,8 @@ const getProducts = async () => {
 
 const getProductById = async (id) => {
 	try {
-		const response = await axios.get(`https://run.mocky.io/v3/e1f52261-551a-4aa8-91fb-0b40b1cfd8f0`);
-		return response.data;
+	  	const response = await axios.get(`${BASE_URL}/products/${id}`);
+	  	return response.data.data;
 	} catch {
 		throw new Error("No se pudo obtener información del producto. Inténtalo de nuevo más tarde.");
 	}

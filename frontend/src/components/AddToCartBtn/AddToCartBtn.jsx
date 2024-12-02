@@ -1,6 +1,6 @@
-import React from 'react';
 import { useCart } from '../../contexts/CartContext/CartContext';
 import { Toaster, toast } from 'sonner';
+import "./addToCartButton.css";
 
 function AddToCartButton({ product }) {
     //Usa el contexto para poder "mandar" las acciones
@@ -24,12 +24,8 @@ function AddToCartButton({ product }) {
                 //closeButton
                 position="top-center"
             />
-            <button onClick={() => {
-                addToCart()
-            }
-            }
-                disabled={product.stock === 0}>
-                Añadir al carrito
+            <button className="add-cart" onClick={() => {addToCart()}} disabled={product.stock === 0}>
+                <i className="bx bxs-cart"></i> Añadir al carrito
             </button>
         </>
     );
