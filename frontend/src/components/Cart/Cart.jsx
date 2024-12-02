@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext/CartContext';
 import './cart.css';
 
@@ -21,7 +22,6 @@ function Cart() {
 
     return (
         <div className='cart'>
-            <h2>Carrito de Compras</h2>
             {state.length === 0 && <p>Tu carrito está vacío.</p>}
             {state.map((item) => (
                 <div key={item.id}>
@@ -41,6 +41,11 @@ function Cart() {
                 </div>
             ))}
             <h3>Total del carrito: ${total.toFixed(2)}</h3>
+            <div className=''>
+                <Link to="/checkout">
+                    <button>Comprar</button>
+                </Link>
+            </div>
         </div>
     );
 }

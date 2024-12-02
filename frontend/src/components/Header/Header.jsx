@@ -23,7 +23,7 @@ const Header = () => {
           {totalQuantity > 0 && ( 
             <span className="cart-count">{totalQuantity}</span>
           )}
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <Modal isOpen={isModalOpen} onClose={closeModal} title="Carrito de compras">
             <Cart />
           </Modal>
       </div>

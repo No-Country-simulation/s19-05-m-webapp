@@ -10,8 +10,6 @@ const ProductDetail = () => {
     const { id } = useParams();
     const { data: product, loading } = useFetch(productService.getProductById, id);
 
-    console.log(product)
-
     return (
         <>
             {
@@ -33,6 +31,5 @@ const ProductDetail = () => {
         </>
     );
 };
-  
+
 export default ProductDetail;
-  
