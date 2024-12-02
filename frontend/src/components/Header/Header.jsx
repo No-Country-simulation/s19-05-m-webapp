@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Header.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useModal from "../../hooks/useModal";
 import useLogin from "../../hooks/useLogin";
 import Modal from "../modal/Modal";
@@ -10,6 +10,7 @@ import { logout } from "../../store/slices/auth.slices";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
 
 const Header = () => {
+  const [inputSearch, setInputSearch] = useState();
   const [menuOpen, setMenuOpen] = useState(false);
   const { isModalOpen, openModal, closeModal } = useModal();
   const { isLoginOpen, openLogin, closeLogin } = useLogin();
@@ -26,6 +27,19 @@ const Header = () => {
     google.accounts.id.disableAutoSelect();
   }
 
+  /* *********Search**************** */
+
+  const { productsGlobal } = useSelector((state) => state);
+
+  const inputValue = useRef();
+
+  const handleChangeSearch = () => {
+    setInputSearch(inputValue.current.value);
+  };
+
+  console.log(productsGlobal);
+
+  /* ************************* */
   useEffect(() => {
     if (user) {
       document.getElementById("iniciar-sesion-header").style.display = "none";
@@ -68,6 +82,8 @@ const Header = () => {
               <i className="bx bx-search-alt btn-search-p"></i>
             </button>
             <input
+              ref={inputValue}
+              onChange={handleChangeSearch}
               className="header-search-prod"
               type="text"
               placeholder="Minecraft, Pubg..."

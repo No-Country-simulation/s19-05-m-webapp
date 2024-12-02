@@ -62,7 +62,7 @@
   font-size: 1.4em;
   background-color: var(--second-color);
   color: var(--first-color);
-  margin: 0 0.7em;
+  /* margin: 0 0.7em; */
 }
 
 .header-search-prod {
