@@ -13,10 +13,28 @@ const Table = ({ columns, data, admin = false }) => {
     const [modalHeight, setModalHeight] = useState("");
     const [currentProduct, setCurrentProduct] = useState(null);
     const [errors, setErrors] = useState({});
+
+    const filteredData = data?.map((p) => {
+        if (admin) {
+            return {
+                id: p.id_product,
+                title: p.title,
+                price: p.price,
+                stock: p.stock,
+                fullProduct: p 
+            };
+        } else {
+            // para el usuario normal
+        }
+    });
     
     const handleAction = (product, actionType) => {
-        console.log(`${actionType} producto:`, product);
-        setCurrentProduct(product);
+        const productWithEmptyFile = {
+            ...product,
+            image: "" 
+        };
+
+        setCurrentProduct(productWithEmptyFile);
         setModalTitle(actionType === 'Editar' ? 'Editar Producto' : 'Eliminar Producto')
         setModalHeight(actionType === 'Eliminar' ? '50vh' : '98vh');
         openModal();
@@ -46,13 +64,13 @@ const Table = ({ columns, data, admin = false }) => {
                 </thead>
                 <tbody>
                     {
-                        data?.map((product) => (
-                            <tr key={product.id}>
+                        filteredData?.map((p) => (
+                            <tr key={p.id}> 
                                 {
-                                    Object.keys(product)
-                                        .filter((key) => key !== "id") 
+                                    Object.keys(p)
+                                        .filter((key) => key !== "id" && key !== "fullProduct")
                                         .map((key) => (
-                                            <td key={key}>{product[key]}</td> 
+                                            <td key={key}>{p[key]}</td> 
                                         )
                                     )
                                 }
@@ -60,11 +78,11 @@ const Table = ({ columns, data, admin = false }) => {
                                     admin && (
                                         <td className="container-admin-buttons">
                                         <button className="btn-edit" 
-                                            onClick={() => handleAction(product, "Editar")}>
+                                            onClick={() => handleAction(p.fullProduct, "Editar")}>
                                             <i className="bx bx-edit"></i>
                                         </button>
                                         <button className="btn-delete" 
-                                            onClick={() => handleAction(product, "Eliminar")}>
+                                            onClick={() => handleAction(p.fullProduct, "Eliminar")}>
                                             <i className="bx bx-trash"></i>
                                         </button>
                                         </td>
