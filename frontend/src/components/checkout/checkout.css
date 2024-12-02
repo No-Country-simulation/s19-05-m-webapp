@@ -178,7 +178,8 @@ button {
   background-color: var(--second-color);
 }
 
-.next-button, .form-btn {
+.next-button,
+.form-btn {
   background-color: var(--second-color);
   color: var(--optional-color);
   margin: 0.4rem 0;
@@ -191,4 +192,6 @@ button {
   border: 1px solid var(--second-color);
 }
 
-
+p {
+  color: var(--accent-color);
+}
