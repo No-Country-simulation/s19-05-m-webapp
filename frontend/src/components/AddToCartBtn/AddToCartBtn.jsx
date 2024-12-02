@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from '../CartContext/CartContext';
+import { useCart } from '../../contexts/CartContext/CartContext';
 import { Toaster, toast } from 'sonner';
 
 function AddToCartButton({ product }) {

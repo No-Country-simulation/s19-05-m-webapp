@@ -4,7 +4,7 @@ import { useState } from "react";
 import useModal from "../../hooks/useModal";
 import Modal from "../modal/Modal";
 import Cart from "../Cart/Cart";
-import { useCart } from "../CartContext/CartContext";
+import { useCart } from "../../contexts/CartContext/CartContext";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
