@@ -44,7 +44,7 @@ const Header = () => {
     if (user) {
       document.getElementById("iniciar-sesion-header").style.display = "none";
     } else {
-      document.getElementById("iniciar-sesion-header");
+      document.getElementById("iniciar-sesion-header").style.display = "block";
     }
   }, [user]);
 

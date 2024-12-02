@@ -31,6 +31,18 @@
     font-family: var(--subtitle-font), sans-serif;
 }
 
+#login-form {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+}
+
+#login-form>input{
+    margin: 10px 0;
+}
+
 #logInButton {
     width: 210px;
     display: flex;
@@ -51,7 +63,6 @@
     position: absolute;
     background-color: var(--second-color);
     clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
-    
 }
 
 #login-img {
@@ -111,7 +122,6 @@
     width: 100%;
     background-color: var(--second-color);
     clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
-    
 }
 
 #register-img {
@@ -120,11 +130,19 @@
 }
 
 @media (max-width: 820px) {
-    #register-img {
+    #register-img, #login-img {
         width: 0;
     }
 
-    #register-container {
+    #register-container, #logIn-container {
+        width: 100%;
+    }
+
+    #logInDiv {
+        height: 80%;
+    }
+
+    #triangle-login {
         width: 100%;
     }
 
