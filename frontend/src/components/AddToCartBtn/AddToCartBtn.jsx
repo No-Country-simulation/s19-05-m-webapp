@@ -17,12 +17,11 @@ function AddToCartButton({ product }) {
     };
 
     return (
-        //Modificar el icono cart acá
         <>
             <Toaster
                 richColors
                 //closeButton
-                position="top-center"
+                position="bottom-center"
             />
             <button className="add-cart" onClick={() => {addToCart()}} disabled={product.stock === 0}>
                 <i className="bx bxs-cart"></i> Añadir al carrito
