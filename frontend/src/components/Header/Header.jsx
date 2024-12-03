@@ -5,6 +5,7 @@ import useModal from "../../hooks/useModal";
 import useLogin from "../../hooks/useLogin";
 import Modal from "../modal/Modal";
 import Cart from "../Cart/Cart";
+import { useCart } from "../../contexts/CartContext/CartContext";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/auth.slices";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
@@ -13,12 +14,14 @@ const Header = () => {
   const [inputSearch, setInputSearch] = useState();
   const [menuOpen, setMenuOpen] = useState(false);
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { totalQuantity } = useCart();
   const { isLoginOpen, openLogin, closeLogin } = useLogin();
 
   const handleLinkClick = () => {
     setMenuOpen(false);
   };
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
 
@@ -27,6 +30,20 @@ const Header = () => {
     google.accounts.id.disableAutoSelect();
   }
 
+  /* *********Search**************** */
+
+  const inputValue = useRef();
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      const searchTerm = inputValue.current.value;
+      if (searchTerm.trim()) {
+        navigate(`/products?search=${searchTerm.trim()}`); // Redirige a la página de productos con el término de búsqueda
+      }
+    }
+  };
+
+  /* ************************* */
   useEffect(() => {
     if (user) {
       document.getElementById("iniciar-sesion-header").style.display = "none";
@@ -43,12 +60,17 @@ const Header = () => {
         </Link>
       </div>
       <div className="header-cart">
-        <Link to="/">
-          <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <Cart />
-          </Modal>
-        </Link>
+        <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
+        {totalQuantity > 0 && (
+          <span className="cart-count">{totalQuantity}</span>
+        )}
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          title="Carrito de compras"
+        >
+          <Cart onClose={closeModal} />
+        </Modal>
       </div>
       <div
         className="menu"
@@ -65,10 +87,12 @@ const Header = () => {
       <nav className={`header-nav ${menuOpen ? "open" : ""}`}>
         <ul className={menuOpen ? "open" : ""}>
           <div className="header-search">
-            <button className="header-search-btn">
+            <button className="header-search-btn" onClick={handleSearch}>
               <i className="bx bx-search-alt btn-search-p"></i>
             </button>
             <input
+              ref={inputValue}
+              onKeyDown={handleSearch}
               className="header-search-prod"
               type="text"
               placeholder="Minecraft, Pubg..."

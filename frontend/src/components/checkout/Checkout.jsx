@@ -14,7 +14,9 @@ export const Checkout = ({ onNext, products, totalAmount }) => {
       <p>
         <strong>Total:</strong> {totalAmount.toFixed(2)}$
       </p>
-      <button className="next-button" onClick={onNext}>Siguiente</button>
+      <button className="next-button" onClick={onNext}>
+        Siguiente
+      </button>
     </div>
   );
 };

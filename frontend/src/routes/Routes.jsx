@@ -6,6 +6,7 @@ import { CheckoutPage } from "../pages/Checkout";
 import About from "../pages/About/About";
 import Politics from "../pages/Politics/Politics";
 import Terms from "../pages/Terms/Terms";
+import Admin from "../pages/Admin";
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
       <Route path="/products" element={<ProductsPage />} />
       <Route path="/product/:id" element={<ProductDetailPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/admin" element={<Admin />} />
     </Routes>
   );
 };

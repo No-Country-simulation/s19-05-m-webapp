@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../card/Card";
 import Dropdown from "../dropdown/Dropdown";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
@@ -10,6 +10,7 @@ import usePagination from "../../hooks/usePagination";
 import options from "../../utils/options";
 import useFilteredProducts from "../../hooks/useFilteredProducts";
 import "./products.css";
+import { useEffect } from "react";
 
 const Products = () => {
   const {
@@ -25,6 +26,7 @@ const Products = () => {
     resetPagination,
   } = usePagination();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     values: selectedOptions,
@@ -52,7 +54,7 @@ const Products = () => {
     selectedOptions.platform
   );
 
-  const filteredProducts = useFilteredProducts(
+  let filteredProducts = useFilteredProducts(
     selectedOptions,
     products,
     productsByGenre,
@@ -73,6 +75,14 @@ const Products = () => {
     setGenreError(null);
     setPlatformError(null);
   };
+
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+  console.log(searchQuery);
+
+  filteredProducts = filteredProducts?.filter((product) =>
+    product.title.toLowerCase().includes(searchQuery)
+  );
 
   return (
     <>
