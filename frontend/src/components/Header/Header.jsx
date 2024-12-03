@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import { useState, useEffect, useRef } from "react";
 import useModal from "../../hooks/useModal";
@@ -27,19 +27,6 @@ const Header = () => {
     google.accounts.id.disableAutoSelect();
   }
 
-  /* *********Search**************** */
-
-  const { productsGlobal } = useSelector((state) => state);
-
-  const inputValue = useRef();
-
-  const handleChangeSearch = () => {
-    setInputSearch(inputValue.current.value);
-  };
-
-  console.log(productsGlobal);
-
-  /* ************************* */
   useEffect(() => {
     if (user) {
       document.getElementById("iniciar-sesion-header").style.display = "none";
@@ -82,8 +69,6 @@ const Header = () => {
               <i className="bx bx-search-alt btn-search-p"></i>
             </button>
             <input
-              ref={inputValue}
-              onChange={handleChangeSearch}
               className="header-search-prod"
               type="text"
               placeholder="Minecraft, Pubg..."
