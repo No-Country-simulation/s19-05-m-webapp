@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import { useCookies } from 'react-cookie'; 
 
 const CartContext = createContext(); //Guarda y comparte estado y acciones
 
@@ -32,9 +33,16 @@ const cartReducer = (state, action) => { //Estado actual y acción sobre como mo
 //Se usa el reducer para manejar el estado y las acciones(dispatch)
 //Children = quienes consumen el contexto
 export const CartProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(cartReducer, []);
+    const [cookies, setCookie] = useCookies(['cart']);
+    const [state, dispatch] = useReducer(cartReducer, cookies.cart || []);
+    const totalQuantity = state.reduce((total, item) => total + item.quantity, 0);
+
+    useEffect(() => {
+        setCookie('cart', state, { path: '/', maxAge: 60 * 60 * 24 * 7 });
+    }, [state, setCookie]);
+
     return (
-        <CartContext.Provider value={{ state, dispatch }}>
+        <CartContext.Provider value={{ state, dispatch, totalQuantity }}>
             {children}
         </CartContext.Provider>
     );

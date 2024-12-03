@@ -38,11 +38,31 @@ const getProductsByPlatform = async (platform) => {
 	}
 }
 
+const createProduct = async (newProduct) => {
+	try {
+		const response = await axios.post(`${BASE_URL}/products`, newProduct );
+		return response.data.message;
+	} catch {
+		throw new Error("No se pudo crear el producto. Inténtalo de nuevo más tarde.");
+	}
+}
+
+const editProduct = async (id, updateProduct) => {
+	try {
+		const response = await axios.put(`${BASE_URL}/products/${id}`, updateProduct);
+		return response.data.success;
+	} catch {
+		throw new Error("No se pudo editar el producto. Inténtalo de nuevo más tarde.");
+	}
+}
+
 const productService = {
 	getProducts,
 	getProductById,
 	getProductsByGenre,
 	getProductsByPlatform,
+	createProduct,
+	editProduct
 };
 
 export default productService;
