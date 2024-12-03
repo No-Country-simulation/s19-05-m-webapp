@@ -161,7 +161,10 @@ userRouter.put(
   /* authJWTMiddleware, adminMiddleware, */ userController.changeUserRoleController
 );
 
-userRouter.put("/:id/update", userController.updateUserInfoController);
+userRouter.put(
+  "/:id/update",
+  /* authJWTMiddleware, adminMiddleware, */ userController.updateUserInfoController
+);
 
 /**
  * @swagger

@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { UserService } from "../services/users.service";
 import ControllerHandler from "../handlers/controllers.handler";
 import { createTokenUtil } from "../utils/token.util";
-import { ObjectId } from "typeorm";
 
 /**
  * @swagger
