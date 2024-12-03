@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { Toaster, toast } from 'sonner';
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Table from "../table/Table";
 import useFetch from "../../hooks/useFetch";
-import useCrud from "../../hooks/useCrud";
 import useModal from "../../hooks/useModal";
 import columns from "../../utils/tableAdmin";
 import productFields  from "../../utils/productFields";
@@ -15,10 +15,9 @@ import "./dashboard.css";
 const Dashboard = () => {
     const { isModalOpen, openModal, closeModal } = useModal();
     const { data: products } = useFetch(productService.getProducts);
-    const [newProduct, setNewProduct] = useState(null);  
-    const { req: createProduct, res: createRes } = useCrud(productService.createProduct, newProduct);
     const [filterType, setFilterType] = useState("all");
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const filteredProducts = products?.filter(product => 
         filterType === "all" ? product.stock > 0 : product.stock === 0
@@ -33,20 +32,33 @@ const Dashboard = () => {
         const validationResult = await validateForm(formValues, createProductSchema);
     
         if (validationResult.isValid) {
-            setNewProduct(formValues);  
+            const prueba = {
+                title : formValues.title,
+                price: Number(formValues.price),
+                stock : Number(formValues.stock),
+                description : formValues.description,
+                genre : formValues.genre,
+                type: 'hola',
+                image: '/imagen.prueba',
+                platforms: []
+            }
+
+            setLoading(true); 
+            try {
+                await productService.createProduct(prueba);
+                toast.success('Producto creado correctamente!');
+            } catch (error) {
+                toast.error(error.message);
+            } finally {
+                setLoading(false);  
+                handleCloseModal();  
+            }
+
         } else {
             setErrors(validationResult.errors); 
         }
     };
     
-    useEffect(() => {
-        if (newProduct) {
-            createProduct();
-            handleCloseModal();
-            console.log('hola')
-        }
-    }, [newProduct]);
-
     return (
         <>
             <h1 className="admin-title">Dashboard Administrador</h1>
@@ -64,7 +76,7 @@ const Dashboard = () => {
                     onSubmit={handleSubmit}
                     initialValues={productFields.initialValues}
                     className="btn-action-admin"
-                    buttonText="Crear producto"
+                    buttonText={loading ? "Cargando..." : "Crear producto"}
                     errors={errors}
                 />
             </Modal>
@@ -72,6 +84,10 @@ const Dashboard = () => {
                 columns={columns.productsList}
                 data={filteredProducts}  
                 admin={true}
+            />
+            <Toaster
+                richColors
+                position="top-center"
             />
         </>
     );
