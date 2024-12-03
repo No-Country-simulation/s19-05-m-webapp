@@ -1,13 +1,19 @@
 import { useState } from "react";
-
 import { CheckoutForm } from "../components/checkout/CheckoutForm";
 import { Payment } from "../components/checkout/Payment";
 import { Checkout } from "../components/checkout/Checkout";
 import { useCart } from "../contexts/CartContext/CartContext";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import useLogin from "../hooks/useLogin";
+import GoogleAuth from "../components/GoogleAuth/GoogleAuth";
 
 export const CheckoutPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { state: products } = useCart();
+  const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+  const { isLoginOpen, openLogin, closeLogin } = useLogin();
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const previousStep = () =>
@@ -17,6 +23,37 @@ export const CheckoutPage = () => {
     (acc, product) => acc + product.price * product.quantity,
     0
   );
+
+  if (!products.length) {
+    return (
+      <div className="page-container">
+        <h1>Checkout</h1>
+        <div className="steps-container">
+          <h2>Cesta Vacía</h2>
+          <p>No hay productos en la cesta.</p>
+          <button className="back-button" onClick={() => navigate("/")}>
+            Volver a la tienda
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="page-container">
+        <h1>Checkout</h1>
+        <div className="steps-container">
+          <h2>Inicia Sesión</h2>
+          <p>Debes iniciar sesión para continuar con el proceso de compra.</p>
+          <button onClick={openLogin} className="next-button">
+            Iniciar sesión
+          </button>
+          <GoogleAuth isOpen={isLoginOpen} onClose={closeLogin} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-container">
