@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { UserService } from "../services/users.service";
 import ControllerHandler from "../handlers/controllers.handler";
 import { createTokenUtil } from "../utils/token.util";
+import { ObjectId } from "typeorm";
 
 /**
  * @swagger
@@ -75,6 +76,8 @@ export class UserController {
     this.ReadOnebyEmail = this.ReadOnebyEmail.bind(this);
     this.UpdateUser = this.UpdateUser.bind(this);
     this.DeleteUser = this.DeleteUser.bind(this);
+    this.changeUserRoleController = this.changeUserRoleController.bind(this);
+    this.updateUserInfoController = this.updateUserInfoController.bind(this);
   }
 
   async CreateUser(
@@ -199,6 +202,70 @@ export class UserController {
       return ControllerHandler.ok("Deleted user.", res, user);
     } catch (error) {
       console.error(error);
+      next(error);
+    }
+  }
+
+  async changeUserRoleController(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const { id } = req.params;
+      const { role } = req.body;
+
+      //se puede verificar directamente de la entity
+      if (role !== "ADMINISTRATOR" && role !== "USER") {
+        return res.status(400).json({ message: "User role is not valid." });
+      }
+
+      const user = await this.userService.changeUserRole(parseInt(id), role); //parseint porque viene cmo string
+
+      return ControllerHandler.ok(
+        "User role has been changed successfully.",
+        res,
+        user
+      );
+    } catch (error) {
+      console.error("Error in UserController.changeUserRoleController:", error);
+      next(error);
+    }
+  }
+
+  async updateUserInfoController(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+
+      //unicos campos que puede actualizar el admin
+      const allowedFields = ["name", "address", "phone", "active"];
+
+      const updateData: Partial<any> = {};
+      for (const element of allowedFields) {
+        if (data.hasOwnProperty(element)) {
+          updateData[element] = data[element];
+        }
+      }
+      if (Object.keys(updateData).length === 0)
+        return res.status(400).json({ message: "No fields to update." });
+
+      const user = await this.userService.updateUserInfo(
+        parseInt(id),
+        updateData
+      );
+
+      return ControllerHandler.ok(
+        "User information has been updated successfully.",
+        res,
+        user
+      );
+    } catch (error) {
+      console.error("Error in UserController.updateUserInfoController:", error);
       next(error);
     }
   }

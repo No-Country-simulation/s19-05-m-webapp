@@ -156,6 +156,13 @@ userRouter.get("/:id", userController.ReadOnebyId);
  */
 userRouter.post("/readone", userController.ReadOnebyEmail);
 
+userRouter.put(
+  "/:id/role",
+  /* authJWTMiddleware, adminMiddleware, */ userController.changeUserRoleController
+);
+
+userRouter.put("/:id/update", userController.updateUserInfoController);
+
 /**
  * @swagger
  * /api/users/{id}:

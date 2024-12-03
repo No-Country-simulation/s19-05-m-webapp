@@ -101,4 +101,37 @@ export class UserService {
       throw new Error("Failed to delete user");
     }
   }
+
+  async changeUserRole(id: number, role: string): Promise<User> {
+    try {
+      const user = await userRepository.findOne({ where: { id_users: id } });
+      if (!user) throw new Error(`The user with the id ${id} does not exist`);
+
+      user.role = role as any; //para que typscript no llore
+
+      await userRepository.save(user);
+
+      return user;
+    } catch (error) {
+      console.error("Error in UserService.changeUserRole:", error);
+      throw new Error("Failed to change user role.");
+    }
+  }
+
+  async updateUserInfo(id: number, data: Partial<any>): Promise<User> {
+    try {
+      const user = await userRepository.findOne({ where: { id_users: id } });
+      if (!user) {
+        throw new Error(`The user with the id ${id} does not exist`);
+      }
+
+      userRepository.merge(user, data); //guarda solo los campos que se pasan en el data
+      await userRepository.save(user);
+
+      return user;
+    } catch (error) {
+      console.error("Error in UserService.updateUserInfo:", error);
+      throw new Error("Failed to change user information.");
+    }
+  }
 }
