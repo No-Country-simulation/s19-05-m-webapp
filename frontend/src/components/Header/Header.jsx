@@ -35,10 +35,11 @@ const Header = () => {
   const inputValue = useRef();
 
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
+    if (e.type === "click" || e.key === "Enter") {
       const searchTerm = inputValue.current.value;
       if (searchTerm.trim()) {
-        navigate(`/products?search=${searchTerm.trim()}`); // Redirige a la página de productos con el término de búsqueda
+        navigate(`/products?search=${searchTerm.trim()}`);
+        inputValue.current.value = "";
       }
     }
   };
