@@ -1,3 +1,15 @@
+.form-admin {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.form-admin .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -12,7 +24,7 @@ input, select, textarea {
     width: 100%;
 }
 
-.btn-action-admin {
+.form-admin button {
     background-color: transparent !important;
     border: 1px solid var(--second-color);
     color: var(--second-color) !important;
@@ -24,7 +36,7 @@ input, select, textarea {
     
 }
 
-.btn-action-admin:hover {
+.form-admin button:hover {
     background-color: var(--second-color) !important;
     color: var(--first-color) !important;
 }
@@ -37,4 +49,16 @@ input, select, textarea {
     color: #dc2626;
     font-size: 0.9rem;
     margin-top: 5px;
+}
+
+@media (min-width: 768px) {
+    .form-admin .form-group {
+        width: 49%;
+    }
+}
+
+@media (min-width: 992px) {
+    .form-admin .form-group {
+        width: 49%;
+    }
 }

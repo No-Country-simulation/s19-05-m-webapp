@@ -61,3 +61,30 @@
     background: #ffc36b; 
     border-radius: 10px; 
 }
+
+@media (min-width: 768px) {
+    .modal-admin {
+        width: 90% !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .modal-admin {
+        height: 76vh !important;
+        width: 70% !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .modal-admin {
+        height: 66vh !important;
+        width: 50% !important;
+    }
+}
+
+@media (min-width: 1300px) {
+    .modal-admin {
+        height: 86vh !important;
+        width: 50% !important;
+    }
+}
