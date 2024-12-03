@@ -40,7 +40,7 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={className}>
             {
                 fields.map((field) => (
                     <div key={field.name} className="form-group">
@@ -70,7 +70,7 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
                 ))
             }
             {
-                showButton && <button type="submit" className={`form-btn ${className}`}>{buttonText}</button>
+                showButton && <button type="submit" className={`form-btn`}>{buttonText}</button>
             }
         </form>
     );

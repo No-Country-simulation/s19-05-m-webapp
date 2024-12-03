@@ -70,12 +70,13 @@ const Dashboard = () => {
             <Modal 
                 isOpen={isModalOpen} 
                 onClose={handleCloseModal} 
-                title="Crear producto">
+                title="Crear producto"
+                className="modal-admin">
                 <Form
                     fields={productFields.fields} 
                     onSubmit={handleSubmit}
                     initialValues={productFields.initialValues}
-                    className="btn-action-admin"
+                    className="form-admin"
                     buttonText={loading ? "Cargando..." : "Crear producto"}
                     errors={errors}
                 />

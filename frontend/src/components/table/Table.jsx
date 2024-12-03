@@ -13,6 +13,7 @@ const Table = ({ columns, data, admin = false }) => {
     const { isModalOpen, openModal, closeModal } = useModal();
     const [modalTitle, setModalTitle] = useState("");
     const [modalHeight, setModalHeight] = useState("");
+    const [className, setClassName] = useState("");
     const [currentProduct, setCurrentProduct] = useState(null);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
@@ -45,6 +46,7 @@ const Table = ({ columns, data, admin = false }) => {
         setCurrentProduct(productWithEmptyFile);
         setModalTitle(actionType === 'Editar' ? 'Editar Producto' : 'Eliminar Producto')
         setModalHeight(actionType === 'Eliminar' ? '50vh' : '98vh');
+        setClassName(actionType === 'Editar' ? 'modal-admin' : "");
         openModal();
     };
 
@@ -124,7 +126,8 @@ const Table = ({ columns, data, admin = false }) => {
                 isOpen={isModalOpen} 
                 onClose={handleCloseModal} 
                 title={modalTitle}
-                height={modalHeight}>
+                height={modalHeight}
+                className={className}>
                 <div>
                     {
                         modalTitle === 'Editar Producto' && currentProduct && (
@@ -132,7 +135,7 @@ const Table = ({ columns, data, admin = false }) => {
                                 fields={productFields.fields} 
                                 onSubmit={handleSubmit}
                                 initialValues={currentProduct}
-                                className="btn-action-admin"
+                                className="form-admin"
                                 buttonText={loading ? "Cargando..." : "Actualizar producto"}
                                 errors={errors}
                             />
