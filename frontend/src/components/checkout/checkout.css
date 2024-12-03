@@ -192,6 +192,9 @@ button {
   border: 1px solid var(--second-color);
 }
 
+h1,
+h2,
+h3,
 p {
   color: var(--accent-color);
 }
