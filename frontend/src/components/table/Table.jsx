@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { Toaster, toast } from 'sonner';
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import useModal from "../../hooks/useModal";
+import productService from "../../services/products";
 import productFields from "../../utils/productFields";
 import createProductSchema from "../../validations/createProduct.schema";
 import validateForm from "../../utils/validateForm";
@@ -13,6 +15,7 @@ const Table = ({ columns, data, admin = false }) => {
     const [modalHeight, setModalHeight] = useState("");
     const [currentProduct, setCurrentProduct] = useState(null);
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const filteredData = data?.map((p) => {
         if (admin) {
@@ -27,6 +30,11 @@ const Table = ({ columns, data, admin = false }) => {
             // para el usuario normal
         }
     });
+
+    const handleCloseModal = () => {
+        setErrors({}); 
+        closeModal();  
+    };
     
     const handleAction = (product, actionType) => {
         const productWithEmptyFile = {
@@ -44,7 +52,26 @@ const Table = ({ columns, data, admin = false }) => {
         const validationResult = await validateForm(formValues, createProductSchema);
     
         if (validationResult.isValid) {
-            console.log('se válido bien')
+            const updatedFormValues = { ...formValues };
+            delete updatedFormValues.model;
+            delete updatedFormValues.name;
+        
+            if (!updatedFormValues.image) {
+                updatedFormValues.image = '/ruta-image'; 
+            }
+
+            setLoading(true); 
+            
+            try {
+                await productService.editProduct(updatedFormValues.id_product, updatedFormValues);
+                toast.success('Producto editado correctamente!');
+            } catch (error) {
+                toast.error(error.message);
+            } finally {
+                setLoading(false);  
+                handleCloseModal();  
+            }
+
         } else {
             setErrors(validationResult.errors); 
         }
@@ -95,7 +122,7 @@ const Table = ({ columns, data, admin = false }) => {
             </table>
             <Modal 
                 isOpen={isModalOpen} 
-                onClose={closeModal} 
+                onClose={handleCloseModal} 
                 title={modalTitle}
                 height={modalHeight}>
                 <div>
@@ -106,12 +133,16 @@ const Table = ({ columns, data, admin = false }) => {
                                 onSubmit={handleSubmit}
                                 initialValues={currentProduct}
                                 className="btn-action-admin"
-                                buttonText="Actualizar producto"
+                                buttonText={loading ? "Cargando..." : "Actualizar producto"}
                                 errors={errors}
                             />
                     )}
                 </div>
             </Modal>
+            <Toaster
+                richColors
+                position="top-center"
+            />
         </div>
     );
 };
