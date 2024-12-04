@@ -77,7 +77,6 @@ const Products = () => {
 
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
-  console.log(searchQuery);
 
   filteredProducts = filteredProducts?.filter((product) =>
     product.title.toLowerCase().includes(searchQuery)

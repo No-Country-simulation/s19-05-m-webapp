@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Toaster, toast } from 'sonner';
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
+import Loader from "../loader/Loader";
 import useModal from "../../hooks/useModal";
 import useFilteredTable from "../../hooks/useFilteredTable";
 import productService from "../../services/products";
@@ -11,7 +12,7 @@ import validateForm from "../../utils/validateForm";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
 import "./table.css";
 
-const Table = ({ columns, data, admin = false }) => {
+const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
     const { visibleData, hasMore, handleLoadMore } = useFilteredTable(data, admin, data);
     const { isModalOpen, openModal, closeModal } = useModal();
     const [modalTitle, setModalTitle] = useState("");
@@ -82,32 +83,45 @@ const Table = ({ columns, data, admin = false }) => {
                 </thead>
                 <tbody>
                     {
-                        visibleData?.map((p) => (
-                            <tr key={p.id}> 
-                                {
-                                    Object.keys(p)
-                                        .filter((key) => key !== "id" && key !== "fullProduct")
-                                        .map((key) => (
-                                            <td key={key}>{p[key]}</td> 
-                                        )
-                                    )
-                                }
-                                {
-                                    admin && (
-                                        <td className="container-admin-buttons">
-                                        <button className="btn-edit" 
-                                            onClick={() => handleAction(p.fullProduct, "Editar")}>
-                                            <i className="bx bx-edit"></i>
-                                        </button>
-                                        <button className="btn-delete" 
-                                            onClick={() => handleAction(p.fullProduct, "Eliminar")}>
-                                            <i className="bx bx-trash"></i>
-                                        </button>
-                                        </td>
-                                    )
-                                }
+                        errorData ? (
+                            <tr>
+                                <td colSpan={columns.length}>
+                                    <p>{errorData}</p>
+                                </td>
                             </tr>
-                        ))
+                        ) : loadingData ? (
+                            <tr>
+                                <td colSpan={columns.length}>
+                                    <Loader />
+                                </td>
+                            </tr>
+                        ) : visibleData?.map((p) => (
+                                <tr key={p.id}> 
+                                    {
+                                        Object.keys(p)
+                                            .filter((key) => key !== "id" && key !== "fullProduct")
+                                            .map((key) => (
+                                                <td key={key}>{p[key]}</td> 
+                                            )
+                                        )
+                                    }
+                                    {
+                                        admin && (
+                                            <td className="container-admin-buttons">
+                                            <button className="btn-edit" 
+                                                onClick={() => handleAction(p.fullProduct, "Editar")}>
+                                                <i className="bx bx-edit"></i>
+                                            </button>
+                                            <button className="btn-delete" 
+                                                onClick={() => handleAction(p.fullProduct, "Eliminar")}>
+                                                <i className="bx bx-trash"></i>
+                                            </button>
+                                            </td>
+                                        )
+                                    }
+                                </tr>
+                            )
+                        )
                     }
                 </tbody>
             </table>
