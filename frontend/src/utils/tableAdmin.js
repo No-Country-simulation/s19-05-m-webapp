@@ -17,8 +17,25 @@ const productsList = [
     }
 ];
 
+
+const usersList = [
+    { 
+        header: 'Nombre', 
+        field: 'name' 
+    },
+    { 
+        header: 'Email', 
+        field: 'email' 
+    },
+    { 
+        header: 'Estado', 
+        field: 'active' 
+    },
+]
+
 const columns = {
     productsList,
+    usersList
 }
 
 export default columns;
