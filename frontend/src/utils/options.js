@@ -1,6 +1,6 @@
 const platformOptions = [
     { value: 'Plataformas' },
-    { value: 'Nintendo Switch' },
+    { value: 'Nintendo' },
     { value: 'PlayStation' },
     { value: 'PC' }
 ];
@@ -23,6 +23,24 @@ const genreOptions = [
     { value: 'Sci-Fi' },
 ];
 
+const modelOptionsByPlatform = {
+    PC: [
+        { value: 'Seleccionar Modelo' },
+        { value: 'Windows 10' },
+        { value: 'Windows 11' }
+    ],
+    PlayStation: [
+        { value: 'Seleccionar Modelo' },
+        { value: 'PlayStation 4' },
+        { value: 'PlayStation 5' }
+    ],
+    Nintendo: [
+        { value: 'Seleccionar Modelo' },
+        { value: 'Standard Model' },
+        { value: 'OLED Model' }
+    ],
+};
+
 const countryOptions = [
     { value: 'Países' },
     { value: 'Argentina'},
@@ -41,6 +59,7 @@ const options = {
     genreOptions,
     platformOptions,
     modelOptions,
+    modelOptionsByPlatform,
     countryOptions,
 }
 
