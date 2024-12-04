@@ -1,5 +1,5 @@
 .cart p{
-    color: var(--first-color)
+    color: var(--accent-color)
 }
 .cart h2{
     color: var(--optional-color)
@@ -11,4 +11,5 @@
 .cart input{
     background-color: var(--accent-color);
     color: var(--first-color);
+    margin: 10px 0px ;
 }

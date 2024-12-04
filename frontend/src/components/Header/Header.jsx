@@ -20,7 +20,7 @@ const Header = () => {
   const handleLinkClick = () => {
     setMenuOpen(false);
   };
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -35,21 +35,21 @@ const Header = () => {
   const inputValue = useRef();
 
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
+    if (e.type === "click" || e.key === "Enter") {
       const searchTerm = inputValue.current.value;
       if (searchTerm.trim()) {
-        navigate(`/products?search=${searchTerm.trim()}`); // Redirige a la página de productos con el término de búsqueda
+        navigate(`/products?search=${searchTerm.trim()}`);
+        inputValue.current.value = "";
       }
     }
   };
-
 
   /* ************************* */
   useEffect(() => {
     if (user) {
       document.getElementById("iniciar-sesion-header").style.display = "none";
     } else {
-      document.getElementById("iniciar-sesion-header");
+      document.getElementById("iniciar-sesion-header").style.display = "block";
     }
   }, [user]);
 
@@ -61,13 +61,17 @@ const Header = () => {
         </Link>
       </div>
       <div className="header-cart">
-          <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
-          {totalQuantity > 0 && ( 
-            <span className="cart-count">{totalQuantity}</span>
-          )}
-          <Modal isOpen={isModalOpen} onClose={closeModal} title="Carrito de compras">
-            <Cart onClose={closeModal}/>
-          </Modal>
+        <i className="bx bxs-cart btn-cart" onClick={openModal}></i>
+        {totalQuantity > 0 && (
+          <span className="cart-count">{totalQuantity}</span>
+        )}
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          title="Carrito de compras"
+        >
+          <Cart onClose={closeModal} />
+        </Modal>
       </div>
       <div
         className="menu"

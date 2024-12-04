@@ -9,7 +9,7 @@ function AddToCartButton({ product }) {
 
     const addToCart = () => {
         if (product.stock > 0) {
-            dispatch({ type: 'ADD_ITEM', payload: product });
+            dispatch({ type: 'ADD_ITEM', payload: { ...product, id: product.id_product }, });
             toast.success('Artículo añadido al carrito')
         } else {
             toast.error('El producto no tiene stock disponible');
@@ -17,12 +17,11 @@ function AddToCartButton({ product }) {
     };
 
     return (
-        //Modificar el icono cart acá
         <>
             <Toaster
                 richColors
                 //closeButton
-                position="top-center"
+                position="bottom-center"
             />
             <button className="add-cart" onClick={() => {addToCart()}} disabled={product.stock === 0}>
                 <i className="bx bxs-cart"></i> Añadir al carrito
