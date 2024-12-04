@@ -78,6 +78,8 @@ export class CheckoutController {
         this.getCheckoutsWithStatusController = this.getCheckoutsWithStatusController.bind(this);
         this.getCheckoutByUserController = this.getCheckoutByUserController.bind(this);
         this.getCheckoutByProductController = this.getCheckoutByProductController.bind(this);
+        this.createOrderController = this.createOrderController.bind(this);
+        this.captureOrderController = this.captureOrderController.bind(this);
     }
 
     async getAllCheckoutController(req: Request, res: Response, next: NextFunction):Promise<any> {
@@ -91,7 +93,7 @@ export class CheckoutController {
     }
 
     async getCheckoutByIdController (req: Request, res: Response, next: NextFunction):Promise<any> {
-        const id = parseInt(req.params.id);
+        const id = req.params.id;
         try {
             const checkout = await this.checkoutService.getCheckoutById(id);
             if (!checkout) return ControllerHandler.notFound("Checkout not found", res);
@@ -115,9 +117,9 @@ export class CheckoutController {
     }
 
     async getCheckoutByUserController(req: Request, res: Response, next: NextFunction):Promise<any> {
-        const userId = parseInt(req.params.userId);
+        const user = parseInt(req.params.user);
         try {
-            const checkouts = await this.checkoutService.getCheckoutByUser(userId);
+            const checkouts = await this.checkoutService.getCheckoutByUser(user);
             if (!checkouts || checkouts.length === 0)
                 return ControllerHandler.ok("No checkouts found for the specified user", res, []);
             return ControllerHandler.ok("User's checkouts retrieved successfully", res, checkouts);
@@ -127,9 +129,9 @@ export class CheckoutController {
     }
 
     async getCheckoutByProductController(req: Request, res: Response, next: NextFunction):Promise<any> {
-        const productId = parseInt(req.params.productId);
+        const product = parseInt(req.params.product);
         try {
-            const checkouts = await this.checkoutService.getCheckoutByProduct(productId);
+            const checkouts = await this.checkoutService.getCheckoutByProduct(product);
             if (!checkouts || checkouts.length === 0)
                 return ControllerHandler.ok("No checkouts found for the specified product", res, []);
             return ControllerHandler.ok("Product's checkouts retrieved successfully", res, checkouts);
@@ -137,4 +139,38 @@ export class CheckoutController {
             next(error);
         }
     }
+
+    async createOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const { shopping, amount } = req.body;
+        if (!shopping || !amount) return ControllerHandler.badRequest("Mandatory parameters missing: shopping and amount", res);
+        try {
+            const order = await this.checkoutService.createOrder(shopping, amount);
+            return ControllerHandler.ok("Order created successfully", res, order);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async captureOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const token = req.query.token as string;
+        const payerID = req.query.PayerID as string;
+        if (!token || !payerID) return ControllerHandler.badRequest("Token and PayerID are required", res);
+        try {
+            const checkoutRecords = await this.checkoutService.captureOrder(token, payerID);
+            return ControllerHandler.ok("Order captured successfully", res, checkoutRecords);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async cancelOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { id } = req.query;
+            if (!id) return ControllerHandler.badRequest("Order ID is required", res);
+            return ControllerHandler.ok(`Order with ID ${id} has been canceled.`, res)
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
