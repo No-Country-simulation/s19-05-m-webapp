@@ -1,26 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 const useFilteredTable = (data, admin) => {
     const [visibleData, setVisibleData] = useState([]);
     const [hasMore, setHasMore] = useState(true);
 
-    const filteredData = data?.map((p) => {
-        if (admin) {
-            return {
-                id: p.id_product,
-                title: p.title,
-                price: p.price,
-                stock: p.stock,
-                fullProduct: p
-            };
-        }
-    });
+    const filteredData = useMemo(() => {
+        return data?.map((p) => {
+            if (admin) {
+                return {
+                    id: p.id_product,
+                    title: p.title,
+                    price: p.price,
+                    stock: p.stock,
+                    fullProduct: p
+                };
+            } else {
+                // para el usuario normal
+            }
+        });
+    }, [data, admin]);
+    
 
     useEffect(() => {
-        if (filteredData?.length && visibleData.length === 0) {
-            setVisibleData(filteredData.slice(0, 10));
+        if (filteredData?.length) {
+            setVisibleData(filteredData.slice(0, 10)); 
+            setHasMore(filteredData.length > 10); 
         }
-    }, [filteredData, visibleData.length]);
+    }, [filteredData]);
 
     const handleLoadMore = () => {
         const nextProducts = filteredData.slice(visibleData.length, visibleData.length + 5);

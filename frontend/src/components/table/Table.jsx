@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Toaster, toast } from 'sonner';
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
@@ -12,7 +12,7 @@ import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
 import "./table.css";
 
 const Table = ({ columns, data, admin = false }) => {
-    const { visibleData, hasMore, handleLoadMore } = useFilteredTable(data, admin);
+    const { visibleData, hasMore, handleLoadMore } = useFilteredTable(data, admin, data);
     const { isModalOpen, openModal, closeModal } = useModal();
     const [modalTitle, setModalTitle] = useState("");
     const [modalHeight, setModalHeight] = useState("");
@@ -25,7 +25,7 @@ const Table = ({ columns, data, admin = false }) => {
         setErrors({}); 
         closeModal();  
     };
-    
+
     const handleAction = (product, actionType) => {
         const productWithEmptyFile = {
             ...product,
