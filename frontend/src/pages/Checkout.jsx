@@ -27,7 +27,6 @@ export const CheckoutPage = () => {
   if (!products.length) {
     return (
       <div className="page-container">
-        <h1>Checkout</h1>
         <div className="steps-container">
           <h2>Cesta Vacía</h2>
           <p>No hay productos en la cesta.</p>
@@ -42,7 +41,6 @@ export const CheckoutPage = () => {
   if (!user) {
     return (
       <div className="page-container">
-        <h1>Checkout</h1>
         <div className="steps-container">
           <h2>Inicia Sesión</h2>
           <p>Debes iniciar sesión para continuar con el proceso de compra.</p>
@@ -57,8 +55,6 @@ export const CheckoutPage = () => {
 
   return (
     <div className="page-container">
-      <h1>Checkout</h1>
-
       <div className="steps-container">
         <div className="steps-indicator">
           <div className={`step ${currentStep >= 1 ? "active" : ""}`}>

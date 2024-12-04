@@ -1,20 +1,21 @@
 export const Checkout = ({ onNext, products, totalAmount }) => {
   return (
-    <div>
+    <div className="container">
       <h2>Cesta</h2>
       {products.map((product, index) => (
         <div key={index} className="summary-item">
           <p>
-            {product.title} {/* ({product.platform}) */} - {product.quantity}x{" "}
-            {product.price.toFixed(2)}$
+            Juego: {product.title} {/* ({product.platform}) */} - $
+            {product.price.toFixed(2)} {" "}
+            &#40;{product.quantity}&#41;
           </p>
         </div>
       ))}
       <hr />
       <p>
-        <strong>Total:</strong> {totalAmount.toFixed(2)}$
+        <strong>Total:</strong> ${totalAmount.toFixed(2)}
       </p>
-      <button className="next-button" onClick={onNext}>
+      <button id="boton-submit" style={{ margin: "0.8rem 0" }} onClick={onNext}>
         Siguiente
       </button>
     </div>
