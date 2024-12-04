@@ -145,10 +145,14 @@ const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
                     )}
                 </div>
             </Modal>
-            <InfiniteScroll 
-                onLoadMore={handleLoadMore} 
-                hasMore={hasMore} 
-            />
+            {
+                !errorData && (
+                    <InfiniteScroll 
+                        onLoadMore={handleLoadMore} 
+                        hasMore={hasMore} 
+                    />
+                )
+            }
             <Toaster
                 richColors
                 position="top-center"
