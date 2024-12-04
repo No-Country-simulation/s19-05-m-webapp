@@ -14,7 +14,8 @@ import "./dashboard.css";
 
 const Dashboard = () => {
     const { isModalOpen, openModal, closeModal } = useModal();
-    const { data: products } = useFetch(productService.getProducts);
+    const { data: products, loading: productsLoading, 
+        hasError: productsError } = useFetch(productService.getProducts);
     const [filterType, setFilterType] = useState("all");
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
@@ -32,30 +33,30 @@ const Dashboard = () => {
         const validationResult = await validateForm(formValues, createProductSchema);
     
         if (validationResult.isValid) {
-            const prueba = {
-                title : formValues.title,
+            setLoading(true);
+    
+            const reqBody = {
+                title: formValues.title,
                 price: Number(formValues.price),
-                stock : Number(formValues.stock),
-                description : formValues.description,
-                genre : formValues.genre,
-                type: 'hola',
+                stock: Number(formValues.stock),
+                description: formValues.description,
+                genre: formValues.genre,
                 image: '/imagen.prueba',
-                platforms: []
-            }
+                type: 'videogame',
+                platforms: [{ name: formValues.name, model: formValues.model }]
+            };
 
-            setLoading(true); 
             try {
-                await productService.createProduct(prueba);
+                await productService.createProduct(reqBody);
                 toast.success('Producto creado correctamente!');
             } catch (error) {
                 toast.error(error.message);
             } finally {
-                setLoading(false);  
-                handleCloseModal();  
+                setLoading(false);
+                handleCloseModal();
             }
-
         } else {
-            setErrors(validationResult.errors); 
+            setErrors(validationResult.errors);
         }
     };
     
@@ -83,7 +84,9 @@ const Dashboard = () => {
             </Modal>
             <Table 
                 columns={columns.productsList}
-                data={filteredProducts}  
+                data={filteredProducts} 
+                loadingData={productsLoading}
+                errorData={productsError} 
                 admin={true}
             />
             <Toaster

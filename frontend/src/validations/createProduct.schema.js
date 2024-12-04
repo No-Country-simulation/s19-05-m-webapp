@@ -9,9 +9,7 @@ const createProductSchema = Yup.object().shape({
     description: Yup.string()
         .required("La descripción es obligatoria"),
     stock: Yup.number()
-        .transform((value, originalValue) => {
-            return originalValue === "" ? 0 : value;})
-        .positive("El stock no puede ser negativo") 
+        .min(0, "El stock no puede ser negativo") 
         .integer("El stock debe ser un número entero"),
     name: Yup.string()
         .notOneOf(["Plataformas"], "Debes seleccionar un plataforma")

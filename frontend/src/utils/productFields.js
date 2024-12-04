@@ -14,10 +14,10 @@ const fields = [
         placeholder: "0.00" 
     },
     { 
-        name: "description", 
-        label: "Descripción", 
-        type: "textarea", 
-        placeholder: "Descripción del producto" 
+        name: "stock", 
+        label: "Stock", 
+        type: "number", 
+        placeholder: "0" 
     },
     { 
         name: "image", 
@@ -25,11 +25,17 @@ const fields = [
         type: "file", 
         placeholder: "Selecciona una imagen" 
     },
+    {
+        name: "genre",
+        label: "Seleccionar Género",
+        type: "select",
+        options: options.genreOptions,
+    },
     { 
-        name: "stock", 
-        label: "Stock", 
-        type: "number", 
-        placeholder: "0" 
+        name: "description", 
+        label: "Descripción", 
+        type: "textarea", 
+        placeholder: "Descripción del producto" 
     },
     {
         name: "name",
@@ -41,25 +47,19 @@ const fields = [
         name: "model",
         label: "Seleccionar Modelo",
         type: "select",
-        options: options.modelOptions,
-    },
-    {
-        name: "genre",
-        label: "Seleccionar Género",
-        type: "select",
-        options: options.genreOptions,
+        options: [],
     },
 ];
 
 const initialValues = {
     name: "",
     price: "",
-    description: "",
+    stock: 0,
     image: "",
-    stock: "",
-    platform: "",
     genre: "",
-    model: ""
+    description: "",
+    type: "videogame",
+    platforms: [{ name: "", model: "" }]
 };
 
 const productFields = {
@@ -68,3 +68,4 @@ const productFields = {
 }
 
 export default productFields;
+

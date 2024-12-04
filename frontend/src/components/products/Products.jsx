@@ -10,7 +10,6 @@ import usePagination from "../../hooks/usePagination";
 import options from "../../utils/options";
 import useFilteredProducts from "../../hooks/useFilteredProducts";
 import "./products.css";
-import { useEffect } from "react";
 
 const Products = () => {
   const {
@@ -78,7 +77,6 @@ const Products = () => {
 
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
-  console.log(searchQuery);
 
   filteredProducts = filteredProducts?.filter((product) =>
     product.title.toLowerCase().includes(searchQuery)
@@ -124,13 +122,15 @@ const Products = () => {
           <Loader />
         ) : filteredProducts && filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <Card
-              key={product.id_product}
-              title={product.title}
-              genre={product.genre}
-              price={product.price}
-              onClick={() => handleCard(product.id_product)}
-            />
+            product.stock > 0 && (
+              <Card
+                key={product.id_product}
+                title={product.title}
+                genre={product.genre}
+                price={product.price}
+                onClick={() => handleCard(product.id_product)}
+              />
+            )
           ))
         ) : isFilterActive && filteredProducts.length === 0 ? (
           <p>
