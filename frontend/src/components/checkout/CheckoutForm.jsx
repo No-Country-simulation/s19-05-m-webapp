@@ -18,7 +18,7 @@ export const CheckoutForm = ({ onGoBack, onFormSubmit }) => {
         dispatch(setShipping(formValues));
         localStorage.setItem("shipping", JSON.stringify(formValues));
         setErrors({});
-        onFormSubmit();        
+        onFormSubmit();
       })
       .catch((validationErrors) => {
         const formattedErrors = {};
@@ -30,7 +30,7 @@ export const CheckoutForm = ({ onGoBack, onFormSubmit }) => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>Dirección de facturación</h2>
       <Form
         fields={checkoutFields.fields}
@@ -39,8 +39,10 @@ export const CheckoutForm = ({ onGoBack, onFormSubmit }) => {
         errors={errors}
         buttonText="Siguiente"
       />
-
-      <button className="back-button" onClick={onGoBack}>Regresar</button>
+      <hr />
+      <button className="back-button full-width" onClick={onGoBack}>
+        Regresar
+      </button>
     </div>
   );
 };
