@@ -1,16 +1,18 @@
-import { Column, Entity,JoinColumn,ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity,Index,JoinColumn,ManyToOne, PrimaryColumn } from "typeorm";
 import { Shopping } from "./Shopping.entity";
 
 export enum StatusCheckout {
     PAID = "PAID",
-    DECLINED = "DECLINED",    
+    DECLINED = "DECLINED",
+    PENDING = "PENDING"    
 }
 
 @Entity()
+@Index(["id_checkout", "shopping_user", "shopping_products"], { unique: true })
 export class Checkout {
 
-    @PrimaryGeneratedColumn()
-    id_checkout!: number;
+    @PrimaryColumn()
+    id_checkout!: string;
 
     @Column({
         type: "enum",
@@ -18,16 +20,13 @@ export class Checkout {
     })
     status!: StatusCheckout;
 
-    @Column({
-        type: "timestamp",
-        default: () => "CURRENT_TIMESTAMP",
-    })
+    @Column()
     date_checkout!: Date;
 
-    @Column()
+    @PrimaryColumn()
     shopping_user!: number;
     
-    @Column()
+    @PrimaryColumn()
     shopping_products!: number;
 
     @ManyToOne(() => Shopping, { eager: true })
