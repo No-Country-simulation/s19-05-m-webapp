@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Toaster, toast } from 'sonner';
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import useModal from "../../hooks/useModal";
+import useFilteredTable from "../../hooks/useFilteredTable";
 import productService from "../../services/products";
 import productFields from "../../utils/productFields";
 import createProductSchema from "../../validations/createProduct.schema";
 import validateForm from "../../utils/validateForm";
+import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
 import "./table.css";
 
 const Table = ({ columns, data, admin = false }) => {
+    const { visibleData, hasMore, handleLoadMore } = useFilteredTable(data, admin);
     const { isModalOpen, openModal, closeModal } = useModal();
     const [modalTitle, setModalTitle] = useState("");
     const [modalHeight, setModalHeight] = useState("");
@@ -17,20 +20,6 @@ const Table = ({ columns, data, admin = false }) => {
     const [currentProduct, setCurrentProduct] = useState(null);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
-
-    const filteredData = data?.map((p) => {
-        if (admin) {
-            return {
-                id: p.id_product,
-                title: p.title,
-                price: p.price,
-                stock: p.stock,
-                fullProduct: p 
-            };
-        } else {
-            // para el usuario normal
-        }
-    });
 
     const handleCloseModal = () => {
         setErrors({}); 
@@ -93,7 +82,7 @@ const Table = ({ columns, data, admin = false }) => {
                 </thead>
                 <tbody>
                     {
-                        filteredData?.map((p) => (
+                        visibleData?.map((p) => (
                             <tr key={p.id}> 
                                 {
                                     Object.keys(p)
@@ -142,6 +131,10 @@ const Table = ({ columns, data, admin = false }) => {
                     )}
                 </div>
             </Modal>
+            <InfiniteScroll 
+                onLoadMore={handleLoadMore} 
+                hasMore={hasMore} 
+            />
             <Toaster
                 richColors
                 position="top-center"
