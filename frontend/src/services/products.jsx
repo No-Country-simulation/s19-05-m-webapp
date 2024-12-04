@@ -47,7 +47,7 @@ const createProduct = async (newProduct) => {
 	}
 }
 
-const editProduct = async (id, updateProduct) => {
+const updateProduct = async (id, updateProduct) => {
 	try {
 		const response = await axios.put(`${BASE_URL}/products/${id}`, updateProduct);
 		return response.data.success;
@@ -62,7 +62,7 @@ const productService = {
 	getProductsByGenre,
 	getProductsByPlatform,
 	createProduct,
-	editProduct
+	updateProduct
 };
 
 export default productService;

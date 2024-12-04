@@ -1,15 +1,13 @@
 import { useState } from "react";
-import { Toaster, toast } from 'sonner';
+import { Toaster } from "sonner";
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Loader from "../loader/Loader";
 import useModal from "../../hooks/useModal";
 import useFilteredTable from "../../hooks/useFilteredTable";
-import productService from "../../services/products";
 import productFields from "../../utils/productFields";
-import createProductSchema from "../../validations/createProduct.schema";
-import validateForm from "../../utils/validateForm";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
+import updateProductSubmit from "../../utils/updateProduct";
 import "./table.css";
 
 const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
@@ -41,34 +39,12 @@ const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
     };
 
     const handleSubmit = async (formValues) => {
-        const validationResult = await validateForm(formValues, createProductSchema);
-    
-        if (validationResult.isValid) {
-            const updatedFormValues = { ...formValues };
-            delete updatedFormValues.model;
-            delete updatedFormValues.name;
-        
-            if (!updatedFormValues.image) {
-                updatedFormValues.image = '/ruta-image'; 
-            }
-
-            setLoading(true); 
-            
-            try {
-                await productService.editProduct(updatedFormValues.id_product, updatedFormValues);
-                toast.success('Producto editado correctamente!');
-            } catch (error) {
-                toast.error(error.message);
-            } finally {
-                setLoading(false);  
-                handleCloseModal();  
-            }
-
-        } else {
-            setErrors(validationResult.errors); 
-        }
+        setLoading(true);  
+        await updateProductSubmit(formValues, setErrors);
+        setLoading(false);  
+        closeModal();
     };
-
+    
     return (
         <div className="custom-table-wrapper ">
             <table className="custom-table">
