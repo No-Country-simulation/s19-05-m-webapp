@@ -88,6 +88,17 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
                                             : option
                                         )} 
                                     />
+                                ) : field.name === "country" ? (
+                                    <Dropdown
+                                        name={field.name}
+                                        value={formValues[field.name] || "Seleccionar País"}
+                                        onChange={handleChange}
+                                        options={options.countryOptions.map(option => 
+                                            option.value === "Seleccionar País" 
+                                            ? { ...option, disabled: !!formValues.genre }
+                                            : option
+                                        )} 
+                                    />
                                 ) : null
                             ) : field.type === "textarea" ? (
                                 <textarea

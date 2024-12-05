@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckoutForm } from "../components/checkout/CheckoutForm";
 import { Payment } from "../components/checkout/Payment";
 import { Checkout } from "../components/checkout/Checkout";
@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useLogin from "../hooks/useLogin";
 import GoogleAuth from "../components/GoogleAuth/GoogleAuth";
+import shoppingService from "../services/shopping";
 
 export const CheckoutPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -14,6 +15,10 @@ export const CheckoutPage = () => {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const { isLoginOpen, openLogin, closeLogin } = useLogin();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [paymentUrl, setPaymentUrl] = useState("");
+  const [error, setError] = useState("");
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const previousStep = () =>
@@ -23,6 +28,33 @@ export const CheckoutPage = () => {
     (acc, product) => acc + product.price * product.quantity,
     0
   );
+
+  useEffect(() => {
+    const fetchPaymentUrl = async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+        const response = await shoppingService.patchShopping(user.id ?? "1");
+
+        if (response.links && response.links[1]?.href) {
+          setPaymentUrl(response.links[1].href);         
+        } else {
+          throw new Error("La respuesta no contiene el enlace de pago.");
+        }
+      } catch (error) {
+        console.error("Error al obtener la URL de pago:", error);
+        setError(
+          "Ocurrió un error al obtener el enlace de pago. Por favor, inténtelo más tarde."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchPaymentUrl();
+    }
+  }, [user]);
 
   if (!products.length) {
     return (
@@ -92,6 +124,9 @@ export const CheckoutPage = () => {
             onGoBack={previousStep}
             products={products}
             totalAmount={totalAmount}
+            paymentUrl={paymentUrl}
+            isLoading={isLoading}
+            error={error}
           />
         )}
       </div>

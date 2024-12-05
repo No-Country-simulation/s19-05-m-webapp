@@ -42,7 +42,7 @@ const modelOptionsByPlatform = {
 };
 
 const countryOptions = [
-    { value: 'Países' },
+    { value: 'Seleccionar País' },
     { value: 'Argentina'},
     { value: 'Bolivia'},
     { value: 'Chile' },
