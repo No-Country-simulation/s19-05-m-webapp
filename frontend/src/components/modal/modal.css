@@ -70,21 +70,21 @@
 
 @media (min-width: 992px) {
     .modal-admin {
-        height: 76vh !important;
+        height: 78vh !important;
         width: 70% !important;
     }
 }
 
 @media (min-width: 1200px) {
     .modal-admin {
-        height: 66vh !important;
+        height: 68vh !important;
         width: 50% !important;
     }
 }
 
 @media (min-width: 1300px) {
     .modal-admin {
-        height: 86vh !important;
+        height: 90vh !important;
         width: 50% !important;
     }
 }

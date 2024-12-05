@@ -1,12 +1,12 @@
 const platformOptions = [
-    { value: 'Plataformas' },
+    { value: 'Seleccionar Plataformas' },
     { value: 'Nintendo' },
     { value: 'PlayStation' },
     { value: 'PC' }
 ];
 
 const modelOptions = [
-    { value: 'Modelos' },
+    { value: 'Seleccionar Modelos' },
     { value: 'Standard Model' },
     { value: 'OLED Model' },
     { value: 'PlayStation 5' },
@@ -15,7 +15,7 @@ const modelOptions = [
 ];
 
 const genreOptions = [
-    { value: 'Generos' },
+    { value: 'Seleccionar Géneros' },
     { value: 'Fantasy' },
     { value: 'Family' },
     { value: 'Sports' },

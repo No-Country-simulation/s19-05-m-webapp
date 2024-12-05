@@ -9,6 +9,7 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
     className = false, errors = false, showButton = true }) => {
     const [formValues, setFormValues] = useState(initialValues || {});
     const [modelOptions, setModelOptions] = useState([]); 
+    const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
         if (formValues.name) {
@@ -20,7 +21,7 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
     }, [formValues.name]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, files } = e.target;
 
         if (name === 'price') {
             const formattedValue = formatPrice(value);
@@ -28,6 +29,8 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
                 ...formValues,
                 [name]: formattedValue,
             });
+        } else if (name === 'image') {
+            setSelectedFile(files[0]);
         } else {
             setFormValues({
                 ...formValues,
@@ -38,7 +41,7 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(formValues);
+        onSubmit({ ...formValues, image: selectedFile });
     };
 
     return (
@@ -79,6 +82,14 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
                                     id={field.name}
                                     name={field.name}
                                     value={formValues[field.name] || ""}
+                                    onChange={handleChange}
+                                    placeholder={field.placeholder || ""}
+                                />
+                            ) : field.type === "file" ? (
+                                <input
+                                    type="file"
+                                    id={field.name}
+                                    name={field.name}
                                     onChange={handleChange}
                                     placeholder={field.placeholder || ""}
                                 />

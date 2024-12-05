@@ -5,8 +5,6 @@ import productService from "../../services/products";
 import useFetch from "../../hooks/useFetch";
 import "./products.css";
 
-const imageUrl = "/hero-img.png"; // para prueba
-
 const ProductDetail = () => {
     const { id } = useParams();
     const { data: product, loading, hasError } = useFetch(productService.getProductById, id);
@@ -25,9 +23,11 @@ const ProductDetail = () => {
                     <p className="text-error">No se pudo cargar el detalle del producto.</p>
                 ) : (  
                     <div className="product-detail" style={{ backgroundImage: window.innerWidth < 1024 ? 
-                        `url(${imageUrl})` : 'none' }}>
+                        `url(${product.image && product.image.startsWith('https') ? 
+                        product.image : '/images/default-image.png'})` : 'none' }}>
                         <div className="overlay" style={{ backgroundImage: window.innerWidth >= 1024 ? 
-                            `url(${imageUrl})` : 'none' }}></div>
+                            `url(${product.image && product.image.startsWith('https') ? 
+                            product.image : '/images/default-image.png'})` : 'none' }}></div>
                         <div className="page-container" style={{ zIndex:'1', width: window.innerWidth >= 1024 ? 
                             '50%' : null, paddingLeft: window.innerWidth >= 1024 ? '60px' : null }}>
                             <div className="product-detail-info">

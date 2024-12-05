@@ -8,6 +8,7 @@ import useModal from "../../hooks/useModal";
 import columns from "../../utils/tableAdmin";
 import productFields  from "../../utils/productFields";
 import productService from "../../services/products";
+import uploadImageToCloudinary from "../../services/cloudinary";
 import createProductSchema from "../../validations/createProduct.schema";
 import validateForm from "../../utils/validateForm";
 import "./dashboard.css";
@@ -34,14 +35,26 @@ const Dashboard = () => {
     
         if (validationResult.isValid) {
             setLoading(true);
-    
+
+            let imageUrl = "";
+
+            if (formValues.image) {
+                try {
+                    imageUrl = await uploadImageToCloudinary(formValues.image); 
+                } catch (error) {
+                    toast.error(error.message);
+                    setLoading(false);
+                    return; 
+                }
+            }
+
             const reqBody = {
                 title: formValues.title,
                 price: Number(formValues.price),
                 stock: Number(formValues.stock),
                 description: formValues.description,
                 genre: formValues.genre,
-                image: '/imagen.prueba',
+                image: imageUrl,
                 type: 'videogame',
                 platforms: [{ name: formValues.name, model: formValues.model }]
             };

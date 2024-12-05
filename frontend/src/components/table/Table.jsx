@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { Toaster, toast } from 'sonner';
+import { Toaster, toast } from "sonner";
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Loader from "../loader/Loader";
 import useModal from "../../hooks/useModal";
 import useFilteredTable from "../../hooks/useFilteredTable";
-import productService from "../../services/products";
 import productFields from "../../utils/productFields";
-import createProductSchema from "../../validations/createProduct.schema";
-import validateForm from "../../utils/validateForm";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
+import updateProductSubmit from "../../utils/updateProduct";
+import productService from "../../services/products";
 import "./table.css";
 
 const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
@@ -40,35 +39,27 @@ const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
         openModal();
     };
 
-    const handleSubmit = async (formValues) => {
-        const validationResult = await validateForm(formValues, createProductSchema);
-    
-        if (validationResult.isValid) {
-            const updatedFormValues = { ...formValues };
-            delete updatedFormValues.model;
-            delete updatedFormValues.name;
-        
-            if (!updatedFormValues.image) {
-                updatedFormValues.image = '/ruta-image'; 
-            }
-
-            setLoading(true); 
-            
-            try {
-                await productService.editProduct(updatedFormValues.id_product, updatedFormValues);
-                toast.success('Producto editado correctamente!');
-            } catch (error) {
-                toast.error(error.message);
-            } finally {
-                setLoading(false);  
-                handleCloseModal();  
-            }
-
-        } else {
-            setErrors(validationResult.errors); 
-        }
+    const handleUpdateSubmit = async (formValues) => {
+        setLoading(true);  
+        await updateProductSubmit(formValues, setErrors);
+        setLoading(false);  
+        closeModal();
     };
 
+    const handleDeleteSubmit = async (id) => {
+        console.log(id)
+        setLoading(true);
+        try {
+            await productService.deleteProduct(id);
+            toast.success("Producto eliminado correctamente!"); 
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+            closeModal(); 
+        }
+    };
+    
     return (
         <div className="custom-table-wrapper ">
             <table className="custom-table">
@@ -95,6 +86,12 @@ const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
                                     <Loader />
                                 </td>
                             </tr>
+                        ) : data?.length === 0 ? (
+                                <tr>
+                                    <td colSpan={columns.length}>
+                                        <p>No hay productos para mostrar</p>
+                                    </td>
+                                </tr>
                         ) : visibleData?.map((p) => (
                                 <tr key={p.id}> 
                                     {
@@ -133,16 +130,25 @@ const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
                 className={className}>
                 <div>
                     {
-                        modalTitle === 'Editar Producto' && currentProduct && (
+                        modalTitle === 'Editar Producto' && currentProduct ? (
                             <Form
                                 fields={productFields.fields} 
-                                onSubmit={handleSubmit}
+                                onSubmit={handleUpdateSubmit}
                                 initialValues={currentProduct}
                                 className="form-admin"
                                 buttonText={loading ? "Cargando..." : "Actualizar producto"}
                                 errors={errors}
                             />
-                    )}
+                    ) : (
+                        <div className="container-delete">
+                            <p>¿Estás seguro de eliminar el producto <strong>{currentProduct?.title}</strong>?</p>
+                            <button 
+                                onClick={() => handleDeleteSubmit(currentProduct?.id_product)}>
+                                {loading ? "Cargando..." : "Confirmar"}
+                            </button>
+                        </div>
+                    )
+                }
                 </div>
             </Modal>
             {

@@ -126,6 +126,7 @@ const Products = () => {
               <Card
                 key={product.id_product}
                 title={product.title}
+                image={product.image}
                 genre={product.genre}
                 price={product.price}
                 onClick={() => handleCard(product.id_product)}
