@@ -24,7 +24,10 @@ const checkoutController = new CheckoutController();
  *       400:
  *         description: Invalid input data.
  */
-checkoutRouter.post("/order", checkoutController.createOrderController);
+checkoutRouter.post(
+  "/order",
+  /* authJWTMiddleware, */ checkoutController.createOrderController
+);
 
 /**
  * @swagger
@@ -39,7 +42,10 @@ checkoutRouter.post("/order", checkoutController.createOrderController);
  *       404:
  *         description: Order not found.
  */
-checkoutRouter.get("/capture", checkoutController.captureOrderController);
+checkoutRouter.get(
+  "/capture",
+  /* authJWTMiddleware, */ checkoutController.captureOrderController
+);
 
 /**
  * @swagger
@@ -54,7 +60,10 @@ checkoutRouter.get("/capture", checkoutController.captureOrderController);
  *       404:
  *         description: Order not found.
  */
-checkoutRouter.get("/cancel", checkoutController.cancelOrderController);
+checkoutRouter.get(
+  "/cancel",
+  /* authJWTMiddleware, */ checkoutController.cancelOrderController
+);
 
 /**
  * @swagger
@@ -72,7 +81,10 @@ checkoutRouter.get("/cancel", checkoutController.cancelOrderController);
  *               items:
  *                 $ref: '#/components/schemas/Checkout'
  */
-checkoutRouter.get("/", checkoutController.getAllCheckoutController);
+checkoutRouter.get(
+  "/",
+  /* authJWTMiddleware, adminMiddleware, */ checkoutController.getAllCheckoutController
+);
 
 /**
  * @swagger
@@ -98,7 +110,10 @@ checkoutRouter.get("/", checkoutController.getAllCheckoutController);
  *       404:
  *         description: Checkout not found.
  */
-checkoutRouter.get("/:id", checkoutController.getCheckoutByIdController);
+checkoutRouter.get(
+  "/:id",
+  /* authJWTMiddleware, */ checkoutController.getCheckoutByIdController
+);
 
 /**
  * @swagger
@@ -126,9 +141,14 @@ checkoutRouter.get("/:id", checkoutController.getCheckoutByIdController);
  *       404:
  *         description: No checkouts found with the specified status.
  */
-checkoutRouter.get("/status/:status", checkoutController.getCheckoutsByStatusController);
+checkoutRouter.get(
+  "/status/:status",
+  /* authJWTMiddleware, adminMiddleware, */ checkoutController.getCheckoutsByStatusController
+);
 
-
-checkoutRouter.get("/user/:userId", checkoutController.getCheckoutsByUserController);
+checkoutRouter.get(
+  "/user/:userId",
+  /* authJWTMiddleware, */ checkoutController.getCheckoutsByUserController
+);
 
 export default checkoutRouter;

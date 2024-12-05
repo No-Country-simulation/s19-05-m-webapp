@@ -7,7 +7,14 @@ const platformController = new PlatformController();
 
 platformRouter.get("/", platformController.getAllPlatformsController);
 platformRouter.get("/:id", platformController.getPlatformByIdController);
-platformRouter.post("/", validateCreatePlatforms, platformController.createPlatformController);
-platformRouter.delete("/:id", platformController.deletePlatformController);
+platformRouter.post(
+  "/",
+  /* authJWTMiddleware, adminMiddleware, */ validateCreatePlatforms,
+  platformController.createPlatformController
+);
+platformRouter.delete(
+  "/:id",
+  /* authJWTMiddleware, adminMiddleware, */ platformController.deletePlatformController
+);
 
 export default platformRouter;
