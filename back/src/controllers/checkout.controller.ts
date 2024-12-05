@@ -95,7 +95,6 @@ export class CheckoutController {
             const order = await this.checkoutService.cancelOrder(token);
             if(order.length === 0)
                 return ControllerHandler.badRequest("No orders found to cancel.", res);
-            return ControllerHandler.ok(`Order with ID ${token} has been canceled.`, res)
         } catch (error) {
             next(error);
         }
