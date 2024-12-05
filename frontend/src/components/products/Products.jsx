@@ -43,7 +43,7 @@ const Products = () => {
     hasError: genreError,
     setHasError: setGenreError,
   } = useFetch(
-    selectedOptions.genre ? productService.getProductsByGenre : null,
+    selectedOptions.genre !== "Seleccionar Género" ? productService.getProductsByGenre : null,
     selectedOptions.genre
   );
 
@@ -53,7 +53,7 @@ const Products = () => {
     hasError: platformError,
     setHasError: setPlatformError,
   } = useFetch(
-    selectedOptions.platform ? productService.getProductsByPlatform : null,
+    selectedOptions.platform !== "Seleccionar Plataforma" ? productService.getProductsByPlatform : null,
     selectedOptions.platform
   );
 
@@ -76,7 +76,7 @@ const Products = () => {
     } else {
       setModelOptions([]);
     }
-  }, [selectedOptions.platform, selectedOptions.model, handleChange]);
+  }, [selectedOptions.platform, selectedOptions.model]);
   
   const handleCard = (id) => {
     navigate(`/product/${id}`);
@@ -140,7 +140,7 @@ const Products = () => {
         ) : productsLoading || genreLoading || platformLoading ? (
           <Loader />
         ) : filteredProducts && filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
+          filteredProducts.reverse().map((product) => (
             product.stock > 0 && (
               <Card
                 key={product.id_product}
