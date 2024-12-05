@@ -1,22 +1,48 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext/CartContext';
+import shoppingCartService from '../../services/shoppingCartService';
 import './cart.css';
 
 function Cart({onClose}) {
     const { state, dispatch } = useCart();
     const navigate = useNavigate();
+    const userId = 1;
 
-    const removeItem = (id) => {
-        dispatch({ type: 'REMOVE_ITEM', payload: { id } });
+    useEffect(() => {
+        const fetchCart = async () => {
+            if (!userId) return; 
+
+            try {
+                const cartItems = await shoppingCartService.getCart(userId);
+                dispatch({ type: 'SET_CART', payload: cartItems });
+            } catch (error) {
+                console.error('Error al cargar el carrito:', error);
+            }
+        };
+        fetchCart();
+    }, [dispatch, userId]);
+
+    const removeItem = async (id) => {
+        try {
+            await shoppingCartService.removeProductFromCart(userId, id);
+            dispatch({ type: 'REMOVE_ITEM', payload: { id } });
+        } catch (error) {
+            console.error('Error al eliminar el producto:', error);
+        }
     };
 
-    const updateQuantity = (id, quantity, stock) => {
+    const updateQuantity = async (id, quantity, stock) => {
         if (quantity > stock) {
-            alert('No hay suficiente stock disponible.');
+            toast.error('No hay suficiente stock disponible.');
             return;
         }
-        dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
+        try {
+            await shoppingCartService.addOrUpdateProductInCart(userId, id, quantity);
+            dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
+        } catch (error) {
+            console.error('Error al actualizar la cantidad:', error);
+        }
     };
 
     const total = state.reduce((sum, item) => sum + item.price * item.quantity, 0);
