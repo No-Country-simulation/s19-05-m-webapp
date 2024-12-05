@@ -6,6 +6,69 @@ const checkoutController = new CheckoutController();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Checkout:
+ *       type: object
+ *       required:
+ *         - status
+ *         - date_checkout
+ *         - shopping_user
+ *         - shopping_products
+ *       properties:
+ *         id_checkout:
+ *           type: integer
+ *           description: The unique identifier for the checkout entry
+ *         status:
+ *           type: string
+ *           description: The status of the checkout, can be either "PAID" or "DECLINED"
+ *           enum:
+ *             - "PAID"
+ *             - "DECLINED"
+ *         date_checkout:
+ *           type: string
+ *           format: date-time
+ *           description: The timestamp when the checkout was made
+ *           default: CURRENT_TIMESTAMP
+ *         shopping_user:
+ *           type: integer
+ *           description: The user ID associated with this checkout
+ *         shopping_products:
+ *           type: integer
+ *           description: The product ID associated with this checkout
+ *         shopping:
+ *           $ref: '#/components/schemas/Shopping'  # Reference to the Shopping schema
+ *       example:
+ *         id_checkout: 1
+ *         status: "PAID"
+ *         date_checkout: "2024-11-26T12:00:00Z"
+ *         shopping_user: 1
+ *         shopping_products: 101
+ *         shopping:
+ *           - user_id: 1
+ *             products_id: 101
+ *             state: "PENDING"
+ *             quantity: 2
+ *             users:
+ *               id_users: 1
+ *               name: "John Doe"
+ *               email: "johndoe@example.com"
+ *               active: true
+ *               role: "USER"
+ *             products:
+ *               id_product: 101
+ *               title: "Laptop"
+ *               price: 1200.50
+ *               available: true
+ *               description: "High-end gaming laptop"
+ *               type: "Electronics"
+ *               image: "laptop.jpg"
+ *               genre: "Technology"
+ *               stock: 50
+ */
+
+/**
+ * @swagger
  * tags:
  *   name: Checkout
  *   description: API for managing the checkout process, including handling transactions for cart purchases and interacting with the service to complete orders.
