@@ -6,9 +6,17 @@ const checkoutController = new CheckoutController();
 
 /**
  * @swagger
+ * tags:
+ *   name: Checkout
+ *   description: API for managing the checkout process, including handling transactions for cart purchases and interacting with the service to complete orders.
+*/
+
+/**
+ * @swagger
  * /checkouts/order:
  *   post:
  *     summary: Create a new order
+ *     tags: [Checkout]
  *     description: Creates a new order in the checkout process.
  *     responses:
  *       201:
@@ -23,6 +31,7 @@ checkoutRouter.post("/order", checkoutController.createOrderController);
  * /checkouts/capture:
  *   get:
  *     summary: Capture an order
+ *     tags: [Checkout]
  *     description: Captures a payment for an order.
  *     responses:
  *       200:
@@ -37,6 +46,7 @@ checkoutRouter.get("/capture", checkoutController.captureOrderController);
  * /checkouts/cancel:
  *   get:
  *     summary: Cancel an order
+ *     tags: [Checkout]
  *     description: Cancels an existing order.
  *     responses:
  *       200:
@@ -62,6 +72,7 @@ checkoutRouter.get("/", checkoutController.getAllCheckoutController);
  * /checkout/{id}:
  *   get:
  *     summary: Get a checkout by ID
+ *     tags: [Checkout]
  *     description: Retrieves a specific checkout by its ID.
  *     parameters:
  *       - in: path
