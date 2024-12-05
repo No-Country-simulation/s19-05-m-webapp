@@ -9,6 +9,8 @@ import productFields from "../../utils/productFields";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
 import updateProductSubmit from "../../utils/updateProduct";
 import deleteProductSubmit from "../../utils/deleteProduct";
+import validateForm from "../../utils/validateForm";
+import createProductSchema from "../../validations/createProduct.schema";
 import "./table.css";
 
 const Table = ({ columns, data, loadingData, errorData, refetch, admin = false }) => {
@@ -41,11 +43,19 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false }
 
     const handleUpdateSubmit = async (formValues) => {
         setLoading(true);  
-        await updateProductSubmit(formValues, setErrors, refetch);
+        const validationResult = await validateForm(formValues, createProductSchema);
+    
+        if (!validationResult.isValid) {
+            setErrors(validationResult.errors);
+            setLoading(false);  
+            return; 
+        }
+    
+        await updateProductSubmit(formValues, refetch);
         setLoading(false);  
-        closeModal();
+        handleCloseModal(); 
     };
-
+    
     const handleDeleteSubmit = async (id) => {
         setLoading(true);
         await deleteProductSubmit(id, refetch);

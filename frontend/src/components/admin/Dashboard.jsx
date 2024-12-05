@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Toaster, toast } from 'sonner';
+import { Toaster } from 'sonner';
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Table from "../table/Table";
@@ -7,10 +7,10 @@ import useFetch from "../../hooks/useFetch";
 import useModal from "../../hooks/useModal";
 import columns from "../../utils/tableAdmin";
 import productFields  from "../../utils/productFields";
-import productService from "../../services/products";
-import uploadImageToCloudinary from "../../services/cloudinary";
-import createProductSchema from "../../validations/createProduct.schema";
+import createProductSubmit from "../../utils/createProduct";
 import validateForm from "../../utils/validateForm";
+import productService from "../../services/products";
+import createProductSchema from "../../validations/createProduct.schema";
 import "./dashboard.css";
 
 const Dashboard = () => {
@@ -30,48 +30,19 @@ const Dashboard = () => {
         closeModal();  
     };
 
-    const handleSubmit = async (formValues) => {
+    const handleCreateSubmit = async (formValues) => {
+        setLoading(true);  
         const validationResult = await validateForm(formValues, createProductSchema);
     
-        if (validationResult.isValid) {
-            setLoading(true);
-
-            let imageUrl = "";
-
-            if (formValues.image) {
-                try {
-                    imageUrl = await uploadImageToCloudinary(formValues.image); 
-                } catch (error) {
-                    toast.error(error.message);
-                    setLoading(false);
-                    return; 
-                }
-            }
-
-            const reqBody = {
-                title: formValues.title,
-                price: Number(formValues.price),
-                stock: Number(formValues.stock),
-                description: formValues.description,
-                genre: formValues.genre,
-                image: imageUrl,
-                type: 'videogame',
-                platforms: [{ name: formValues.name, model: formValues.model }]
-            };
-
-            try {
-                await productService.createProduct(reqBody);
-                toast.success('Producto creado correctamente!');
-                refetch(); 
-            } catch (error) {
-                toast.error(error.message);
-            } finally {
-                setLoading(false);
-                handleCloseModal();
-            }
-        } else {
+        if (!validationResult.isValid) {
             setErrors(validationResult.errors);
+            setLoading(false);  
+            return; 
         }
+    
+        await createProductSubmit(formValues, refetch);
+        setLoading(false);  
+        handleCloseModal(); 
     };
     
     return (
@@ -89,7 +60,7 @@ const Dashboard = () => {
                 className="modal-admin">
                 <Form
                     fields={productFields.fields} 
-                    onSubmit={handleSubmit}
+                    onSubmit={handleCreateSubmit}
                     initialValues={productFields.initialValues}
                     className="form-admin"
                     buttonText={loading ? "Cargando..." : "Crear producto"}
