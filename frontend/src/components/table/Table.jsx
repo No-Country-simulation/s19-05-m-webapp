@@ -86,6 +86,12 @@ const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
                                     <Loader />
                                 </td>
                             </tr>
+                        ) : data?.length === 0 ? (
+                                <tr>
+                                    <td colSpan={columns.length}>
+                                        <p>No hay productos para mostrar</p>
+                                    </td>
+                                </tr>
                         ) : visibleData?.map((p) => (
                                 <tr key={p.id}> 
                                     {
