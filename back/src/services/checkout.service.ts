@@ -118,9 +118,6 @@ export class CheckoutService {
 
 					shopping.state = StateShopping.COMPLETED;
 					checkout.status = StatusCheckout.PAID;
-				} else {
-					shopping.state = StateShopping.CANCELLED;
-					checkout.status = StatusCheckout.DECLINED;
 				}
 
 				await queryRunner.manager.save(Shopping, shopping);
@@ -141,6 +138,31 @@ export class CheckoutService {
 			console.error("Error capturing payment:", typedError.message);
 			throw new Error("Failed to capture order");
 		} finally { 
+			await queryRunner.release();
+		}
+	}
+
+	async cancelOrder(token: string): Promise<any[]> {
+		const queryRunner = this.dataSource.createQueryRunner();
+    	await queryRunner.connect();
+    	await queryRunner.startTransaction();
+
+		try {
+			await queryRunner.manager.update(Checkout, { id_checkout: token }, { status: StatusCheckout.DECLINED });
+			const updatedShoppings = await queryRunner.manager.find(Shopping, { where: { state: StateShopping.PENDING } });
+
+			for (const shopping of updatedShoppings) {
+				shopping.state = StateShopping.CANCELLED;
+				await queryRunner.manager.save(Shopping, shopping);
+			}
+	
+			await queryRunner.commitTransaction();
+			return updatedShoppings;
+		} catch (error) {
+			await queryRunner.rollbackTransaction();
+	        console.error("Error in cancelOrder:", error);
+	        throw error;
+		} finally {
 			await queryRunner.release();
 		}
 	}
@@ -229,22 +251,12 @@ export class CheckoutService {
 	}
 
 	async getCheckoutsWithStatus(status: StatusCheckout): Promise<Checkout[]> {
-		return await checkoutRepository.find({ where: { status } });
+		if (!Object.values(StatusCheckout).includes(status)) throw new Error(`Invalid status: ${status}`);
+		return await checkoutRepository.find({ where: { status: status } });
 	}
 
 	async getCheckoutById(id: string): Promise<Checkout []> {
 		return await checkoutRepository.find({ where: { id_checkout: id } });
 	}
-
-	async getCheckoutByUser(user: number): Promise<Checkout[]> {
-		return await checkoutRepository.find({
-			where: { shopping_user: user },
-		});
-	}
-
-	async getCheckoutByProduct(product: number): Promise<Checkout[]> {
-		return await checkoutRepository.find({
-			where: { shopping_products: product },
-		});
-	}
+	
 }

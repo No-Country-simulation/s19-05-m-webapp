@@ -76,10 +76,9 @@ export class CheckoutController {
         this.getAllCheckoutController = this.getAllCheckoutController.bind(this);
         this.getCheckoutByIdController = this.getCheckoutByIdController.bind(this);
         this.getCheckoutsWithStatusController = this.getCheckoutsWithStatusController.bind(this);
-        this.getCheckoutByUserController = this.getCheckoutByUserController.bind(this);
-        this.getCheckoutByProductController = this.getCheckoutByProductController.bind(this);
         this.createOrderController = this.createOrderController.bind(this);
         this.captureOrderController = this.captureOrderController.bind(this);
+        this.cancelOrderController = this.cancelOrderController.bind(this);
     }
 
     async getAllCheckoutController(req: Request, res: Response, next: NextFunction):Promise<any> {
@@ -104,37 +103,10 @@ export class CheckoutController {
     }
 
     async getCheckoutsWithStatusController(req: Request, res: Response, next: NextFunction):Promise<any> {
-        const status = req.params.status as StatusCheckout;
-        if (!Object.values(StatusCheckout).includes(status)) return ControllerHandler.notFound("Invalid status", res);
         try {
-            const checkouts = await this.checkoutService.getCheckoutsWithStatus(status);
-            if (!checkouts || checkouts.length === 0) 
-                return ControllerHandler.ok("No checkouts found with the specified status", res, []);
-            return ControllerHandler.ok("Checkouts retrieved successfully", res, checkouts);
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    async getCheckoutByUserController(req: Request, res: Response, next: NextFunction):Promise<any> {
-        const user = parseInt(req.params.user);
-        try {
-            const checkouts = await this.checkoutService.getCheckoutByUser(user);
-            if (!checkouts || checkouts.length === 0)
-                return ControllerHandler.ok("No checkouts found for the specified user", res, []);
-            return ControllerHandler.ok("User's checkouts retrieved successfully", res, checkouts);
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    async getCheckoutByProductController(req: Request, res: Response, next: NextFunction):Promise<any> {
-        const product = parseInt(req.params.product);
-        try {
-            const checkouts = await this.checkoutService.getCheckoutByProduct(product);
-            if (!checkouts || checkouts.length === 0)
-                return ControllerHandler.ok("No checkouts found for the specified product", res, []);
-            return ControllerHandler.ok("Product's checkouts retrieved successfully", res, checkouts);
+            const { status } = req.params;
+            const checkouts = await this.checkoutService.getCheckoutsWithStatus(status as StatusCheckout);
+            return ControllerHandler.ok("Checkouts with specified status retrieved successfully", res, checkouts);
         } catch (error) {
             next(error);
         }
@@ -164,10 +136,13 @@ export class CheckoutController {
     }
 
     async cancelOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const token = req.query.token as string;
         try {
-            const { id } = req.query;
-            if (!id) return ControllerHandler.badRequest("Order ID is required", res);
-            return ControllerHandler.ok(`Order with ID ${id} has been canceled.`, res)
+            if (!token) return ControllerHandler.badRequest("Order ID is required", res);
+            const order = await this.checkoutService.cancelOrder(token);
+            if(order.length === 0)
+                return ControllerHandler.badRequest("No orders found to cancel.", res);
+            return ControllerHandler.ok(`Order with ID ${token} has been canceled.`, res)
         } catch (error) {
             next(error);
         }
