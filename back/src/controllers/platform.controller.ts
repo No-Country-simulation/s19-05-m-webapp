@@ -58,17 +58,29 @@ export class PlatformController {
   }
 
   // Obtener todas las plataformas
-  async getAllPlatformsController(req: Request, res: Response, next: NextFunction): Promise<any> {
+  async getAllPlatformsController(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
       const platforms = await this.platformService.getAllPlatforms();
-      return ControllerHandler.ok("Platforms retrieved successfully", res, platforms);
+      return ControllerHandler.ok(
+        "Platforms retrieved successfully",
+        res,
+        platforms
+      );
     } catch (error) {
       next(error);
     }
   }
 
   // Obtener una plataforma por ID
-  async getPlatformByIdController(req: Request, res: Response, next: NextFunction): Promise<any> {
+  async getPlatformByIdController(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
       const { id } = req.params;
       const platformId = parseInt(id, 10);
@@ -90,20 +102,34 @@ export class PlatformController {
   }
 
   // Crear una nueva plataforma
-  async createPlatformController(req: Request, res: Response, next: NextFunction): Promise<any> {
+  async createPlatformController(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
       const platformData: PlatfomsDto = req.body;
 
-      const newPlatform = await this.platformService.createPlatform(platformData);
+      const newPlatform = await this.platformService.createPlatformIfNotExists(
+        platformData
+      );
 
-      return ControllerHandler.ok("Platform created successfully", res, newPlatform);
+      return ControllerHandler.ok(
+        "Platform created successfully",
+        res,
+        newPlatform
+      );
     } catch (error) {
       next(error);
     }
   }
 
   // Eliminar una plataforma
-  async deletePlatformController(req: Request, res: Response, next: NextFunction): Promise<any> {
+  async deletePlatformController(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
       const { id } = req.params;
       const platformId = parseInt(id, 10);
@@ -112,13 +138,19 @@ export class PlatformController {
         return ControllerHandler.badRequest("Invalid platform ID", res);
       }
 
-      const deletedPlatform = await this.platformService.deletePlatform(platformId);
+      const deletedPlatform = await this.platformService.deletePlatform(
+        platformId
+      );
 
       if (!deletedPlatform) {
         return ControllerHandler.notFound("Platform not found", res);
       }
 
-      return ControllerHandler.ok("Platform deleted successfully", res, deletedPlatform);
+      return ControllerHandler.ok(
+        "Platform deleted successfully",
+        res,
+        deletedPlatform
+      );
     } catch (error) {
       next(error);
     }

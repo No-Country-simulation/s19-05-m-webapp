@@ -46,35 +46,17 @@ export class ProductService {
     try {
       const { platforms, ...productDetails } = productData;
 
-      //crear producto sin plataformas
+      //crear el producto sin plataformas
       const newProduct = productRepository.create(productDetails);
 
       if (platforms && Array.isArray(platforms)) {
-        //(podemos crear un servicio de busqueda de plataformas por nombre)
-        const platformNames = platforms.map((elem) => elem.name);
-        const existingPlatforms = await platformRepository.find({
-          where: { name: In(platformNames) }, //"In" es un operador de busqueda de igualdad (typeorm)
-        });
-
-        //se fija si las plataformas no existen, sino, las crea y las guarda (tambien se pujede crear su propio servicio)
-        const existingPlatformNames = existingPlatforms.map(
-          (elem) => elem.name
+        //obtener o crear las plataformas
+        const allPlatforms = await this.platformService.findOrCreatePlatforms(
+          platforms
         );
-        const newPlatformNames = platformNames.filter(
-          (name) => !existingPlatformNames.includes(name)
-        );
-        const newPlatforms = newPlatformNames.map(
-          (name) =>
-            platformRepository.create(platforms.find((p) => p.name === name)!) //! pa que typescript no llore
-        );
-        await platformRepository.save(newPlatforms);
-
-        //fusiona plataformas existentes y nuevas, y asigna las plataformas al producto
-        const allPlatforms = [...existingPlatforms, ...newPlatforms];
         newProduct.platforms = allPlatforms;
       }
 
-      //guarda TODO el producto ya listito
       await productRepository.save(newProduct);
 
       return newProduct;
@@ -93,25 +75,29 @@ export class ProductService {
         where: { id_product: id },
         relations: ["platforms"],
       });
-      if (!product) {
-        return null;
-      }
+      if (!product) return null;
 
       const { platforms, ...productDetails } = productData;
+
+      //actualizar el producto sin las pltformas (merge)
       productRepository.merge(product, productDetails);
       await productRepository.save(product);
 
-      //manejar plataformas
       if (platforms && Array.isArray(platforms)) {
-        // await platformRepository.delete({ product: { id_product: id } });
+        //limpiar las plataforma actuales para asignar las nuevas
+        product.platforms = [];
+        await productRepository.save(product);
 
-        for (const platformData of platforms) {
-          const platform = {
-            ...platformData,
-            product: product,
-          };
-          await this.platformService.createPlatform(platform);
-        }
+        const allPlatforms = await this.platformService.findOrCreatePlatforms(
+          platforms
+        );
+
+        product.platforms = allPlatforms;
+        await productRepository.save(product);
+      } else {
+        //si no se proporcionan plataformas, se limpian las actuales
+        product.platforms = [];
+        await productRepository.save(product);
       }
 
       const updatedProduct = await productRepository.findOne({
