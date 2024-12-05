@@ -11,7 +11,5 @@ checkoutRouter.get("/cancel", checkoutController.cancelOrderController);
 checkoutRouter.get("/", checkoutController.getAllCheckoutController);
 checkoutRouter.get("/:id", checkoutController.getCheckoutByIdController);
 checkoutRouter.get("/status/:status", checkoutController.getCheckoutByIdController);
-checkoutRouter.get("/user/:user", checkoutController.getCheckoutByIdController);
-checkoutRouter.get("/product/:product", checkoutController.getCheckoutByIdController);
 
 export default checkoutRouter;
