@@ -8,6 +8,8 @@ import Politics from "../pages/Politics/Politics";
 import Terms from "../pages/Terms/Terms";
 import Registro from "../components/GoogleAuth/Registro";
 import Admin from "../pages/Admin";
+import SuccessPage from "../pages/payment/SuccessPage";
+import CancelPage from "../pages/payment/CancelPage";
 
 const AppRoutes = () => {
   return (
@@ -21,6 +23,9 @@ const AppRoutes = () => {
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/registro" element={<Registro />} />
       <Route path="/admin" element={<Admin />} />
+      
+      <Route path="/success" element={<SuccessPage />} />      
+      <Route path="/cancel" element={<CancelPage />} />
     </Routes>
   );
 };
