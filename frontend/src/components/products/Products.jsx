@@ -31,7 +31,8 @@ const Products = () => {
     values: selectedOptions,
     handleChange,
     reset,
-  } = useReset({ platform: "", genre: "", model: "" });
+  } = useReset({ 
+    platform: "Seleccionar Plataforma", genre: "Seleccionar Género", model: "Seleccionar Modelo" });
 
   const {
     data: productsByGenre,
@@ -65,7 +66,9 @@ const Products = () => {
     navigate(`/product/${id}`);
   };
 
-  const isFilterActive = selectedOptions.platform || selectedOptions.genre;
+  const isFilterActive = 
+    selectedOptions.platform !== "Seleccionar Plataforma" || 
+    selectedOptions.genre !== "Seleccionar Género";
 
   const handleResetFilters = () => {
     reset();
@@ -99,7 +102,7 @@ const Products = () => {
           name="genre"
           disabled={!!productsError || !!genreError || !!platformError}
         />
-        {selectedOptions.platform && productsByPlatform && (
+        {selectedOptions.platform !== "Seleccionar Plataforma" && productsByPlatform && (
           <Dropdown
             options={options.modelOptions}
             value={selectedOptions.model}
@@ -133,7 +136,7 @@ const Products = () => {
               />
             )
           ))
-        ) : isFilterActive && filteredProducts.length === 0 ? (
+        ) : isFilterActive && filteredProducts?.length === 0 ? (
           <p>
             No se encontraron productos que coincidan con los filtros
             seleccionados.

@@ -58,23 +58,35 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
                                 field.name === "name" ? (
                                     <Dropdown
                                         name={field.name}
-                                        value={formValues[field.name] || ""}
+                                        value={formValues[field.name] || "Seleccionar Plataforma"} 
                                         onChange={handleChange}
-                                        options={options.platformOptions} 
+                                        options={options.platformOptions.map(option => 
+                                            option.value === "Seleccionar Plataforma" 
+                                            ? { ...option, disabled: !!formValues.name }
+                                            : option
+                                        )}
                                     />
                                 ) : field.name === "model" && formValues.name ? (
                                     <Dropdown
                                         name={field.name}
-                                        value={formValues[field.name] || ""}
+                                        value={formValues[field.name] || "Seleccionar Modelo"}
                                         onChange={handleChange}
-                                        options={modelOptions}  
+                                        options={modelOptions.map(option => 
+                                            option.value === "Seleccionar Modelo" 
+                                            ? { ...option, disabled: !!formValues.name } 
+                                            : option
+                                        )} 
                                     />
                                 ) : field.name === "genre" ? (
                                     <Dropdown
                                         name={field.name}
-                                        value={formValues[field.name] || ""}
+                                        value={formValues[field.name] || "Seleccionar Género"}
                                         onChange={handleChange}
-                                        options={field.options} 
+                                        options={options.genreOptions.map(option => 
+                                            option.value === "Seleccionar Género" 
+                                            ? { ...option, disabled: !!formValues.genre }
+                                            : option
+                                        )} 
                                     />
                                 ) : null
                             ) : field.type === "textarea" ? (
