@@ -4,7 +4,7 @@ import uploadImageToCloudinary from "../services/cloudinary";
 import validateForm from "../utils/validateForm";
 import createProductSchema from "../validations/createProduct.schema";
 
-const updateProductSubmit = async (formValues, setErrors) => {
+const updateProductSubmit = async (formValues, setErrors, refetch) => {
     const validationResult = await validateForm(formValues, createProductSchema);
 
     if (validationResult.isValid) {
@@ -30,6 +30,7 @@ const updateProductSubmit = async (formValues, setErrors) => {
         try {
             await productService.updateProduct(updatedFormValues.id_product, updatedFormValues);
             toast.success("Producto actualizado correctamente!");
+            refetch();
         } catch (error) {
             toast.error(error.message);
         } 

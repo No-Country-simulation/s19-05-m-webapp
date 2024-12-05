@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Loader from "../loader/Loader";
@@ -8,10 +8,10 @@ import useFilteredTable from "../../hooks/useFilteredTable";
 import productFields from "../../utils/productFields";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
 import updateProductSubmit from "../../utils/updateProduct";
-import productService from "../../services/products";
+import deleteProductSubmit from "../../utils/deleteProduct";
 import "./table.css";
 
-const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
+const Table = ({ columns, data, loadingData, errorData, refetch, admin = false }) => {
     const { visibleData, hasMore, handleLoadMore } = useFilteredTable(data, admin, data);
     const { isModalOpen, openModal, closeModal } = useModal();
     const [modalTitle, setModalTitle] = useState("");
@@ -41,24 +41,17 @@ const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
 
     const handleUpdateSubmit = async (formValues) => {
         setLoading(true);  
-        await updateProductSubmit(formValues, setErrors);
+        await updateProductSubmit(formValues, setErrors, refetch);
         setLoading(false);  
         closeModal();
     };
 
     const handleDeleteSubmit = async (id) => {
-        console.log(id)
         setLoading(true);
-        try {
-            await productService.deleteProduct(id);
-            toast.success("Producto eliminado correctamente!"); 
-        } catch (error) {
-            toast.error(error.message);
-        } finally {
-            setLoading(false);
-            closeModal(); 
-        }
-    };
+        await deleteProductSubmit(id, refetch);
+        setLoading(false);  
+        closeModal();
+    }
     
     return (
         <div className="custom-table-wrapper ">
@@ -92,7 +85,7 @@ const Table = ({ columns, data, loadingData, errorData, admin = false }) => {
                                         <p>No hay productos para mostrar</p>
                                     </td>
                                 </tr>
-                        ) : visibleData?.map((p) => (
+                        ) : visibleData?.slice().reverse().map((p) => (
                                 <tr key={p.id}> 
                                     {
                                         Object.keys(p)
