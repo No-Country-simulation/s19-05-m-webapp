@@ -54,6 +54,27 @@
     border: 2px solid #e74c3c;
 }
 
+.container-delete p {
+    padding-bottom: 40px;
+}
+
+.container-delete button {
+    background-color: transparent !important;
+    border: 1px solid var(--second-color);
+    border-radius: 8px;
+    color: var(--second-color) !important;
+    font-family: var(--text-font);
+    font-size: 16px;
+    padding: 10px;  
+    transition: all 500ms ease;
+    width: 100%;
+}
+
+.container-delete button:hover {
+    background-color: var(--second-color) !important;
+    color: var(--first-color) !important;
+}
+
 @media (min-width: 769px) {
     .custom-table {
         width: 100%; 
