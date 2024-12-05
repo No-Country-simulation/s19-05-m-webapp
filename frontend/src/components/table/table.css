@@ -33,7 +33,7 @@
     justify-content: center;
 }
 
-.custom-table .btn-edit,
+.custom-table .btn-edit, .custom-table .btn-see,
 .custom-table .btn-delete {
     align-items: center;
     background-color: transparent;
@@ -54,11 +54,17 @@
     border: 2px solid #e74c3c;
 }
 
-.container-delete p {
+.custom-table .btn-see {
+    border: 2px solid yellow;
+}
+
+.container-delete p,
+.container-order-status p {
     padding-bottom: 40px;
 }
 
-.container-delete button {
+.container-delete button, 
+.container-order-status button {
     background-color: transparent !important;
     border: 1px solid var(--second-color);
     border-radius: 8px;
@@ -70,7 +76,8 @@
     width: 100%;
 }
 
-.container-delete button:hover {
+.container-delete button:hover,
+.container-order-status button:hover {
     background-color: var(--second-color) !important;
     color: var(--first-color) !important;
 }
