@@ -11,6 +11,7 @@ import { StatusCheckout } from "../entity/Checkout.entity";
  *     Checkout:
  *       type: object
  *       required:
+ *         - id_checkout
  *         - status
  *         - date_checkout
  *         - shopping_user
@@ -21,9 +22,10 @@ import { StatusCheckout } from "../entity/Checkout.entity";
  *           description: The unique identifier for the checkout entry
  *         status:
  *           type: string
- *           description: The status of the checkout, can be either "PAID" or "DECLINED"
+ *           description: The status of the checkout, can be either "PAID", "PENDING" or "DECLINED"
  *           enum:
  *             - "PAID"
+ *             - "PENDING"
  *             - "DECLINED"
  *         date_checkout:
  *           type: string
@@ -37,34 +39,13 @@ import { StatusCheckout } from "../entity/Checkout.entity";
  *           type: integer
  *           description: The product ID associated with this checkout
  *         shopping:
- *           $ref: '#/components/schemas/Shopping'  # Reference to the Shopping schema
+ *           $ref: '#/components/schemas/Checkout'  # Reference to the Shopping schema
  *       example:
  *         id_checkout: 1
  *         status: "PAID"
  *         date_checkout: "2024-11-26T12:00:00Z"
  *         shopping_user: 1
  *         shopping_products: 101
- *         shopping:
- *           - user_id: 1
- *             products_id: 101
- *             state: "PENDING"
- *             quantity: 2
- *             users:
- *               id_users: 1
- *               name: "John Doe"
- *               email: "johndoe@example.com"
- *               active: true
- *               role: "USER"
- *             products:
- *               id_product: 101
- *               title: "Laptop"
- *               price: 1200.50
- *               available: true
- *               description: "High-end gaming laptop"
- *               type: "Electronics"
- *               image: "laptop.jpg"
- *               genre: "Technology"
- *               stock: 50
  */
 
 export class CheckoutController {
@@ -73,43 +54,15 @@ export class CheckoutController {
 
     constructor () {
         this.checkoutService = new CheckoutService(AppDataSource);
-        this.getAllCheckoutController = this.getAllCheckoutController.bind(this);
-        this.getCheckoutByIdController = this.getCheckoutByIdController.bind(this);
-        this.getCheckoutsWithStatusController = this.getCheckoutsWithStatusController.bind(this);
+
         this.createOrderController = this.createOrderController.bind(this);
         this.captureOrderController = this.captureOrderController.bind(this);
         this.cancelOrderController = this.cancelOrderController.bind(this);
-    }
 
-    async getAllCheckoutController(req: Request, res: Response, next: NextFunction):Promise<any> {
-        try {
-            const checkouts = await this.checkoutService.getAllCheckout();
-            if(!checkouts || checkouts.length === 0) return ControllerHandler.ok("No checkout data available", res, []);
-            return ControllerHandler.ok("All checkouts retrieved successfully", res, checkouts)    
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    async getCheckoutByIdController (req: Request, res: Response, next: NextFunction):Promise<any> {
-        const id = req.params.id;
-        try {
-            const checkout = await this.checkoutService.getCheckoutById(id);
-            if (!checkout) return ControllerHandler.notFound("Checkout not found", res);
-            return ControllerHandler.ok("Checkout retrieved successfully", res, checkout);
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    async getCheckoutsWithStatusController(req: Request, res: Response, next: NextFunction):Promise<any> {
-        try {
-            const { status } = req.params;
-            const checkouts = await this.checkoutService.getCheckoutsWithStatus(status as StatusCheckout);
-            return ControllerHandler.ok("Checkouts with specified status retrieved successfully", res, checkouts);
-        } catch (error) {
-            next(error);
-        }
+        this.getAllCheckoutController = this.getAllCheckoutController.bind(this);
+        this.getCheckoutByIdController = this.getCheckoutByIdController.bind(this);
+        this.getCheckoutsByStatusController = this.getCheckoutsByStatusController.bind(this);
+        this.getCheckoutsByUserController = this.getCheckoutsByUserController.bind(this);
     }
 
     async createOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -146,6 +99,49 @@ export class CheckoutController {
         } catch (error) {
             next(error);
         }
+    }
+
+    async getAllCheckoutController(req: Request, res: Response, next: NextFunction):Promise<any> {
+        try {
+            const checkouts = await this.checkoutService.getAllCheckout();
+            if(!checkouts || checkouts.length === 0) return ControllerHandler.ok("No checkout data available", res, []);
+            return ControllerHandler.ok("All checkouts retrieved successfully", res, checkouts)    
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getCheckoutByIdController (req: Request, res: Response, next: NextFunction):Promise<any> {
+        const id = req.params.id;
+        try {
+            const checkout = await this.checkoutService.getCheckoutById(id);
+            if (!checkout) return ControllerHandler.notFound("Checkout not found", res);
+            return ControllerHandler.ok("Checkout retrieved successfully", res, checkout);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getCheckoutsByStatusController(req: Request, res: Response, next: NextFunction):Promise<any> {
+        const { status } = req.params;
+        try {
+            const checkoutStatus = await this.checkoutService.getCheckoutsByStatus(status as StatusCheckout);
+            return ControllerHandler.ok("Checkouts retrieved successfully", res, checkoutStatus);
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getCheckoutsByUserController(req: Request, res: Response, next: NextFunction):Promise<any> {
+        const { userId } = req.params;
+        const user = parseInt(userId, 10)
+        try {
+            const checkoutUser = await this.checkoutService.getCheckoutsByUser(user);
+            return ControllerHandler.ok("Checkouts retrieved successfully", res, checkoutUser);
+        } catch (error) {
+            next(error);
+        }
+
     }
 
 }

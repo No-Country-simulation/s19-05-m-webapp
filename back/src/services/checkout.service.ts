@@ -250,13 +250,21 @@ export class CheckoutService {
 		return await checkoutRepository.find();
 	}
 
-	async getCheckoutsWithStatus(status: StatusCheckout): Promise<Checkout[]> {
-		if (!Object.values(StatusCheckout).includes(status)) throw new Error(`Invalid status: ${status}`);
-		return await checkoutRepository.find({ where: { status: status } });
-	}
-
 	async getCheckoutById(id: string): Promise<Checkout []> {
 		return await checkoutRepository.find({ where: { id_checkout: id } });
+	}
+
+	async getCheckoutsByStatus(status: StatusCheckout): Promise<Checkout[]> {
+		return await checkoutRepository.find({
+			where: { status }
+		});
+	}
+
+	async getCheckoutsByUser(userId: number): Promise<Checkout[]> {
+		return await checkoutRepository.find({
+		  where: { shopping_user: userId },
+		  relations: ["shopping"]
+		});
 	}
 	
 }
