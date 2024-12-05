@@ -27,4 +27,12 @@ export class PlatformService {
     await platformRepository.remove(platformToDelete);
     return platformToDelete;
   }
+
+  //obtener una platform con prductos asociados (podria crear un nuevo endpoint )
+  async getPlatformWithProducts(id: number): Promise<Platforms | null> {
+    return await platformRepository.findOne({
+      where: { id_platform: id },
+      relations: ["products"],
+    });
+  }
 }
