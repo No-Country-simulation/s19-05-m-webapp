@@ -25,17 +25,17 @@ const genreOptions = [
 
 const modelOptionsByPlatform = {
     PC: [
-        { value: 'Seleccionar Modelo' },
+        { value: 'Seleccionar Modelo', disabled: true },
         { value: 'Windows 10' },
         { value: 'Windows 11' }
     ],
     PlayStation: [
-        { value: 'Seleccionar Modelo' },
+        { value: 'Seleccionar Modelo', disabled: true },
         { value: 'PlayStation 4' },
         { value: 'PlayStation 5' }
     ],
     Nintendo: [
-        { value: 'Seleccionar Modelo' },
+        { value: 'Seleccionar Modelo', disabled: true },
         { value: 'Standard Model' },
         { value: 'OLED Model' }
     ],

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../card/Card";
 import Dropdown from "../dropdown/Dropdown";
@@ -24,8 +25,10 @@ const Products = () => {
     loadMore,
     resetPagination,
   } = usePagination();
+  
   const navigate = useNavigate();
   const location = useLocation();
+  const [modelOptions, setModelOptions] = useState([]);
 
   const {
     values: selectedOptions,
@@ -62,6 +65,19 @@ const Products = () => {
     page
   );
 
+  useEffect(() => {
+    if (selectedOptions.platform) {
+      const newModelOptions = options.modelOptionsByPlatform[selectedOptions.platform] || [];
+      setModelOptions(newModelOptions);
+  
+      if (!newModelOptions.some(option => option.value === selectedOptions.model)) {
+        handleChange({ target: { name: 'model', value: 'Seleccionar Modelo' } });
+      }
+    } else {
+      setModelOptions([]);
+    }
+  }, [selectedOptions.platform, selectedOptions.model, handleChange]);
+  
   const handleCard = (id) => {
     navigate(`/product/${id}`);
   };
@@ -104,7 +120,7 @@ const Products = () => {
         />
         {selectedOptions.platform !== "Seleccionar Plataforma" && productsByPlatform && (
           <Dropdown
-            options={options.modelOptions}
+            options={modelOptions}
             value={selectedOptions.model}
             onChange={handleChange}
             name="model"
