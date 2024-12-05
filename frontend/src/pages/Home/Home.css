@@ -46,8 +46,8 @@
 .hero-p {
   font-family: var(--subtitle-font);
   font-weight: 400;
-  line-height: 1rem;
-  font-size: 0.9rem;
+  line-height: 1.2rem;
+  font-size: 1rem;
   margin-top: 1rem;
   margin-bottom: 2rem;
   color: var(--accent-color);
@@ -143,8 +143,16 @@
 }
 
 .categories-card img {
-  max-width: 20vw;
   height: auto;
+}
+
+.categories-card .img-1 {
+  opacity: 0.85;
+  width: 27vw;
+}
+
+.categories-card .img-2 {
+  width: 20vw;
 }
 
 .categories-content {

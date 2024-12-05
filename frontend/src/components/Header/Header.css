@@ -16,19 +16,25 @@
   cursor: pointer;
 }
 
-.menu .bx-user, .menu .bx-close, .header-cart .bxs-cart {
-  font-size: 2.3rem;
-  color: var(--second-color);
-}
-
 .menu {
   display: flex;
   position: absolute;
   top: 1.1rem;
-  right: .5rem;
+  right: 0.5rem;
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
+  width: 3rem;
+  height: 3rem;
+}
+
+.menu .bx-user,
+.menu .bx-close,
+.menu .bxs-cart,
+.header-cart {
+  font-size: 2.3rem;
+  color: var(--second-color);
+  line-height: 1;
 }
 
 .header-search {

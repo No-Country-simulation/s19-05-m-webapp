@@ -48,7 +48,7 @@ const Home = () => {
       </section>
       <section className="categories mt">
         <article className="categories-card">
-          <img className="img-1" src="home-avatar-1.png" alt="Avatar 1" />
+          <img className="img-1" src="/home-avatar-1.png" alt="Avatar 1" />
           <img className="img-2" src="/home-avatar-2.png" alt="Avatar 2" />
           <div className="categories-content">
             <h2>Observa todas las categorias de juegos que hay disponibles</h2>
