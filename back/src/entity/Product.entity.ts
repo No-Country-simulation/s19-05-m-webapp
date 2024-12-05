@@ -1,9 +1,15 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Platforms } from "./Platforms.entity";
 
 @Entity()
 export class Product {
-
   @PrimaryGeneratedColumn()
   id_product!: number;
 
@@ -18,20 +24,32 @@ export class Product {
 
   @Column()
   description!: string;
-  
+
   @Column({ length: 20 })
   type!: string;
-  
+
   @Column()
   image!: string;
-  
+
   @Column({ length: 20 })
   genre!: string;
 
   @Column("integer")
   stock!: number;
 
-  @OneToMany(() => Platforms, (platform) => platform.product)
+  @ManyToMany(() => Platforms, (platform) => platform.products, {
+    cascade: true, //cascade hace que se actualice la relacion cuando se actualice el product
+  })
+  @JoinTable({
+    name: "product_platform", //tbla intermedia automatica de typeorm
+    joinColumn: {
+      name: "product_id",
+      referencedColumnName: "id_product",
+    },
+    inverseJoinColumn: {
+      name: "platform_id",
+      referencedColumnName: "id_platform",
+    },
+  })
   platforms!: Platforms[];
-
 }
