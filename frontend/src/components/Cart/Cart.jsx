@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext/CartContext';
 import shoppingCartService from '../../services/shoppingCart';
@@ -25,8 +25,8 @@ function Cart({onClose}) {
 
     const removeItem = async (id) => {
         try {
-            await shoppingCartService.removeProductFromCart(userId, id);
             dispatch({ type: 'REMOVE_ITEM', payload: { id } });
+            await shoppingCartService.removeProductFromCart(userId, id);
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
         }

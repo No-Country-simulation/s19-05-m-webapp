@@ -22,9 +22,9 @@ const createCart = async (userId) => {
 	}
 };
 
-const addOrUpdateProductInCart = async (userId, productId, quantity = 1) => {
+const addOrUpdateProductInCart = async (userId, productId) => {
 	try {
-		const response = await axios.put(`${BASE_URL}/shopping/${userId}/${productId}`, { quantity });
+		const response = await axios.put(`${BASE_URL}/shopping/${userId}/${productId}`);
 		return response.data.message; 
 	} catch {
 		throw new Error("No se pudo actualizar el producto en el carrito. Inténtalo de nuevo más tarde.");

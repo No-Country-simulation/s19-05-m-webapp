@@ -3,7 +3,7 @@ import { Toaster, toast } from 'sonner';
 import "./addToCartButton.css";
 import shoppingCartService from '../../services/shoppingCart';
 
-function AddToCartButton({ product }) {
+function AddToCartButton({ product, openModal }) {
     //Usa el contexto para poder "mandar" las acciones
     const { dispatch } = useCart();
     const userId = 1;
@@ -18,6 +18,7 @@ function AddToCartButton({ product }) {
                 await shoppingCartService.addOrUpdateProductInCart(userId, product.id_product, 1);
                 dispatch({ type: 'ADD_ITEM', payload: { ...product, id: product.id_product } });
                 toast.success('Artículo añadido al carrito');
+                openModal();
             } catch (error) {
                 toast.error('Error al añadir el producto al carrito');
             }
