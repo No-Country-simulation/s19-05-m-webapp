@@ -49,7 +49,7 @@ const Registro = () => {
         phone: ""
       }
       setError("Cargando...");
-      setError(createUser(userData));
+      createUser(userData, setError);
     }
   };
 
