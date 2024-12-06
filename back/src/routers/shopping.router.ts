@@ -114,7 +114,7 @@ shoppingRouter.put(
 /**
  * @swagger
  * /api/shopping/{user}:
- *   post:
+ *   patch:
  *     summary: Updates the payment status of a user's shopping cart.
  *     tags: [Shopping]
  *     parameters:
@@ -138,7 +138,7 @@ shoppingRouter.put(
  *       500:
  *         description: Internal server error.
  */
-shoppingRouter.post(
+shoppingRouter.patch(
   "/:user",
   /* authJWTMiddleware, */ shoppingController.paymentPurchasesController
 );

@@ -10,7 +10,11 @@ import { SECRET_KEY } from "./config/env";
 
 const server = express();
 
-server.use(cors());
+server.use(cors({
+    origin: ['https://checkpoint-zone.vercel.app', 'http://localhost:5173'], // Agrega tu dominio de Vercel
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    //credentials: true,
+}));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true })); // middelware para leer los params
 server.use(morgan("dev"));
