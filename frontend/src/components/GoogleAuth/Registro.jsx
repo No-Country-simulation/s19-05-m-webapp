@@ -63,6 +63,7 @@ const Registro = () => {
       address: "",
       phone: ""
     };
+    createUser(userData, setError)
   }
 
   useEffect(() => {

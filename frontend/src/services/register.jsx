@@ -12,7 +12,7 @@ const createUser = async (userData, setMessage) => {
         const errorMessage = err.response?.data?.message || "Hubo un problema con el registro. Inténtalo nuevamente.";
         console.log(errorMessage);
         if (errorMessage == "User email already exists.") {
-            setMessage("Ese correo ya está en uso.");
+            setMessage("El correo ya está en uso.");
         }else {
             setMessage("Ocurrió un error.");
         }
