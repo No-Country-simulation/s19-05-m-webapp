@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Toaster } from "sonner";
 import Modal from "../modal/Modal";
+import Bill from "../bill/Bill";
 import Form from "../form/Form";
 import Loader from "../loader/Loader";
 import useModal from "../../hooks/useModal";
+import useBillDownload from "../../hooks/useBillDownload";
 import useFilteredTable from "../../hooks/useFilteredTable";
 import productFields from "../../utils/productFields";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
@@ -20,6 +22,7 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
     const [modalHeight, setModalHeight] = useState("");
     const [className, setClassName] = useState("");
     const [currentProduct, setCurrentProduct] = useState(null);
+    const { elementRef, downloadPDF } = useBillDownload(`factura_${currentProduct?.name}`);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -175,11 +178,11 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
                                 errors={errors}
                             />
                     ) : modalTitle === 'Factura' && currentProduct ? (
-                        <div>
-                            <p>Aquí va la factura, el detalle</p>  
+                        <div ref={elementRef}>
+                            <Bill product={currentProduct} />
                         </div>
                     ) : modalTitle === 'Editar Estado' && currentProduct ? ( 
-                        <div className="container-order-status">
+                        <div className="container-order">
                             <p>Cambiar estado del pedido de <strong>{currentProduct?.name}</strong></p>
                             <p>Aquí va el select</p>
                             <button>
@@ -197,6 +200,15 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
                     )
                 }
                 </div>
+                {
+                    modalTitle === 'Factura' && (
+                        <div className="container-bill">
+                            <button onClick={downloadPDF}>
+                                Descargar PDF
+                            </button>
+                        </div>
+                    )
+                }
             </Modal>
             {
                 !errorData && (
