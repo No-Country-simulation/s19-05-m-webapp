@@ -6,15 +6,6 @@ const platformOptions = [
     { value: 'Xbox' }
 ];
 
-const modelOptions = [
-    { value: 'Seleccionar Modelo', disabled: true },
-    { value: 'Standard Model' },
-    { value: 'OLED Model' },
-    { value: 'PlayStation 5' },
-    { value: 'PlayStation 4' },
-    { value: 'Windows 10' },
-];
-
 const genreOptions = [
     { value: 'Seleccionar Género', disabled: true },
     { value: 'Deporte' },
@@ -71,7 +62,6 @@ const statusOptions = [
 const options = {
     genreOptions,
     platformOptions,
-    modelOptions,
     modelOptionsByPlatform,
     countryOptions,
     statusOptions,
