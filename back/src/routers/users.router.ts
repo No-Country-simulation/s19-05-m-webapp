@@ -92,7 +92,7 @@ userRouter.post("/login", userController.loginController);
  */
 userRouter.get(
   "/",
-  /* authJWTMiddleware, adminMiddleware, */ userController.ReadAll //descomentar los middlewares si se necesita
+  /* authJWTMiddleware, adminMiddleware, */ userController.ReadAll
 );
 
 /**
@@ -120,7 +120,7 @@ userRouter.get(
  *       500:
  *         description: Internal server error.
  */
-userRouter.get("/:id", userController.ReadOnebyId);
+userRouter.get("/:id", /* authJWTMiddleware, */ userController.ReadOnebyId);
 
 /**
  * @swagger
@@ -154,7 +154,10 @@ userRouter.get("/:id", userController.ReadOnebyId);
  *       500:
  *         description: Internal server error.
  */
-userRouter.post("/readone", userController.ReadOnebyEmail);
+userRouter.post(
+  "/readone",
+  /* authJWTMiddleware */ userController.ReadOnebyEmail
+);
 
 userRouter.put(
   "/:id/role",
@@ -163,7 +166,7 @@ userRouter.put(
 
 userRouter.put(
   "/:id/update",
-  /* authJWTMiddleware, adminMiddleware, */ userController.updateUserInfoController
+  /* authJWTMiddleware, adminMiddleware */ userController.updateUserInfoController
 );
 
 /**
@@ -223,7 +226,7 @@ userRouter.put(
  *       500:
  *         description: Internal server error.
  */
-userRouter.put("/:id", userController.UpdateUser);
+userRouter.put("/:id", /* authJWTMiddleware, */ userController.UpdateUser);
 
 /**
  * @swagger
@@ -246,6 +249,9 @@ userRouter.put("/:id", userController.UpdateUser);
  *       500:
  *         description: Internal server error.
  */
-userRouter.delete("/:id", userController.DeleteUser);
+userRouter.delete(
+  "/:id",
+  /* authJWTMiddleware, adminMiddleware, */ userController.DeleteUser
+);
 
 export default userRouter;

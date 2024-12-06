@@ -103,7 +103,10 @@ productRouter.get("/limited", productController.getProductsWithLimitController);
  *       500:
  *         description: Internal server error.
  */
-productRouter.post("", productController.createProductController);
+productRouter.post(
+  "",
+  /* authJWTMiddleware, adminMiddleware, */ productController.createProductController
+);
 
 /**
  * @swagger
@@ -137,7 +140,10 @@ productRouter.post("", productController.createProductController);
  *         description: Product not found.
  *       500:
  */
-productRouter.put("/:id", productController.updateProductController);
+productRouter.put(
+  "/:id",
+  /* authJWTMiddleware, adminMiddleware, */ productController.updateProductController
+);
 
 /**
  * @swagger
@@ -162,7 +168,10 @@ productRouter.put("/:id", productController.updateProductController);
  *       500:
  *         description: Internal server error.
  */
-productRouter.delete("/:id", productController.deleteProductController);
+productRouter.delete(
+  "/:id",
+  /* authJWTMiddleware, adminMiddleware, */ productController.deleteProductController
+);
 
 /**
  * @swagger
@@ -193,7 +202,10 @@ productRouter.delete("/:id", productController.deleteProductController);
  *       500:
  *         description: Internal server error.
  */
-productRouter.get("/platform/:platform", productController.getProductsByPlatformController);
+productRouter.get(
+  "/platform/:platform",
+  productController.getProductsByPlatformController
+);
 
 /**
  * @swagger
@@ -224,7 +236,9 @@ productRouter.get("/platform/:platform", productController.getProductsByPlatform
  *       500:
  *         description: Internal server error.
  */
-productRouter.get("/genre/:genre", productController.getProductsByGenreController);
-
+productRouter.get(
+  "/genre/:genre",
+  productController.getProductsByGenreController
+);
 
 export default productRouter;

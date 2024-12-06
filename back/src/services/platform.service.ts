@@ -1,22 +1,56 @@
 import { platformRepository } from "../repositories/platform.repository";
 import { Platforms } from "../entity/Platforms.entity";
 import { PlatfomsDto } from "../dto/platform.dto";
+import { In } from "typeorm";
 
 export class PlatformService {
   // Obtener todas las plataformas
   async getAllPlatforms(): Promise<Platforms[]> {
-    return await platformRepository.find();
+    return platformRepository.find();
   }
 
   // Obtener una plataforma por ID
   async getPlatformById(id: number): Promise<Platforms | null> {
-    return await platformRepository.findOne({ where: { id_platform: id } });
+    return platformRepository.findOne({ where: { id_platform: id } });
   }
 
-  // Crear una nueva plataforma
-  async createPlatform(data: PlatfomsDto): Promise<Platforms> {
+  // Crear una plataforma únicamente si no existe en la base de datos
+  async createPlatformIfNotExists(data: PlatfomsDto): Promise<Platforms> {
+    const existing = await platformRepository.findOne({
+      where: { name: data.name },
+    });
+    if (existing) {
+      return existing;
+    }
     const newPlatform = platformRepository.create(data);
-    return await platformRepository.save(newPlatform);
+    return platformRepository.save(newPlatform);
+  }
+
+  // Dado un array de plataformas DTO, obtiene las existentes y crea las que no existen, retornando el total.
+  async findOrCreatePlatforms(
+    platformDtos: PlatfomsDto[]
+  ): Promise<Platforms[]> {
+    const platformNames = platformDtos.map((p) => p.name);
+
+    // Buscar plataformas existentes por nombre
+    const existingPlatforms = await platformRepository.find({
+      where: { name: In(platformNames) },
+    });
+
+    const existingNames = existingPlatforms.map((p) => p.name);
+
+    // Filtrar las que no existen
+    const newPlatformDtos = platformDtos.filter(
+      (p) => !existingNames.includes(p.name)
+    );
+
+    // Crear las nuevas plataformas que no están en la base
+    const newPlatforms = await Promise.all(
+      newPlatformDtos.map((dto) => this.createPlatformIfNotExists(dto))
+    );
+
+    // Unir las existentes con las nuevas
+    return [...existingPlatforms, ...newPlatforms];
   }
 
   // Eliminar una plataforma por ID
@@ -28,9 +62,9 @@ export class PlatformService {
     return platformToDelete;
   }
 
-  //obtener una platform con prductos asociados (podria crear un nuevo endpoint )
+  // Obtener una plataforma con productos asociados
   async getPlatformWithProducts(id: number): Promise<Platforms | null> {
-    return await platformRepository.findOne({
+    return platformRepository.findOne({
       where: { id_platform: id },
       relations: ["products"],
     });
