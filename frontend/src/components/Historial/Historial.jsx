@@ -20,9 +20,9 @@ const Historial = () => {
                 <tbody>
                 {checkout &&
                 checkout.map((checkout) => (
-                        <tr>
+                        <tr key={checkout.id_checkout}>
                             <td>{checkout.id_checkout}</td>
-                            <td>{checkout.date_checkout}</td>
+                            <td>{new Date(checkout.date_checkout).toLocaleDateString()}</td>
                             <td>{checkout.status}</td>
                             <td>${checkout.total}</td>
                             <td><button className="boton-factura">Ver Factura</button></td>
