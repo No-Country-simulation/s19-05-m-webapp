@@ -3,11 +3,13 @@ import { Toaster } from "sonner";
 import Modal from "../modal/Modal";
 import Bill from "../bill/Bill";
 import Form from "../form/Form";
+import Dropdown from "../dropdown/Dropdown";
 import Loader from "../loader/Loader";
 import useModal from "../../hooks/useModal";
 import useBillDownload from "../../hooks/useBillDownload";
 import useFilteredTable from "../../hooks/useFilteredTable";
 import productFields from "../../utils/productFields";
+import options from "../../utils/options";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
 import updateProductSubmit from "../../utils/updateProduct";
 import deleteProductSubmit from "../../utils/deleteProduct";
@@ -184,7 +186,8 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
                     ) : modalTitle === 'Editar Estado' && currentProduct ? ( 
                         <div className="container-order">
                             <p>Cambiar estado del pedido de <strong>{currentProduct?.name}</strong></p>
-                            <p>Aquí va el select</p>
+                            <Dropdown 
+                                options={options.statusOptions} />
                             <button>
                                 {loading ? "Cargando..." : "Confirmar"}
                             </button>

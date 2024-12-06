@@ -58,9 +58,16 @@
     border: 2px solid yellow;
 }
 
-.container-delete p,
-.container-order p {
+.container-delete p {
     padding-bottom: 40px;
+}
+
+.container-order p {
+    padding-bottom: 10px;
+}
+
+.container-order select {
+    margin-bottom: 20px;
 }
 
 .container-delete button, 
