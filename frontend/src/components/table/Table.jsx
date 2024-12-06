@@ -72,7 +72,7 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
             setLoading(false);  
             return; 
         }
-    
+
         await updateProductSubmit(formValues, refetch);
         setLoading(false);  
         handleCloseModal(); 
@@ -141,13 +141,11 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
                                             </td>
                                         ) : (
                                             <>
-                                                <td>
+                                                <td className="container-admin-buttons">
                                                     <button className="btn-see" 
                                                         onClick={() => handleAction(p.full, "Ver")}>
-                                                        <i className="bx bx-show"></i>
+                                                        Ver factura
                                                     </button>
-                                                </td>
-                                                <td>
                                                     <button className="btn-edit" 
                                                         onClick={() => handleAction(p.full, "Editar-estado")}>
                                                         <i className="bx bx-edit"></i>

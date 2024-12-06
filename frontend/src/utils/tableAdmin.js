@@ -31,11 +31,7 @@ const ordersList = [
         field: 'status' 
     },
     { 
-        header: 'Factura', 
-        field: 'bill' 
-    },
-    { 
-        header: 'Acción', 
+        header: 'Acciones', 
         field: 'actions' 
     }
 ];
