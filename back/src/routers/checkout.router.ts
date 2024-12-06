@@ -58,9 +58,10 @@ checkoutRouter.get("/cancel", checkoutController.cancelOrderController);
 
 /**
  * @swagger
- * /checkouts:
+ * /api/checkouts:
  *   get:
  *     summary: Get all checkouts
+ *     tags: [Checkout]
  *     description: Retrieves a list of all checkouts.
  *     responses:
  *       200:
@@ -76,7 +77,7 @@ checkoutRouter.get("/", checkoutController.getAllCheckoutController);
 
 /**
  * @swagger
- * /checkouts/{id}:
+ * /api/checkouts/{id}:
  *   get:
  *     summary: Get a checkout by ID
  *     tags: [Checkout]
@@ -102,7 +103,7 @@ checkoutRouter.get("/:id", checkoutController.getCheckoutByIdController);
 
 /**
  * @swagger
- * /checkouts/status/{status}:
+ * /api/checkouts/status/{status}:
  *   get:
  *     summary: Get checkouts by status
  *     tags: [Checkout]
@@ -128,7 +129,32 @@ checkoutRouter.get("/:id", checkoutController.getCheckoutByIdController);
  */
 checkoutRouter.get("/status/:status", checkoutController.getCheckoutsByStatusController);
 
-
+/**
+ * @swagger
+ * /api/checkouts/user/{userId}:
+ *   get:
+ *     summary: Get the checkouts for a user
+ *     tags: [Checkout]
+ *     description: Retrieves a list of checkouts by user.
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         description: Retrieves a list of checkouts by user.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of checkouts with the specified user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Checkout'
+ *       404:
+ *         description: No checkouts found with the specified status.
+ */
 checkoutRouter.get("/user/:userId", checkoutController.getCheckoutsByUserController);
 
 export default checkoutRouter;

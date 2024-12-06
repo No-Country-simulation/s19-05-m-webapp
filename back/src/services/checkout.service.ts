@@ -247,24 +247,72 @@ export class CheckoutService {
 	}
 
 	async getAllCheckout(): Promise<Checkout[]> {
-		return await checkoutRepository.find();
+		const allCheckouts = await checkoutRepository.find();
+
+		return this.transformCheckouts(allCheckouts);
 	}
 
 	async getCheckoutById(id: string): Promise<Checkout []> {
-		return await checkoutRepository.find({ where: { id_checkout: id } });
+		const idCheckouts = await checkoutRepository.find({ where: { id_checkout: id } });
+		
+		return this.transformCheckouts(idCheckouts);
 	}
 
 	async getCheckoutsByStatus(status: StatusCheckout): Promise<Checkout[]> {
-		return await checkoutRepository.find({
+		const statusCheckouts = await checkoutRepository.find({
 			where: { status }
 		});
+		
+		return this.transformCheckouts(statusCheckouts);
 	}
 
 	async getCheckoutsByUser(userId: number): Promise<Checkout[]> {
-		return await checkoutRepository.find({
-		  where: { shopping_user: userId },
-		  relations: ["shopping"]
+		const rawCheckouts = await checkoutRepository.find({
+		  where: { shopping_user: userId }
 		});
+
+		return this.transformCheckouts(rawCheckouts);
+
+	}
+
+	private transformCheckouts(checkouts: any[]): any[] {
+
+		const grouped = checkouts.reduce((acc, item) => {
+			const {
+			  id_checkout,
+			  status,
+			  date_checkout,
+			  shopping_user,
+			  shopping_products,
+			  shopping,
+			} = item;
+		
+			let existingCheckout = acc.find((c: any) => c.id_checkout === id_checkout);
+		
+			if (!existingCheckout) {
+			  existingCheckout = {
+				id_checkout,
+				status,
+				date_checkout,
+				shopping_user,
+				shopping_products: [],
+				total: 0,
+			  };
+			  acc.push(existingCheckout);
+			}
+
+			existingCheckout.shopping_products.push({
+			  products_id: shopping.products_id,
+			  state: shopping.state,
+			  quantity: shopping.quantity,
+			});
+
+			existingCheckout.total += shopping.quantity * (shopping.product_price || 0);
+		
+			return acc;
+		  }, []);
+		
+		  return grouped;
 	}
 	
 }
