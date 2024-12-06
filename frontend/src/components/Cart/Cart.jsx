@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext/CartContext';
-import shoppingCartService from '../../services/shoppingCartService';
+import shoppingCartService from '../../services/shoppingCart';
 import './cart.css';
 
 function Cart({onClose}) {

@@ -1,7 +1,7 @@
 import { useCart } from '../../contexts/CartContext/CartContext';
 import { Toaster, toast } from 'sonner';
 import "./addToCartButton.css";
-import shoppingCartService from '../../services/shoppingCartService';
+import shoppingCartService from '../../services/shoppingCart';
 
 function AddToCartButton({ product }) {
     //Usa el contexto para poder "mandar" las acciones
