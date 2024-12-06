@@ -13,7 +13,7 @@ const useFilteredProducts = (
     let productsToShow = products;
 
     if(selectedOptions.genre !== "Seleccionar Género" && productsByGenre) {
-        selectedOptions.platform ? 
+        selectedOptions.platform !== "Seleccionar Plataforma" ? 
             (productsToShow = productsByGenre.filter((product) =>
                 product.platforms.some(
                   (platform) => platform.name === selectedOptions.platform
@@ -24,14 +24,14 @@ const useFilteredProducts = (
     
     if(selectedOptions.platform !== "Seleccionar Plataforma") {
         if (productsByPlatform) {
-            selectedOptions.genre ? 
+            selectedOptions.genre !== "Seleccionar Género" ? 
                 (productsToShow = productsByPlatform.filter(
-                    (product) => product.genre === selectedOptions.genre
+                    (product) => product.genre === selectedOptions.genre,
                 ))
           : (productsToShow = productsByPlatform);
         }
 
-        if (selectedOptions.model && productsToShow) {
+        if (selectedOptions.model !== "Seleccionar Modelo" && productsToShow) {
             productsToShow = productsToShow.filter((product) =>
                 product.platforms.some(
                     (platform) => platform.model === selectedOptions.model
