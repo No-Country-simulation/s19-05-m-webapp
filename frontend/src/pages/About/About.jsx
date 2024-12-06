@@ -4,7 +4,7 @@ import "./about.css";
 const About = () => {
   return (
     <section id="about-us" className="about-us-section ">
-      <div className="container">
+      <article className="container">
         <div className="about-content">
           <h2>Sobre Nosotros</h2>
           <p>
@@ -28,13 +28,13 @@ const About = () => {
             tu pasión por este increíble mundo digital!
           </p>
         </div>
-        <div className="about-image">
-          <img
-            src="home-avatar-2.png"
-            alt="Checkpoint Zone - Tienda de Videojuegos"
-          />
-        </div>
-      </div>
+      </article>
+      <article className="about-image">
+        <img
+          src="home-avatar-2.png"
+          alt="Checkpoint Zone - Tienda de Videojuegos"
+        />
+      </article>
     </section>
   );
 };
