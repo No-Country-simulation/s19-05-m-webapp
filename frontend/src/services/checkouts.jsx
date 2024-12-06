@@ -20,9 +20,19 @@ const getCheckout = async (checkoutId) => {
 	}
 };
 
+const getCheckoutUser = async (userId) => {
+	try {
+		const response = await axios.get(`${BASE_URL}checkouts/user/${userId}`);
+		return response.data.data;
+	} catch {
+		throw new Error("No se pudo cargar historial.");		
+	}
+};
+
 const checkoutService = {
 	getCheckouts,
 	getCheckout,
+	getCheckoutUser
 };
 
 export default checkoutService;

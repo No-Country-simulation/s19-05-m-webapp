@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/auth.slices";
 import "./GoogleAuth.css";
+import useFetch from "../../hooks/useFetch";
+import userService from "../../services/register";
 
 const GoogleAuth = ({isOpen, onClose}) => {
     if (!isOpen) return null; 
@@ -33,22 +35,28 @@ const GoogleAuth = ({isOpen, onClose}) => {
         return "";
       };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const errorMessage = validateForm();
         if (errorMessage) {
           setError(errorMessage);
         } else {
-            // Usar fetch para buscar correo + contraseña en base de datos.
           setError("");
+          try {
+            const response = await userService.checkUser();
+            dispatch(setUser(response))
+            onClose()
+          } catch (err) {
+            console.error(err);
+            setError(`${err}`)
+          }
         }
-      };
+    };
 
     function handleCallbackResponse(response) {
         var userObject = jwtDecode(response.credential);
         dispatch(setUser(userObject));
         onClose();
-        console.log(userObject)
     }
 
     useEffect(() => {

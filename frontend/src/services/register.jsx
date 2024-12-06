@@ -19,4 +19,18 @@ const createUser = async (userData, setMessage) => {
     }
 };
 
-export default createUser;
+const checkUser = async () => {
+    try {
+		const response = await axios.get(`${BASE_URL}users/12`);
+		return response.data.data;
+	} catch {
+		throw new Error("No se encontró el usuario.");
+	}
+}
+
+const userService = {
+	createUser,
+    checkUser
+};
+
+export default userService;

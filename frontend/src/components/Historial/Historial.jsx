@@ -3,7 +3,7 @@ import useFetch from "../../hooks/useFetch";
 import checkoutService from "../../services/checkouts";
 
 const Historial = () => {
-    const { data: checkout } = useFetch(checkoutService.getCheckouts);
+    const { data: checkout } = useFetch(checkoutService.getCheckoutUser, 2);
 
     return (
         <div id="table-container">

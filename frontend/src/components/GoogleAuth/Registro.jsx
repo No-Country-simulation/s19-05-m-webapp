@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import "./GoogleAuth.css";
-import createUser from "../../services/register";
+import userService from "../../services/register";
 
 
 const Registro = () => {
@@ -49,12 +49,12 @@ const Registro = () => {
         phone: ""
       }
       setError("Cargando...");
-      createUser(userData, setError);
+      userService.createUser(userData, setError);
     }
   };
 
   function handleCallbackResponse(response) {
-    var userObject = jwtDecode(response.credential); //checkear si existe ya usuario con ese correo
+    var userObject = jwtDecode(response.credential);
     const userData = {
       name: userObject.name,
       email: userObject.email,
@@ -63,7 +63,7 @@ const Registro = () => {
       address: "",
       phone: ""
     };
-    createUser(userData, setError)
+    userService.createUser(userData, setError)
   }
 
   useEffect(() => {
