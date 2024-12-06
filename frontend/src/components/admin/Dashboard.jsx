@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Toaster } from 'sonner';
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Table from "../table/Table";
+import SearchBar from "../searchBar/SearchBar";
 import useFetch from "../../hooks/useFetch";
 import useModal from "../../hooks/useModal";
 import columns from "../../utils/tableAdmin";
@@ -27,10 +28,19 @@ const Dashboard = () => {
     const [filterType, setFilterType] = useState("orders");
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const filteredProducts = products?.filter(product => 
         filterType === "all" ? product.stock > 0 : product.stock === 0
     );
+
+    const filteredData = filterType === "orders" 
+        ? or.filter(order => order.name?.toLowerCase().includes(searchTerm.toLowerCase())) 
+        : filteredProducts?.filter(product => product.title?.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    useEffect(() => {
+        setSearchTerm("");
+    }, [filterType]);
 
     const handleCloseModal = () => {
         setErrors({}); 
@@ -77,9 +87,10 @@ const Dashboard = () => {
                     errors={errors}
                 />
             </Modal>
+            <SearchBar onSearch={setSearchTerm} searchTerm={searchTerm}/> 
             <Table 
                 columns={filterType === "orders" ? columns.ordersList : columns.productsList}
-                data={filterType === "orders" ? or : filteredProducts} 
+                data={filteredData} 
                 loadingData={filterType === "orders" ? '' : productsLoading}
                 errorData={filterType === "orders" ? '' : productsError} 
                 refetch={refetch}
