@@ -95,6 +95,7 @@ export class CheckoutController {
             const order = await this.checkoutService.cancelOrder(token);
             if(order.length === 0)
                 return ControllerHandler.badRequest("No orders found to cancel.", res);
+            return ControllerHandler.ok(`Order ${token} successfully called`, res);
         } catch (error) {
             next(error);
         }
@@ -104,7 +105,7 @@ export class CheckoutController {
         try {
             const checkouts = await this.checkoutService.getAllCheckout();
             if(!checkouts || checkouts.length === 0) return ControllerHandler.ok("No checkout data available", res, []);
-            return ControllerHandler.ok("All checkouts retrieved successfully", res, checkouts)    
+            return ControllerHandler.ok("All checkouts successfully retrieved", res, checkouts)    
         } catch (error) {
             next(error);
         }
