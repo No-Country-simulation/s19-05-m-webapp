@@ -1,27 +1,71 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { PaypalIcon } from "./PaypalIcon";
 import Loader from "../loader/Loader";
+import { useState } from "react";
+import checkoutService from "../../services/checkouts";
+import { toast, Toaster } from "sonner";
 
 export const Payment = ({
   onGoBack,
   products,
   totalAmount,
   paymentUrl,
+  paymentId,
   isLoading,
   error,
 }) => {
   const shipping = useSelector((state) => state.Shipping);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);  
 
   const handlePaypalClick = () => {
+    console.log("paymentId", paymentId);
     if (paymentUrl) {
-      window.location.href = paymentUrl;
+      const popup = window.open(
+        paymentUrl,
+        "PaypalPayment",
+        "width=800,height=600"
+      );
+
+      if (popup) {
+        setIsPopupOpen(true);
+
+        const interval = setInterval(async () => {
+          if (popup.closed) {
+            clearInterval(interval);
+            setIsPopupOpen(false);
+            try {
+              const resp = await checkoutService.getCheckout(paymentId);
+              const check = resp[0];
+
+              if (check.status === "PAID") {
+                toast.success("Compra realizada con éxito");
+                
+              } else if (check.status === "DECLINED") {
+                toast.error("Compra rechazada");
+              }
+
+            } catch (err) {
+              console.error(err);
+              toast.error("Ocurrió un error al verificar el estado del pago");
+            }
+          }
+        }, 500);
+      } else {
+        alert("No se pudo abrir la ventana emergente.");
+      }
+    } else {
+      alert("No se encontró la URL de pago.");
     }
   };
 
   return (
     <div className="container">
-      <div className="checkout-box">
+      <Toaster richColors position="bottom-center" />
+      {/* Overlay que cubre la página */}
+      {isPopupOpen && <div className="overlay"></div>}
+
+      <div className={`checkout-box ${isPopupOpen ? "disabled" : ""}`}>
         {/* Sección Resumen */}
         <div className="resume">
           <h2>Resumen</h2>
@@ -67,7 +111,11 @@ export const Payment = ({
               ) : error ? (
                 <p className="error-message">{error}</p>
               ) : (
-                <button className="next-button" onClick={handlePaypalClick}>
+                <button
+                  className="next-button"
+                  onClick={handlePaypalClick}
+                  disabled={isPopupOpen}
+                >
                   <PaypalIcon />
                   <span>Paypal</span>
                 </button>
@@ -87,7 +135,11 @@ export const Payment = ({
           </div>
         </div>
       </div>
-      <button className="back-button btn-box" onClick={onGoBack}>
+      <button
+        className="back-button btn-box"
+        onClick={onGoBack}
+        disabled={isPopupOpen}
+      >
         Regresar
       </button>
     </div>

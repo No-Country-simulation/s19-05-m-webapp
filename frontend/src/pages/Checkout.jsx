@@ -18,6 +18,7 @@ export const CheckoutPage = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [paymentUrl, setPaymentUrl] = useState("");
+  const [paymentId, setPaymentId] = useState("");
   const [error, setError] = useState("");
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
@@ -37,7 +38,8 @@ export const CheckoutPage = () => {
         const response = await shoppingService.patchShopping(user.id ?? "1");
 
         if (response.links && response.links[1]?.href) {
-          setPaymentUrl(response.links[1].href);         
+          setPaymentUrl(response.links[1].href); 
+          setPaymentId(response.id);        
         } else {
           throw new Error("La respuesta no contiene el enlace de pago.");
         }
@@ -125,6 +127,7 @@ export const CheckoutPage = () => {
             products={products}
             totalAmount={totalAmount}
             paymentUrl={paymentUrl}
+            paymentId={paymentId}
             isLoading={isLoading}
             error={error}
           />

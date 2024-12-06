@@ -1,24 +1,32 @@
 import { useState, useEffect, useMemo } from "react";
 
-const useFilteredTable = (data, admin) => {
+const useFilteredTable = (data, admin, filterType) => {
     const [visibleData, setVisibleData] = useState([]);
     const [hasMore, setHasMore] = useState(true);
 
     const filteredData = useMemo(() => {
         return data?.map((p) => {
-            if (admin) {
+            if (admin && filterType === "orders") {
+                return {
+                    id: p.id,
+                    name: p.name,
+                    date: p.date,
+                    status: p.status,
+                    full: p
+                };
+            } else if(admin) {
                 return {
                     id: p.id_product,
                     title: p.title,
                     price: p.price,
                     stock: p.stock,
-                    fullProduct: p
-                };
+                    full: p
+                }
             } else {
-                // para el usuario normal
+                // usuario normal
             }
         });
-    }, [data, admin]);
+    }, [data, admin, filterType]);
     
 
     useEffect(() => {

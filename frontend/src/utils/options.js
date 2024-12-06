@@ -53,7 +53,14 @@ const countryOptions = [
     { value: 'Peru' },
     { value: 'Uruguay'  },
     { value: 'Venezuela' },
-]
+];
+
+const statusOptions = [
+    { value: 'Pendiente' },
+    { value: 'Enviado' },
+    { value: 'Completado' },
+    { value: 'Cancelado' }
+];
 
 const options = {
     genreOptions,
@@ -61,6 +68,7 @@ const options = {
     modelOptions,
     modelOptionsByPlatform,
     countryOptions,
+    statusOptions,
 }
 
 export default options;
