@@ -247,7 +247,13 @@ export class CheckoutService {
 	}
 
 	async getAllCheckout(): Promise<Checkout[]> {
-		const allCheckouts = await checkoutRepository.find();
+		const allCheckouts = await checkoutRepository.find({
+			relations: {
+				shopping: {
+					products: true
+				}
+			}
+		});
 
 		return this.transformCheckouts(allCheckouts);
 	}
@@ -260,7 +266,12 @@ export class CheckoutService {
 
 	async getCheckoutsByStatus(status: StatusCheckout): Promise<Checkout[]> {
 		const statusCheckouts = await checkoutRepository.find({
-			where: { status }
+			where: { status },
+			relations: {
+				shopping: {
+					products: true
+				},
+			}
 		});
 		
 		return this.transformCheckouts(statusCheckouts);
@@ -268,7 +279,12 @@ export class CheckoutService {
 
 	async getCheckoutsByUser(userId: number): Promise<Checkout[]> {
 		const rawCheckouts = await checkoutRepository.find({
-		  where: { shopping_user: userId }
+			where: { shopping_user: userId },
+			relations: {
+				shopping: {
+					products: true
+				}
+			}
 		});
 
 		return this.transformCheckouts(rawCheckouts);
@@ -301,13 +317,16 @@ export class CheckoutService {
 			  acc.push(existingCheckout);
 			}
 
+			const price = shopping.products?.price || 0;
+
 			existingCheckout.shopping_products.push({
 			  products_id: shopping.products_id,
 			  state: shopping.state,
 			  quantity: shopping.quantity,
+			  price,
 			});
 
-			existingCheckout.total += shopping.quantity * (shopping.product_price || 0);
+			existingCheckout.total += shopping.quantity * (price || 0);
 		
 			return acc;
 		  }, []);
