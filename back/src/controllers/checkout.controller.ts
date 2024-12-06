@@ -70,7 +70,7 @@ export class CheckoutController {
         if (!shopping || !amount) return ControllerHandler.badRequest("Mandatory parameters missing: shopping and amount", res);
         try {
             const order = await this.checkoutService.createOrder(shopping, amount);
-            return ControllerHandler.ok("Order created successfully", res, order);
+            return ControllerHandler.ok("Order created successfully", res);
         } catch (error) {
             next(error);
         }
@@ -82,7 +82,7 @@ export class CheckoutController {
         if (!token || !payerID) return ControllerHandler.badRequest("Token and PayerID are required", res);
         try {
             const checkoutRecords = await this.checkoutService.captureOrder(token, payerID);
-            return ControllerHandler.ok("Order captured successfully", res, checkoutRecords);
+            return ControllerHandler.ok("Order captured successfully", res);
         } catch (error) {
             next(error);
         }
