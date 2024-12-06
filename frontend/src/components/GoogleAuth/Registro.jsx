@@ -1,14 +1,10 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../store/slices/auth.slices";
-import { setRegister } from "../../store/slices/user.slices";
 import "./GoogleAuth.css";
+import createUser from "../../services/register";
 
 
 const Registro = () => {
-  const dispatch = useDispatch();
-  const usuario = useSelector((state) => state.user.name);
   const [formData, setFormData] = useState({
       nombre: "",
       email: "",
@@ -29,27 +25,44 @@ const Registro = () => {
      if (formData.password.length < 6){
       return "La contraseña debe tener más de 6 caracteres.";
     }
+    if (formData.nombre.length > 20 ){
+      return "El nombre no debe tener más de 20 caracteres.";
+    }
     if (formData.password != formData.password2) {
       return "Las contraseñas deben coincidir."
     }
     return "";
   };
     
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errorMessage = validateForm();
     if (errorMessage) {
       setError(errorMessage);
     } else {
-      dispatch(setRegister({ name: formData.nombre, email: formData.email, password: formData.password }));
-      setError("");
-      console.log("Usuario con nombre " + usuario)
+      const userData = {
+        name: formData.nombre,
+        email: formData.email,
+        password: formData.password,  
+        active: true,
+        address: "",
+        phone: ""
+      }
+      setError("Cargando...");
+      setError(createUser(userData));
     }
   };
 
   function handleCallbackResponse(response) {
-    var userObject = jwtDecode(response.credential);
-    dispatch(setUser(userObject));
+    var userObject = jwtDecode(response.credential); //checkear si existe ya usuario con ese correo
+    const userData = {
+      name: userObject.name,
+      email: userObject.email,
+      password: userObject.sub,
+      active: true,
+      address: "",
+      phone: ""
+    };
   }
 
   useEffect(() => {

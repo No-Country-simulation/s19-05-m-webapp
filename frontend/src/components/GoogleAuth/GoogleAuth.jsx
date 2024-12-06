@@ -48,6 +48,7 @@ const GoogleAuth = ({isOpen, onClose}) => {
         var userObject = jwtDecode(response.credential);
         dispatch(setUser(userObject));
         onClose();
+        console.log(userObject)
     }
 
     useEffect(() => {

@@ -24,7 +24,7 @@ const Historial = () => {
                             <td>{checkout.id_checkout}</td>
                             <td>{checkout.date_checkout}</td>
                             <td>{checkout.status}</td>
-                            <td>$</td>
+                            <td>${checkout.total}</td>
                             <td><button className="boton-factura">Ver Factura</button></td>
                         </tr>
                     ))}
