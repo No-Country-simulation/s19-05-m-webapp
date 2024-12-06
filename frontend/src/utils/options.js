@@ -2,7 +2,8 @@ const platformOptions = [
     { value: 'Seleccionar Plataforma', disabled: true },
     { value: 'Nintendo' },
     { value: 'PlayStation' },
-    { value: 'PC' }
+    { value: 'PC' },
+    { value: 'Xbox' }
 ];
 
 const modelOptions = [
@@ -16,18 +17,19 @@ const modelOptions = [
 
 const genreOptions = [
     { value: 'Seleccionar Género', disabled: true },
-    { value: 'Fantasy' },
-    { value: 'Family' },
-    { value: 'Sports' },
-    { value: 'Adventure' },
-    { value: 'Sci-Fi' },
+    { value: 'Deporte' },
+    { value: 'Aventura' },
+    { value: 'Accion' },
+    { value: 'Suspenso' },
+    { value: 'Carreras' },
 ];
 
 const modelOptionsByPlatform = {
     PC: [
         { value: 'Seleccionar Modelo', disabled: true },
-        { value: 'Windows 10' },
-        { value: 'Windows 11' }
+        { value: 'Windows' },
+        { value: 'Mac' },
+        { value: 'Linux' }
     ],
     PlayStation: [
         { value: 'Seleccionar Modelo', disabled: true },
@@ -36,8 +38,12 @@ const modelOptionsByPlatform = {
     ],
     Nintendo: [
         { value: 'Seleccionar Modelo', disabled: true },
-        { value: 'Standard Model' },
-        { value: 'OLED Model' }
+        { value: 'Switch' }
+    ],
+    Xbox: [
+        { value: 'Seleccionar Modelo', disabled: true },
+        { value: 'One' },
+        { value: 'Series x|s' }
     ],
 };
 
