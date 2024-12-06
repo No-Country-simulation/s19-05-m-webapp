@@ -15,11 +15,21 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
         if (formValues.name) {
             const newModelOptions = options.modelOptionsByPlatform[formValues.name] || [];
             setModelOptions(newModelOptions);
-        } else {
-            setModelOptions([]);
+        } else if (formValues.platforms && formValues.platforms.length > 0) {
+            const platformName = formValues.platforms[0].name; 
+            const platformModel = formValues.platforms[0].model; 
+            const newModelOptions = options.modelOptionsByPlatform[platformName] || [];
+    
+            setFormValues((prevValues) => ({
+                ...prevValues,
+                name: prevValues.name || platformName, 
+                model: prevValues.model || platformModel,
+            }));
+    
+            setModelOptions(newModelOptions);
         }
-    }, [formValues.name]);
-
+    }, [formValues.name, formValues.platforms]);
+    
     const handleChange = (e) => {
         const { name, value, files } = e.target;
 
