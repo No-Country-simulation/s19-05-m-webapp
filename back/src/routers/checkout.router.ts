@@ -154,11 +154,11 @@ checkoutRouter.get("/status/:status",
  *     description: Retrieves a list of checkouts by user.
  *     parameters:
  *       - in: path
- *         name: user_id
+ *         name: userId
  *         required: true
  *         description: Retrieves a list of checkouts by user.
  *         schema:
- *           type: string
+ *           type: number
  *     responses:
  *       200:
  *         description: A list of checkouts with the specified user.
