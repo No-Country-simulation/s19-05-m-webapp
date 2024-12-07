@@ -43,12 +43,17 @@ const GoogleAuth = ({isOpen, onClose}) => {
         } else {
           setError("");
           try {
-            const response = await userService.checkUser();
-            dispatch(setUser(response))
-            onClose()
+            const response = await userService.checkUser(formData.email); //usar checkuser con formData.email como parametro (cuando se pueda buscar por email al usuario)
+            if (formData.password == response.password) { //comparar contraseñas. no funciona debido a encriptación de contraseña en database
+                dispatch(setUser(response))
+                onClose() 
+            } else {
+                setError("La contraseña es incorrecta.")
+                console.log(formData.password, response.password) //temporal para comparar contraseña input y contraseña en database
+            }
           } catch (err) {
-            console.error(err);
-            setError(`${err}`)
+            console.error(err); 
+            setError("No se ha encontrado una cuenta con ese correo.") //cambiar mensaje para que ambos sean iguales.
           }
         }
     };

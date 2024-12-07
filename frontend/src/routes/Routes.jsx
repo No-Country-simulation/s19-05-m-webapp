@@ -6,7 +6,7 @@ import { CheckoutPage } from "../pages/Checkout";
 import About from "../pages/About/About";
 import Politics from "../pages/Politics/Politics";
 import Terms from "../pages/Terms/Terms";
-import Registro from "../components/GoogleAuth/Registro";
+import Registro from "../pages/Registro";
 import Historial from "../pages/Historial";
 import Admin from "../pages/Admin";
 import SuccessPage from "../pages/payment/SuccessPage";

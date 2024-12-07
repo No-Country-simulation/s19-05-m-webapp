@@ -19,9 +19,9 @@ const createUser = async (userData, setMessage) => {
     }
 };
 
-const checkUser = async () => {
+const checkUser = async (userEmail) => {
     try {
-		const response = await axios.get(`${BASE_URL}users/12`);
+		const response = await axios.get(`${BASE_URL}users/${userEmail}`); //usar userEmail cuando esté el endpoint
 		return response.data.data;
 	} catch {
 		throw new Error("No se encontró el usuario.");
