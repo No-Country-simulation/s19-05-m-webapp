@@ -34,7 +34,8 @@
 }
 
 .custom-table .btn-edit,
-.custom-table .btn-delete {
+.custom-table .btn-delete,
+.custom-table .btn-see {
     align-items: center;
     background-color: transparent;
     border-radius: 50%;
@@ -55,13 +56,7 @@
 }
 
 .custom-table .btn-see {
-    background-color: transparent;
     border: 2px solid yellow;
-    border-radius: 8px;
-    color: var(--second-color);
-    font-family: var(--text-font);
-    font-size: 16px;
-    height: 40px;
 }
 
 .container-delete p {

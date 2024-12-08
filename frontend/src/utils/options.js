@@ -52,19 +52,11 @@ const countryOptions = [
     { value: 'Venezuela' },
 ];
 
-const statusOptions = [
-    { value: 'Pendiente' },
-    { value: 'Enviado' },
-    { value: 'Completado' },
-    { value: 'Cancelado' }
-];
-
 const options = {
     genreOptions,
     platformOptions,
     modelOptionsByPlatform,
     countryOptions,
-    statusOptions,
 }
 
 export default options;
