@@ -20,13 +20,13 @@ const Trends = () => {
           products
             .slice(-4)
             .reverse()
-            .map((product, index) => (
+            .map((product) => (
               <Card
-                key={index}
+                key={product.id_product}
                 title={product.title}
                 category={product.category}
                 price={product.price}
-                onClick={() => handleCard(index)}
+                onClick={() => handleCard(product.id_product)}
               />
             ))}
       </div>

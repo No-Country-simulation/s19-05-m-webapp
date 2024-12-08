@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Toaster } from 'sonner';
 import Modal from "../modal/Modal";
 import Form from "../form/Form";
 import Table from "../table/Table";
+import SearchBar from "../searchBar/SearchBar";
 import useFetch from "../../hooks/useFetch";
 import useModal from "../../hooks/useModal";
 import columns from "../../utils/tableAdmin";
@@ -10,27 +11,32 @@ import productFields  from "../../utils/productFields";
 import createProductSubmit from "../../utils/createProduct";
 import validateForm from "../../utils/validateForm";
 import productService from "../../services/products";
+import checkoutService from "../../services/checkouts";
 import createProductSchema from "../../validations/createProduct.schema";
 import "./dashboard.css";
-
-const or = [
-    { 'id': 1, 'name': 'Maria Alarcon', 'date': '10/12/2024', 'status': 'pendiente'},
-    { 'id': 2, 'name': 'Jose Chourio', 'date': '10/12/2024', 'status': 'enviado'},
-    { 'id': 3, 'name': 'Andrea Carolina', 'date': '10/12/2024', 'status': 'completado'},
-    { 'id': 4, 'name': 'Marian Carolina', 'date': '10/12/2024', 'status': 'cancelado'},
-]
 
 const Dashboard = () => {
     const { isModalOpen, openModal, closeModal } = useModal();
     const { data: products, loading: productsLoading, 
         hasError: productsError, refetch } = useFetch(productService.getProducts);
+    const { data: orders, loading: ordersLoading, 
+        hasError: ordersError } = useFetch(checkoutService.getCheckouts);
     const [filterType, setFilterType] = useState("orders");
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const filteredProducts = products?.filter(product => 
         filterType === "all" ? product.stock > 0 : product.stock === 0
     );
+
+    const filteredData = filterType === "orders" 
+        ? orders?.filter(order => order.shopping_user?.toLowerCase().includes(searchTerm.toLowerCase())) 
+        : filteredProducts?.filter(product => product.title?.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    useEffect(() => {
+        setSearchTerm("");
+    }, [filterType]);
 
     const handleCloseModal = () => {
         setErrors({}); 
@@ -77,11 +83,12 @@ const Dashboard = () => {
                     errors={errors}
                 />
             </Modal>
+            <SearchBar onSearch={setSearchTerm} searchTerm={searchTerm}/> 
             <Table 
                 columns={filterType === "orders" ? columns.ordersList : columns.productsList}
-                data={filterType === "orders" ? or : filteredProducts} 
-                loadingData={filterType === "orders" ? '' : productsLoading}
-                errorData={filterType === "orders" ? '' : productsError} 
+                data={filteredData} 
+                loadingData={filterType === "orders" ? ordersLoading : productsLoading}
+                errorData={filterType === "orders" ? ordersError : productsError} 
                 refetch={refetch}
                 admin={true}
                 filterType={filterType}

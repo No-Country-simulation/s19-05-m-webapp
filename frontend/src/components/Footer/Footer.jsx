@@ -13,7 +13,7 @@ const Footer = () => {
     <section className="footer page-container">
       <article className="logo-footer">
         <Link to="/">
-          <img src="logo.png" alt="checkpoint logo" />
+          <img src="/logo.png" alt="checkpoint logo" />
         </Link>
         <p>Todos los derechos reservados</p>
       </article>

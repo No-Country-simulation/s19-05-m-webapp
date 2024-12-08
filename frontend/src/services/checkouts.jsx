@@ -7,7 +7,7 @@ const getCheckouts = async () => {
 		const response = await axios.get(`${BASE_URL}checkouts`);
 		return response.data.data;
 	} catch {
-		throw new Error("No se pudo cargar historial.");
+		throw new Error("No se pudo cargar el historial de ordenes. Inténtalo de nuevo más tarde.");
 	}
 };
 

@@ -1,7 +1,7 @@
 const productsList = [
     { 
-        header: 'Nombre', 
-        field: 'name' 
+        header: 'Producto', 
+        field: 'product' 
     },
     { 
         header: 'Precio', 
@@ -24,19 +24,15 @@ const ordersList = [
     },
     { 
         header: 'Fecha del pedido', 
-        field: 'price' 
+        field: 'date' 
     },
     { 
-        header: 'Estado', 
+        header: 'Estado del pago', 
         field: 'status' 
     },
     { 
         header: 'Factura', 
         field: 'bill' 
-    },
-    { 
-        header: 'Acción', 
-        field: 'actions' 
     }
 ];
 

@@ -1,48 +1,51 @@
 import { useState, useEffect, useMemo } from "react";
+import formatDate from "../utils/formatDate";
+import translatePaymentStatus from "../utils/translatePaymentStatus";
 
 const useFilteredTable = (data, admin, filterType) => {
     const [visibleData, setVisibleData] = useState([]);
     const [hasMore, setHasMore] = useState(true);
 
     const filteredData = useMemo(() => {
-        return data?.map((p) => {
+        return data?.map((obj) => {
             if (admin && filterType === "orders") {
                 return {
-                    id: p.id,
-                    name: p.name,
-                    date: p.date,
-                    status: p.status,
-                    full: p
+                    id: obj.id_checkout,
+                    name: obj.shopping_user,
+                    date: formatDate(obj.date_checkout),
+                    status: translatePaymentStatus(obj.status),
+                    full: obj
                 };
-            } else if(admin) {
+            } else if (admin) {
                 return {
-                    id: p.id_product,
-                    title: p.title,
-                    price: p.price,
-                    stock: p.stock,
-                    full: p
-                }
+                    id: obj.id_product,
+                    title: obj.title,
+                    price: `$${obj.price}`,
+                    stock: obj.stock,
+                    full: obj
+                };
             } else {
                 // usuario normal
             }
-        });
+        }).filter(Boolean); 
     }, [data, admin, filterType]);
-    
 
     useEffect(() => {
         if (filteredData?.length) {
             setVisibleData(filteredData.slice(0, 10)); 
-            setHasMore(filteredData.length > 10); 
+            setHasMore(filteredData.length > 10);
         }
     }, [filteredData]);
 
     const handleLoadMore = () => {
-        const nextProducts = filteredData.slice(visibleData.length, visibleData.length + 5);
-        setVisibleData(prev => [...prev, ...nextProducts]);
+        setVisibleData((prev) => {
+            const nextProducts = filteredData?.slice(prev.length, prev.length + 5);
+            const updatedData = [...prev, ...nextProducts];
+            
+            setHasMore(updatedData.length < filteredData.length);
 
-        if (visibleData.length + nextProducts.length >= filteredData.length) {
-            setHasMore(false);
-        }
+            return updatedData;
+        });
     };
 
     return { visibleData, hasMore, handleLoadMore };

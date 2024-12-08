@@ -90,6 +90,7 @@
 .product-detail .overlay {
     bottom: 0;
     left: 0;
+    height: auto;
     position: absolute;
     right: 0;
     top: 0;
@@ -150,8 +151,9 @@
 }
 
 @media (min-width: 1024px) {
-    .overlay {
+    .product-detail .overlay {
         background-position: center;
+        background-repeat: no-repeat;
         background-size: cover;
         opacity: 50%;
         width: 50%;
@@ -168,7 +170,7 @@
 }
 
 @media (max-width: 1023px) {
-    .overlay {
+    .product-detail .overlay {
         background: rgba(0, 0, 0, 0.5);
     }
 }
