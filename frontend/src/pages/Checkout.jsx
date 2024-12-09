@@ -35,11 +35,19 @@ export const CheckoutPage = () => {
       try {
         setIsLoading(true);
         setError("");
-        const response = await shoppingService.patchShopping(user.id ?? "1");
+
+        const localUser = JSON.parse(localStorage.getItem("user") || "{}");
+        if (!localUser?.id_users) {
+          throw new Error("El usuario no tiene un ID válido.");
+        }
+
+        const response = await shoppingService.patchShopping(
+          localUser.id_users
+        );
 
         if (response.links && response.links[1]?.href) {
-          setPaymentUrl(response.links[1].href); 
-          setPaymentId(response.id);        
+          setPaymentUrl(response.links[1].href);
+          setPaymentId(response.id);
         } else {
           throw new Error("La respuesta no contiene el enlace de pago.");
         }

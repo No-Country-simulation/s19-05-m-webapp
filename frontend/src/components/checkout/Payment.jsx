@@ -52,10 +52,10 @@ export const Payment = ({
           }
         }, 500);
       } else {
-        alert("No se pudo abrir la ventana emergente.");
+        toast.error("No se pudo abrir la ventana emergente.");
       }
     } else {
-      alert("No se encontró la URL de pago.");
+      toast.error("No se encontró la URL de pago.");
     }
   };
 
