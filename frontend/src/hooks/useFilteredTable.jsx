@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import formatDate from "../utils/formatDate";
-import translatePaymentStatus from "../utils/translatePaymentStatus";
+import translate from "../utils/translate";
 
 const useFilteredTable = (data, admin, filterType) => {
     const [visibleData, setVisibleData] = useState([]);
@@ -13,7 +13,16 @@ const useFilteredTable = (data, admin, filterType) => {
                     id: obj.id_checkout,
                     name: obj.shopping_user,
                     date: formatDate(obj.date_checkout),
-                    status: translatePaymentStatus(obj.status),
+                    status: translate.paymentStatus(obj.status),
+                    full: obj
+                };
+            } else if (admin && filterType === "users") {
+                return {
+                    id: obj.id_users,
+                    name: obj.name,
+                    email: obj.email,
+                    status: obj.active ? 'ACTIVO' : 'INACTIVO',
+                    role: translate.userRole(obj.role),
                     full: obj
                 };
             } else if (admin) {

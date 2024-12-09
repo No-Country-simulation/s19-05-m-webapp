@@ -8,11 +8,15 @@ import useModal from "../../hooks/useModal";
 import useBillDownload from "../../hooks/useBillDownload";
 import useFilteredTable from "../../hooks/useFilteredTable";
 import productFields from "../../utils/productFields";
+import userFields from "../../utils/userFields";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
 import updateProductSubmit from "../../utils/updateProduct";
 import deleteProductSubmit from "../../utils/deleteProduct";
+import updateUserSubmit from "../../utils/updateUser";
+import deleteUserSubmit from "../../utils/deleteUser";
 import validateForm from "../../utils/validateForm";
-import createProductSchema from "../../validations/createProduct.schema";
+import productSchema from "../../validations/product.schema";
+import userSchema from "../../validations/user.schema";
 import "./table.css";
 
 const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, filterType }) => {
@@ -41,10 +45,10 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
         
         switch (actionType) {
             case 'Editar':
-                setModalTitle('Editar Producto');
+                setModalTitle(`Editar ${filterType !== "users" ? 'Producto' : 'Usuario'}`);
                 break;
             case 'Eliminar':
-                setModalTitle('Eliminar Producto');
+                setModalTitle(`Eliminar ${filterType !== "users" ? 'Producto' : 'Usuario'}`);
                 break;
             case 'Ver':
                 setModalTitle('Factura');
@@ -54,13 +58,14 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
         }
         
         setModalHeight(actionType === 'Eliminar' ? '50vh' : '98vh');
-        setClassName(actionType === 'Editar' ? 'modal-admin' : "");
+        setClassName(actionType === 'Editar' && filterType !== 'users' ? 'modal-admin' 
+            : filterType === 'users' ? 'modal-admin users' : '');
         openModal();
     };
 
     const handleUpdateSubmit = async (formValues) => {
         setLoading(true);  
-        const validationResult = await validateForm(formValues, createProductSchema);
+        const validationResult = await validateForm(formValues, productSchema);
     
         if (!validationResult.isValid) {
             setErrors(validationResult.errors);
@@ -76,6 +81,28 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
     const handleDeleteSubmit = async (id) => {
         setLoading(true);
         await deleteProductSubmit(id, refetch);
+        setLoading(false);  
+        closeModal();
+    }
+
+    const handleUpdateUserSubmit = async (formValues) => {
+        setLoading(true);  
+        const validationResult = await validateForm(formValues, userSchema);
+    
+        if (!validationResult.isValid) {
+            setErrors(validationResult.errors);
+            setLoading(false);  
+            return; 
+        }
+
+        await updateUserSubmit(formValues, refetch);
+        setLoading(false);  
+        handleCloseModal(); 
+    }
+
+    const handleDeleteUserSubmit = async (id) => {
+        setLoading(true);
+        await deleteUserSubmit(id, refetch);
         setLoading(false);  
         closeModal();
     }
@@ -109,10 +136,12 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
                         ) : data?.length === 0 ? (
                                 <tr>
                                     <td colSpan={columns.length}>
-                                        <p>No hay {filterType === "orders" ? 'pedidos': 'productos'} para mostrar</p>
+                                        <p>No hay {filterType === "orders" ? 'pedidos' 
+                                            : filterType === "users" ? 'usuarios' : 'productos'} para mostrar
+                                        </p>
                                     </td>
                                 </tr>
-                        ) : visibleData?.slice().reverse().map((obj) => (
+                        ) : visibleData?.map((obj) => (
                                 <tr key={obj.id}> 
                                     {
                                         Object.keys(obj)
@@ -171,6 +200,23 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
                     ) : modalTitle === 'Factura' && currentObj ? (
                         <div ref={elementRef}>
                             <Bill order={currentObj} />
+                        </div>
+                    ) : modalTitle === 'Editar Usuario' && currentObj ? (
+                            <Form
+                                fields={userFields.fields} 
+                                onSubmit={handleUpdateUserSubmit}
+                                initialValues={currentObj}
+                                className="form-admin"
+                                buttonText={loading ? "Cargando..." : "Actualizar usuario"}
+                                errors={errors}
+                            />
+                    ) : modalTitle === 'Eliminar Usuario' && currentObj ? (
+                        <div className="container-delete">
+                            <p>¿Estás seguro de eliminar al usuario <strong>{currentObj?.name}</strong>?</p>
+                            <button 
+                                onClick={() => handleDeleteUserSubmit(currentObj?.id_users)}>
+                                {loading ? "Cargando..." : "Confirmar"}
+                            </button>
                         </div>
                     ) : (
                         <div className="container-delete">

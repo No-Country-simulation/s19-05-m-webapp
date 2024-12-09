@@ -38,6 +38,11 @@ const modelOptionsByPlatform = {
     ],
 };
 
+const userActive = [
+    { value: 'Activo' },
+    { value: 'Inactivo' }
+]
+
 const countryOptions = [
     { value: 'Seleccionar País' },
     { value: 'Argentina'},
@@ -57,6 +62,7 @@ const options = {
     platformOptions,
     modelOptionsByPlatform,
     countryOptions,
+    userActive,
 }
 
 export default options;
