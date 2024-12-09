@@ -10,6 +10,7 @@ function AddToCartButton({ product }) {
     const addToCart = () => {
         if (product.stock > 0) {
             dispatch({ type: 'ADD_ITEM', payload: product });
+            console.log(product);
             toast.success('Artículo añadido al carrito')
         } else {
             toast.error('El producto no tiene stock disponible');

@@ -15,7 +15,7 @@ const cartReducer = (state, action) => { //Estado actual y acción sobre como mo
                         : item
                 );
             }
-            return [...state, { ...action.payload, quantity: 1 }];
+            return [...state, { ...action.payload, quantity: 1, key: `${action.payload.id}_${Date.now()}` }];
         }
         case 'REMOVE_ITEM':
             //Filtro prods para excluir el que coincide con id
@@ -26,6 +26,18 @@ const cartReducer = (state, action) => { //Estado actual y acción sobre como mo
                     ? { ...item, quantity: action.payload.quantity }
                     : item
             );
+        case 'ADD_ONE':
+            return state.map((item) =>
+                item.id === action.payload.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+            );
+            case 'REMOVE_ONE':
+                return state.map((item) =>
+                    item.id === action.payload.id
+                ? { ...item, quantity: item.quantity - 1 }
+                : item
+                );         
         default:
             return state;
     }
@@ -34,11 +46,11 @@ const cartReducer = (state, action) => { //Estado actual y acción sobre como mo
 //Children = quienes consumen el contexto
 export const CartProvider = ({ children }) => {
     const [cookies, setCookie] = useCookies(['cart']);
-    const [state, dispatch] = useReducer(cartReducer, cookies.cart || []);
+    const [state, dispatch] = useReducer(cartReducer, Array.isArray(cookies.cart) ? cookies.cart : []);
     const totalQuantity = state.reduce((total, item) => total + item.quantity, 0);
 
     useEffect(() => {
-        setCookie('cart', state, { path: '/', maxAge: 60 * 60 * 24 * 7 });
+        setCookie('cart', [], { path: '/', maxAge: 60 * 60 * 24 * 7 });
     }, [state, setCookie]);
 
     return (

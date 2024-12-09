@@ -11,6 +11,14 @@ function Cart({onClose}) {
         dispatch({ type: 'REMOVE_ITEM', payload: { id } });
     };
 
+    const addOne = (id) => {
+        dispatch({ type: 'ADD_ONE', payload: { id } });
+        };
+    
+    const removeOne = (id) => {
+        dispatch({ type: 'REMOVE_ONE', payload: { id } });
+        };
+
     const updateQuantity = (id, quantity, stock) => {
         if (quantity > stock) {
             alert('No hay suficiente stock disponible.');
@@ -29,8 +37,10 @@ function Cart({onClose}) {
     return (
         <div className='cart'>
             {state.length === 0 && <p>Tu carrito está vacío.</p>}
+            console.log("Estado del carrito:", state);
+
             {state.map((item) => (
-                <div key={item.id}>
+                <div key={item.key}>
                     <h4>{item.title}</h4>
                     <p>Precio unitario: ${item.price.toFixed(2)}</p>
                     <p>Total: ${(item.price * item.quantity).toFixed(2)}</p>
@@ -43,6 +53,8 @@ function Cart({onClose}) {
                             updateQuantity(item.id, parseInt(e.target.value, 10), item.stock)
                         }
                     />
+                    <button onClick={() => addOne(item.id)}>+</button>
+                    <button onClick={() => removeOne(item.id)}>-</button>
                     <button onClick={() => removeItem(item.id)}>Eliminar</button>
                 </div>
             ))}

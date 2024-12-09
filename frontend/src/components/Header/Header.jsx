@@ -31,15 +31,13 @@ const Header = () => {
 
   /* *********Search**************** */
 
-  const { productsGlobal } = useSelector((state) => state);
+  // const { productsGlobal } = useSelector((state) => state);
 
   const inputValue = useRef();
 
   const handleChangeSearch = () => {
     setInputSearch(inputValue.current.value);
-  };
-
-  console.log(productsGlobal);
+  }
 
   /* ************************* */
   useEffect(() => {
