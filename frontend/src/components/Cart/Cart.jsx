@@ -7,15 +7,15 @@ import './cart.css';
 function Cart({onClose}) {
     const { state, dispatch } = useCart();
     const navigate = useNavigate();
-    const userId = 1;
+    const userId = 18;
 
     useEffect(() => {
         const fetchCart = async () => {
             if (!userId) return; 
-
             try {
                 const cartItems = await shoppingCartService.getCart(userId);
-                dispatch({ type: 'SET_CART', payload: cartItems });
+                console.log(cartItems);
+                dispatch({ type: 'ADD_ITEM', payload: cartItems });
             } catch (error) {
                 console.error('Error al cargar el carrito:', error);
             }

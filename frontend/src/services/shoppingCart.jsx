@@ -4,7 +4,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const getCart = async (userId) => {
 	try {
-		const response = await axios.get(`${BASE_URL}/shopping`, {
+		const response = await axios.get(`${BASE_URL}shopping`, {
 			params: { user: userId }, 
 		});
 		return response.data.data; 
@@ -15,16 +15,24 @@ const getCart = async (userId) => {
 
 const createCart = async (userId) => {
 	try {
-		const response = await axios.post(`${BASE_URL}/shopping`, { user: userId });
+		const response = await axios.post(`${BASE_URL}shopping`, { user: userId });
 		return response.data.message; 
 	} catch {
 		throw new Error("No se pudo crear el carrito. Inténtalo de nuevo más tarde.");
 	}
 };
 
-const addOrUpdateProductInCart = async (userId, productId) => {
+const addOrUpdateProductInCart = async (userId, productId, quantity) => {
+	console.log({userId, productId, quantity});
 	try {
-		const response = await axios.put(`${BASE_URL}/shopping/${userId}/${productId}`);
+		const response = await axios.post(`${BASE_URL}shopping`, {user_id:userId, products_id:productId, quantity },
+			{
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+			}
+		);
+		console.error("Error al actualizar el carrito:", error.response?.data || error.message);
 		return response.data.message; 
 	} catch {
 		throw new Error("No se pudo actualizar el producto en el carrito. Inténtalo de nuevo más tarde.");
@@ -33,7 +41,7 @@ const addOrUpdateProductInCart = async (userId, productId) => {
 
 const removeProductFromCart = async (userId, productId) => {
 	try {
-		const response = await axios.delete(`${BASE_URL}/shopping/${userId}/${productId}`);
+		const response = await axios.delete(`${BASE_URL}shopping/${userId}/${productId}`);
 		return response.data.message;
 	} catch {
 		throw new Error("No se pudo eliminar el producto del carrito. Inténtalo de nuevo más tarde.");
