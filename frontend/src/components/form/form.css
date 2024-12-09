@@ -54,6 +54,10 @@ input, select, textarea {
     margin-top: 5px;
 }
 
+.users .form-admin .form-group {
+    width: 100% !important;
+}
+
 @media (min-width: 768px) {
     .form-admin .form-group {
         width: 49%;
@@ -62,6 +66,10 @@ input, select, textarea {
     .form-admin .form-group:nth-child(2),
     .form-admin .form-group:nth-child(3) {
         width: 23%;
+    }
+
+    .user .form-group {
+        width: 100% !important;
     }
 
     .form-admin .form-group:nth-child(6) {

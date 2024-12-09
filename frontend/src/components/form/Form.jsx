@@ -33,7 +33,13 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
     const handleChange = (e) => {
         const { name, value, files } = e.target;
 
-        if (name === 'price') {
+        if (name === 'active') {
+            const booleanValue = value === 'Activo'; 
+            setFormValues({
+                ...formValues,
+                [name]: booleanValue,
+            }); 
+        } else if (name === 'price') {
             const formattedValue = formatPrice(value);
             setFormValues({
                 ...formValues,
@@ -108,6 +114,14 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
                                             ? { ...option, disabled: !!formValues.genre }
                                             : option
                                         )} 
+                                    />
+                                ) : field.name === "active" ? (
+                                    <Dropdown
+                                        name={field.name}
+                                        value={formValues.active ? 'Activo' : 'Inactivo'}
+                                        onChange={handleChange}
+                                        options={options.userActive} 
+                                        className="hola"
                                     />
                                 ) : null
                             ) : field.type === "textarea" ? (

@@ -36,9 +36,33 @@ const ordersList = [
     }
 ];
 
+const usersList = [
+    { 
+        header: 'Nombre del cliente', 
+        field: 'name' 
+    },
+    { 
+        header: 'Correo electrónico', 
+        field: 'email' 
+    },
+    { 
+        header: 'Estado', 
+        field: 'status' 
+    },
+    { 
+        header: 'Rol', 
+        field: 'role' 
+    },
+    { 
+        header: 'Acciones', 
+        field: 'actions' 
+    }
+];
+
 const columns = {
     productsList,
-    ordersList
+    ordersList,
+    usersList
 }
 
 export default columns;

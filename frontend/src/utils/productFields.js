@@ -3,13 +3,13 @@ import options from "./options";
 const fields = [
     { 
         name: "title", 
-        label: "Nombre del Producto", 
+        label: "Nombre del Producto *", 
         type: "text", 
         placeholder: "Ingresa el nombre del producto" 
     },
     { 
         name: "price", 
-        label: "Precio", 
+        label: "Precio *", 
         type: "text", 
         placeholder: "0.00" 
     },
@@ -27,19 +27,19 @@ const fields = [
     },
     {
         name: "genre",
-        label: "Seleccionar Género",
+        label: "Seleccionar Género *",
         type: "select",
         options: options.genreOptions,
     },
     { 
         name: "description", 
-        label: "Descripción", 
+        label: "Descripción *", 
         type: "textarea", 
         placeholder: "Descripción del producto" 
     },
     {
         name: "name",
-        label: "Seleccionar Plataforma",
+        label: "Seleccionar Plataforma *",
         type: "select",
         options: options.platformOptions,
     },
@@ -52,7 +52,7 @@ const fields = [
 ];
 
 const initialValues = {
-    name: "",
+    title: "",
     price: "",
     stock: 0,
     image: "",

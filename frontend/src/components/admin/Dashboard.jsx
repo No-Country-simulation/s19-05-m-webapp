@@ -12,7 +12,8 @@ import createProductSubmit from "../../utils/createProduct";
 import validateForm from "../../utils/validateForm";
 import productService from "../../services/products";
 import checkoutService from "../../services/checkouts";
-import createProductSchema from "../../validations/createProduct.schema";
+import userService from "../../services/users";
+import productSchema from "../../validations/product.schema";
 import "./dashboard.css";
 
 const Dashboard = () => {
@@ -21,6 +22,8 @@ const Dashboard = () => {
         hasError: productsError, refetch } = useFetch(productService.getProducts);
     const { data: orders, loading: ordersLoading, 
         hasError: ordersError } = useFetch(checkoutService.getCheckouts);
+    const { data: users, loading: usersLoading, 
+        hasError: usersError, refetch: usersRefetch } = useFetch(userService.getUsers);
     const [filterType, setFilterType] = useState("orders");
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
@@ -31,8 +34,11 @@ const Dashboard = () => {
     );
 
     const filteredData = filterType === "orders" 
-        ? orders?.filter(order => order.shopping_user?.toLowerCase().includes(searchTerm.toLowerCase())) 
-        : filteredProducts?.filter(product => product.title?.toLowerCase().includes(searchTerm.toLowerCase()));
+    ? orders?.filter(order => order.shopping_user?.toLowerCase().includes(searchTerm.toLowerCase())) 
+    : filterType === "users"
+      ? users?.filter(user => user.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+      : filteredProducts?.filter(product => product.title?.toLowerCase().includes(searchTerm.toLowerCase()));
+
 
     useEffect(() => {
         setSearchTerm("");
@@ -45,7 +51,7 @@ const Dashboard = () => {
 
     const handleCreateSubmit = async (formValues) => {
         setLoading(true);  
-        const validationResult = await validateForm(formValues, createProductSchema);
+        const validationResult = await validateForm(formValues, productSchema);
     
         if (!validationResult.isValid) {
             setErrors(validationResult.errors);
@@ -63,6 +69,7 @@ const Dashboard = () => {
             <h1 className="admin-title">Dashboard Administrador</h1>
             <div className="admin-buttons">
                 <button onClick={() => setFilterType("orders")}>Gestionar Pedidos</button>
+                <button onClick={() => setFilterType("users")}>Gestionar Usuarios</button>
             </div>
             <div className="admin-buttons">
                 <button onClick={openModal}>Crear producto</button>
@@ -85,11 +92,21 @@ const Dashboard = () => {
             </Modal>
             <SearchBar onSearch={setSearchTerm} searchTerm={searchTerm}/> 
             <Table 
-                columns={filterType === "orders" ? columns.ordersList : columns.productsList}
+                columns = { 
+                    filterType === "orders" 
+                    ? columns.ordersList 
+                    : filterType === "users" 
+                    ? columns.usersList 
+                    : columns.productsList 
+                }
                 data={filteredData} 
-                loadingData={filterType === "orders" ? ordersLoading : productsLoading}
-                errorData={filterType === "orders" ? ordersError : productsError} 
-                refetch={refetch}
+                loadingData={filterType === "orders" ? 
+                    ordersLoading : filterType === "users" ? 
+                    usersLoading : productsLoading}
+                errorData={filterType === "orders" ? 
+                    ordersError : filterType === "users" ? 
+                    usersError : productsError}
+                refetch={filterType !== "users" ? refetch : usersRefetch}
                 admin={true}
                 filterType={filterType}
             />
