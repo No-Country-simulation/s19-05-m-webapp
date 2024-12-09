@@ -1,10 +1,12 @@
 import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import "./GoogleAuth.css";
 import userService from "../../services/register";
 
 
 const Registro = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
       nombre: "",
       email: "",
@@ -64,6 +66,7 @@ const Registro = () => {
       phone: ""
     };
     userService.createUser(userData, setError)
+    userService.checkGoogle(userObject.email, dispatch)
   }
 
   useEffect(() => {

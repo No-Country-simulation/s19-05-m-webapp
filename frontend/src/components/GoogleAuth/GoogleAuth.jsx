@@ -2,9 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../store/slices/auth.slices";
 import "./GoogleAuth.css";
-import useFetch from "../../hooks/useFetch";
 import userService from "../../services/register";
 
 const GoogleAuth = ({isOpen, onClose}) => {
@@ -42,26 +40,14 @@ const GoogleAuth = ({isOpen, onClose}) => {
           setError(errorMessage);
         } else {
           setError("");
-          try {
-            const response = await userService.checkUser(formData.email); //usar checkuser con formData.email como parametro (cuando se pueda buscar por email al usuario)
-            if (formData.password == response.password) { //comparar contraseñas. no funciona debido a encriptación de contraseña en database
-                dispatch(setUser(response))
-                onClose() 
-            } else {
-                setError("La contraseña es incorrecta.")
-                console.log(formData.password, response.password) //temporal para comparar contraseña input y contraseña en database
-            }
-          } catch (err) {
-            console.error(err); 
-            setError("No se ha encontrado una cuenta con ese correo.") //cambiar mensaje para que ambos sean iguales.
-          }
+          userService.checkUser(formData.email, formData.password, setError, onClose, dispatch);
         }
     };
 
     function handleCallbackResponse(response) {
         var userObject = jwtDecode(response.credential);
-        dispatch(setUser(userObject));
-        onClose();
+        userService.checkGoogle(userObject.email, dispatch);
+        onClose()
     }
 
     useEffect(() => {
