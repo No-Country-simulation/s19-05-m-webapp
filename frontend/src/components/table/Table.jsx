@@ -3,13 +3,11 @@ import { Toaster } from "sonner";
 import Modal from "../modal/Modal";
 import Bill from "../bill/Bill";
 import Form from "../form/Form";
-import Dropdown from "../dropdown/Dropdown";
 import Loader from "../loader/Loader";
 import useModal from "../../hooks/useModal";
 import useBillDownload from "../../hooks/useBillDownload";
 import useFilteredTable from "../../hooks/useFilteredTable";
 import productFields from "../../utils/productFields";
-import options from "../../utils/options";
 import InfiniteScroll from "../infiniteScroll/InfiniteScroll";
 import updateProductSubmit from "../../utils/updateProduct";
 import deleteProductSubmit from "../../utils/deleteProduct";
@@ -23,8 +21,8 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
     const [modalTitle, setModalTitle] = useState("");
     const [modalHeight, setModalHeight] = useState("");
     const [className, setClassName] = useState("");
-    const [currentProduct, setCurrentProduct] = useState(null);
-    const { elementRef, downloadPDF } = useBillDownload(`factura_${currentProduct?.name}`);
+    const [currentObj, setCurrentObj] = useState(null);
+    const { elementRef, downloadPDF } = useBillDownload(`factura_${currentObj?.shopping_user}`);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -39,7 +37,7 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
             image: "" 
         };
 
-        setCurrentProduct(productWithEmptyFile);
+        setCurrentObj(productWithEmptyFile);
         
         switch (actionType) {
             case 'Editar':
@@ -51,14 +49,11 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
             case 'Ver':
                 setModalTitle('Factura');
                 break;
-            case 'Editar-estado':
-                setModalTitle('Editar Estado');
-                break;
             default:
                 setModalTitle('Acción no especificada');
         }
         
-        setModalHeight(actionType === 'Eliminar' || actionType === 'Editar-estado' ? '50vh' : '98vh');
+        setModalHeight(actionType === 'Eliminar' ? '50vh' : '98vh');
         setClassName(actionType === 'Editar' ? 'modal-admin' : "");
         openModal();
     };
@@ -72,7 +67,7 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
             setLoading(false);  
             return; 
         }
-    
+
         await updateProductSubmit(formValues, refetch);
         setLoading(false);  
         handleCloseModal(); 
@@ -114,16 +109,16 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
                         ) : data?.length === 0 ? (
                                 <tr>
                                     <td colSpan={columns.length}>
-                                        <p>No hay productos para mostrar</p>
+                                        <p>No hay {filterType === "orders" ? 'pedidos': 'productos'} para mostrar</p>
                                     </td>
                                 </tr>
-                        ) : visibleData?.slice().reverse().map((p) => (
-                                <tr key={p.id}> 
+                        ) : visibleData?.slice().reverse().map((obj) => (
+                                <tr key={obj.id}> 
                                     {
-                                        Object.keys(p)
+                                        Object.keys(obj)
                                             .filter((key) => key !== "id" && key !== "full")
                                             .map((key) => (
-                                                <td key={key}>{p[key]}</td> 
+                                                <td key={key}>{obj[key]}</td> 
                                             )
                                         )
                                     }
@@ -131,26 +126,20 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
                                         admin && filterType !== "orders" ? (
                                             <td className="container-admin-buttons">
                                                 <button className="btn-edit" 
-                                                    onClick={() => handleAction(p.full, "Editar")}>
+                                                    onClick={() => handleAction(obj.full, "Editar")}>
                                                     <i className="bx bx-edit"></i>
                                                 </button>
                                                 <button className="btn-delete" 
-                                                    onClick={() => handleAction(p.full, "Eliminar")}>
+                                                    onClick={() => handleAction(obj.full, "Eliminar")}>
                                                     <i className="bx bx-trash"></i>
                                                 </button>
                                             </td>
                                         ) : (
                                             <>
-                                                <td>
+                                                <td className="container-admin-buttons">
                                                     <button className="btn-see" 
-                                                        onClick={() => handleAction(p.full, "Ver")}>
+                                                        onClick={() => handleAction(obj.full, "Ver")}>
                                                         <i className="bx bx-show"></i>
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button className="btn-edit" 
-                                                        onClick={() => handleAction(p.full, "Editar-estado")}>
-                                                        <i className="bx bx-edit"></i>
                                                     </button>
                                                 </td>
                                             </>
@@ -170,33 +159,24 @@ const Table = ({ columns, data, loadingData, errorData, refetch, admin = false, 
                 className={className}>
                 <div>
                     {
-                        modalTitle === 'Editar Producto' && currentProduct ? (
+                        modalTitle === 'Editar Producto' && currentObj ? (
                             <Form
                                 fields={productFields.fields} 
                                 onSubmit={handleUpdateSubmit}
-                                initialValues={currentProduct}
+                                initialValues={currentObj}
                                 className="form-admin"
                                 buttonText={loading ? "Cargando..." : "Actualizar producto"}
                                 errors={errors}
                             />
-                    ) : modalTitle === 'Factura' && currentProduct ? (
+                    ) : modalTitle === 'Factura' && currentObj ? (
                         <div ref={elementRef}>
-                            <Bill product={currentProduct} />
-                        </div>
-                    ) : modalTitle === 'Editar Estado' && currentProduct ? ( 
-                        <div className="container-order">
-                            <p>Cambiar estado del pedido de <strong>{currentProduct?.name}</strong></p>
-                            <Dropdown 
-                                options={options.statusOptions} />
-                            <button>
-                                {loading ? "Cargando..." : "Confirmar"}
-                            </button>
+                            <Bill order={currentObj} />
                         </div>
                     ) : (
                         <div className="container-delete">
-                            <p>¿Estás seguro de eliminar el producto <strong>{currentProduct?.title}</strong>?</p>
+                            <p>¿Estás seguro de eliminar el producto <strong>{currentObj?.title}</strong>?</p>
                             <button 
-                                onClick={() => handleDeleteSubmit(currentProduct?.id_product)}>
+                                onClick={() => handleDeleteSubmit(currentObj?.id_product)}>
                                 {loading ? "Cargando..." : "Confirmar"}
                             </button>
                         </div>

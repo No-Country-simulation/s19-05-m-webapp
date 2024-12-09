@@ -10,7 +10,7 @@ const useBillDownload = (fileName) => {
 
         if (content) {
             const textElements = [
-                ...content.querySelectorAll("h1, h2, p, ul li")
+                ...content.querySelectorAll("h1, h2, p, th, td")
             ];
 
             const originalColors = textElements.map((el) => el.style.color);
@@ -30,7 +30,7 @@ const useBillDownload = (fileName) => {
 
             const imgData = canvas.toDataURL("image/png");
             const pdf = new jsPDF();
-            pdf.addImage(imgData, "PNG", 10, 10, 150, 150);
+            pdf.addImage(imgData, "PNG", 10, 10, 120, 150);
             pdf.save(`${fileName}.pdf`);
         }
     };

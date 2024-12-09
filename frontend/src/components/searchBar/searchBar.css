@@ -1,0 +1,28 @@
+.search-bar-container {
+    position: relative;
+}
+
+.search-icon {
+    color: var(--second-color);
+    font-size: 20px;
+    left: 10px;
+    position: absolute;
+    top: 16px;
+}
+
+.search-table {
+    background-color: transparent !important;
+    border: 1px solid var(--second-color);
+    border-radius: 8px;
+    color: var(--second-color);
+    font-size: 16px;
+    margin-bottom: 40px;
+    padding: 10px 40px;
+    width: 100%;
+}
+
+@media (min-width: 992px) {
+    .search-table {
+        width: 50%;
+    }
+}

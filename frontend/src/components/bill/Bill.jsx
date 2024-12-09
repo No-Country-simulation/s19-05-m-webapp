@@ -1,22 +1,36 @@
+import formatDate from "../../utils/formatDate";
 import "./bill.css";
 
-const Bill = ({ product }) => {
+const Bill = ({ order }) => {
     return (
         <div className="container-bill">
             <img src="/logo.png" alt="checkpoint logo" className="bill-logo" />
-            <h2 className="bill-title">Factura #254861</h2>
+            <h2 className="bill-title">Factura {order.id_checkout}</h2>
             <div className="bill-detail">
-                <p><strong>Fecha de compra:</strong> 30/11/2024</p>
-                <p><strong>Comprador:</strong> {product?.name}</p>
-                <p><strong>Productos:</strong></p>
-                <ul className="bill-list">
-                    <li>Producto 1 - $1</li>
-                    <li>Producto 2 - $54</li>
-                    <li>Producto 3 - $30</li>
-                    <li>Producto 4 - $20</li>
-                </ul>
+                <p><strong>Fecha de compra:</strong> {formatDate(order.date_checkout)}</p>
+                <p><strong>Comprador:</strong> {order.shopping_user}</p>
+                <table className="custom-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    order.shopping_products.map((p) => (
+                        <tr key={p.products_id}>
+                            <td>Producto</td>
+                            <td>{p.quantity}</td>
+                            <td>${p.price}</td>
+                        </tr>
+                    ))
+                }
+            </tbody>
+        </table>
             </div>
-            <h2 className="bill-total">Total pagado: $105</h2>
+            <h2 className="bill-total">Total pagado: ${order.total}</h2>
         </div>
     );
 };

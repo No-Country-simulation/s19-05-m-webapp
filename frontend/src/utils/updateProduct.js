@@ -18,7 +18,7 @@ const updateProductSubmit = async (formValues, refetch) => {
         delete updatedFormValues.image; 
     }
     
-    updatedFormValues.platforms = [{ platform: name, model: model }];
+    updatedFormValues.platforms = [{ name: name, model: model }];
     delete updatedFormValues.name; 
     delete updatedFormValues.model;
     
