@@ -1,20 +1,17 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./Product.entity";
 
 @Entity()
 export class Platforms {
+  @PrimaryGeneratedColumn()
+  id_platform!: number;
 
-    @PrimaryGeneratedColumn()
-    id_platform!: number;
+  @Column({ length: 50 /* unique: true */ }) //pa que no se repitan los nombres
+  name: string;
 
-    @Column({ length: 50 })
-    name: string;
-    
-    @Column({ length: 50 })
-    model: string;
+  @Column({ length: 50 })
+  model: string;
 
-    @ManyToOne(() => Product, (product) => product.id_product)
-    @JoinColumn({ name: "product"})
-    product: Product;
-
+  @ManyToMany(() => Product, (product) => product.platforms)
+  products!: Product[];
 }

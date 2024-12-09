@@ -9,7 +9,7 @@ const checkoutController = new CheckoutController();
  * tags:
  *   name: Checkout
  *   description: API for managing the checkout process, including handling transactions for cart purchases and interacting with the service to complete orders.
-*/
+ */
 
 /**
  * @swagger
@@ -24,7 +24,10 @@ const checkoutController = new CheckoutController();
  *       400:
  *         description: Invalid input data.
  */
-checkoutRouter.post("/order", checkoutController.createOrderController);
+checkoutRouter.post(
+  "/order",
+  /* authJWTMiddleware, */ checkoutController.createOrderController
+);
 
 /**
  * @swagger
@@ -39,7 +42,10 @@ checkoutRouter.post("/order", checkoutController.createOrderController);
  *       404:
  *         description: Order not found.
  */
-checkoutRouter.get("/capture", checkoutController.captureOrderController);
+checkoutRouter.get(
+  "/capture",
+  /* authJWTMiddleware, */ checkoutController.captureOrderController
+);
 
 /**
  * @swagger
@@ -54,22 +60,36 @@ checkoutRouter.get("/capture", checkoutController.captureOrderController);
  *       404:
  *         description: Order not found.
  */
-checkoutRouter.get("/cancel", checkoutController.cancelOrderController);
+checkoutRouter.get(
+  "/cancel",
+  /* authJWTMiddleware, */ checkoutController.cancelOrderController
+);
 
 /**
  * @swagger
- * /checkout:
+ * /api/checkouts:
  *   get:
  *     summary: Get all checkouts
+ *     tags: [Checkout]
  *     description: Retrieves a list of all checkouts.
  *     responses:
  *       200:
  *         description: A list of all checkouts.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Checkout'
  */
-checkoutRouter.get("/", checkoutController.getAllCheckoutController);
+checkoutRouter.get(
+  "/",
+  /* authJWTMiddleware, adminMiddleware, */ checkoutController.getAllCheckoutController
+);
+
 /**
  * @swagger
- * /checkout/{id}:
+ * /api/checkouts/{id}:
  *   get:
  *     summary: Get a checkout by ID
  *     tags: [Checkout]
@@ -84,10 +104,74 @@ checkoutRouter.get("/", checkoutController.getAllCheckoutController);
  *     responses:
  *       200:
  *         description: Checkout found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Checkout'
  *       404:
  *         description: Checkout not found.
  */
-checkoutRouter.get("/:id", checkoutController.getCheckoutByIdController);
-checkoutRouter.get("/status/:status", checkoutController.getCheckoutByIdController);
+checkoutRouter.get(
+  "/:id",
+  /* authJWTMiddleware, */ checkoutController.getCheckoutByIdController
+);
+
+/**
+ * @swagger
+ * /api/checkouts/status/{status}:
+ *   get:
+ *     summary: Get checkouts by status
+ *     tags: [Checkout]
+ *     description: Retrieves a list of checkouts by their status (PENDING, DECLINED, PAID).
+ *     parameters:
+ *       - in: path
+ *         name: status
+ *         required: true
+ *         description: The status of the checkouts to retrieve (PENDING, DECLINED, PAID).
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of checkouts with the specified status.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Checkout'
+ *       404:
+ *         description: No checkouts found with the specified status.
+ */
+checkoutRouter.get("/status/:status", 
+  /* authJWTMiddleware, */ checkoutController.getCheckoutsByStatusController);
+
+/**
+ * @swagger
+ * /api/checkouts/user/{userId}:
+ *   get:
+ *     summary: Get the checkouts for a user
+ *     tags: [Checkout]
+ *     description: Retrieves a list of checkouts by user.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: Retrieves a list of checkouts by user.
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: A list of checkouts with the specified user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Checkout'
+ *       404:
+ *         description: No checkouts found with the specified status.
+ */
+checkoutRouter.get("/user/:userId", 
+  /* authJWTMiddleware, */checkoutController.getCheckoutsByUserController);
 
 export default checkoutRouter;

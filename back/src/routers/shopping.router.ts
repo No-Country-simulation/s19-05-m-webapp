@@ -27,7 +27,10 @@ const shoppingController = new ShoppingController();
  *               items:
  *                 $ref: '#/components/schemas/Shopping'
  */
-shoppingRouter.get("", shoppingController.getAllShoppingController);
+shoppingRouter.get(
+  "",
+  /* authJWTMiddleware, adminMiddleware, */ shoppingController.getAllShoppingController
+);
 
 /**
  * @swagger
@@ -67,7 +70,10 @@ shoppingRouter.get("", shoppingController.getAllShoppingController);
  *       500:
  *         description: Internal server error.
  */
-shoppingRouter.post("", shoppingController.createShoppingController);
+shoppingRouter.post(
+  "",
+  /* authJWTMiddleware, */ shoppingController.createShoppingController
+);
 
 /**
  * @swagger
@@ -100,7 +106,10 @@ shoppingRouter.post("", shoppingController.createShoppingController);
  *       404:
  *         description: Shopping cart or product not found.
  */
-shoppingRouter.put("/:user/:product", shoppingController.updateShoppingController);
+shoppingRouter.put(
+  "/:user/:product" /* authJWTMiddleware, */,
+  shoppingController.updateShoppingController
+);
 
 /**
  * @swagger
@@ -129,7 +138,10 @@ shoppingRouter.put("/:user/:product", shoppingController.updateShoppingControlle
  *       500:
  *         description: Internal server error.
  */
-shoppingRouter.patch("/:user", shoppingController.paymentPurchasesController);
+shoppingRouter.patch(
+  "/:user",
+  /* authJWTMiddleware, */ shoppingController.paymentPurchasesController
+);
 
 /**
  * @swagger
@@ -174,6 +186,9 @@ shoppingRouter.patch("/:user", shoppingController.paymentPurchasesController);
  *       500:
  *         description: Internal server error.
  */
-shoppingRouter.delete("/:user/:product", shoppingController.deleteShoppingController);
+shoppingRouter.delete(
+  "/:user/:product" /* authJWTMiddleware, */,
+  shoppingController.deleteShoppingController
+);
 
 export default shoppingRouter;

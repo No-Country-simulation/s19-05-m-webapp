@@ -11,6 +11,7 @@ import { StatusCheckout } from "../entity/Checkout.entity";
  *     Checkout:
  *       type: object
  *       required:
+ *         - id_checkout
  *         - status
  *         - date_checkout
  *         - shopping_user
@@ -21,9 +22,10 @@ import { StatusCheckout } from "../entity/Checkout.entity";
  *           description: The unique identifier for the checkout entry
  *         status:
  *           type: string
- *           description: The status of the checkout, can be either "PAID" or "DECLINED"
+ *           description: The status of the checkout, can be either "PAID", "PENDING" or "DECLINED"
  *           enum:
  *             - "PAID"
+ *             - "PENDING"
  *             - "DECLINED"
  *         date_checkout:
  *           type: string
@@ -37,34 +39,13 @@ import { StatusCheckout } from "../entity/Checkout.entity";
  *           type: integer
  *           description: The product ID associated with this checkout
  *         shopping:
- *           $ref: '#/components/schemas/Shopping'  # Reference to the Shopping schema
+ *           $ref: '#/components/schemas/Checkout'  # Reference to the Shopping schema
  *       example:
  *         id_checkout: 1
  *         status: "PAID"
  *         date_checkout: "2024-11-26T12:00:00Z"
  *         shopping_user: 1
  *         shopping_products: 101
- *         shopping:
- *           - user_id: 1
- *             products_id: 101
- *             state: "PENDING"
- *             quantity: 2
- *             users:
- *               id_users: 1
- *               name: "John Doe"
- *               email: "johndoe@example.com"
- *               active: true
- *               role: "USER"
- *             products:
- *               id_product: 101
- *               title: "Laptop"
- *               price: 1200.50
- *               available: true
- *               description: "High-end gaming laptop"
- *               type: "Electronics"
- *               image: "laptop.jpg"
- *               genre: "Technology"
- *               stock: 50
  */
 
 export class CheckoutController {
@@ -73,19 +54,58 @@ export class CheckoutController {
 
     constructor () {
         this.checkoutService = new CheckoutService(AppDataSource);
-        this.getAllCheckoutController = this.getAllCheckoutController.bind(this);
-        this.getCheckoutByIdController = this.getCheckoutByIdController.bind(this);
-        this.getCheckoutsWithStatusController = this.getCheckoutsWithStatusController.bind(this);
+
         this.createOrderController = this.createOrderController.bind(this);
         this.captureOrderController = this.captureOrderController.bind(this);
         this.cancelOrderController = this.cancelOrderController.bind(this);
+
+        this.getAllCheckoutController = this.getAllCheckoutController.bind(this);
+        this.getCheckoutByIdController = this.getCheckoutByIdController.bind(this);
+        this.getCheckoutsByStatusController = this.getCheckoutsByStatusController.bind(this);
+        this.getCheckoutsByUserController = this.getCheckoutsByUserController.bind(this);
+    }
+
+    async createOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const { shopping, amount } = req.body;
+        if (!shopping || !amount) return ControllerHandler.badRequest("Mandatory parameters missing: shopping and amount", res);
+        try {
+            const order = await this.checkoutService.createOrder(shopping, amount);
+            return ControllerHandler.ok("Order created successfully", res);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async captureOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const token = req.query.token as string;
+        const payerID = req.query.PayerID as string;
+        if (!token || !payerID) return ControllerHandler.badRequest("Token and PayerID are required", res);
+        try {
+            const checkoutRecords = await this.checkoutService.captureOrder(token, payerID);
+            return ControllerHandler.ok("Order captured successfully", res);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async cancelOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const token = req.query.token as string;
+        try {
+            if (!token) return ControllerHandler.badRequest("Order ID is required", res);
+            const order = await this.checkoutService.cancelOrder(token);
+            if(order.length === 0)
+                return ControllerHandler.badRequest("No orders found to cancel.", res);
+            return ControllerHandler.ok(`Order ${token} successfully called`, res);
+        } catch (error) {
+            next(error);
+        }
     }
 
     async getAllCheckoutController(req: Request, res: Response, next: NextFunction):Promise<any> {
         try {
             const checkouts = await this.checkoutService.getAllCheckout();
             if(!checkouts || checkouts.length === 0) return ControllerHandler.ok("No checkout data available", res, []);
-            return ControllerHandler.ok("All checkouts retrieved successfully", res, checkouts)    
+            return ControllerHandler.ok("All checkouts successfully retrieved", res, checkouts)    
         } catch (error) {
             next(error);
         }
@@ -102,50 +122,26 @@ export class CheckoutController {
         }
     }
 
-    async getCheckoutsWithStatusController(req: Request, res: Response, next: NextFunction):Promise<any> {
+    async getCheckoutsByStatusController(req: Request, res: Response, next: NextFunction):Promise<any> {
+        const { status } = req.params;
         try {
-            const { status } = req.params;
-            const checkouts = await this.checkoutService.getCheckoutsWithStatus(status as StatusCheckout);
-            return ControllerHandler.ok("Checkouts with specified status retrieved successfully", res, checkouts);
+            const checkoutStatus = await this.checkoutService.getCheckoutsByStatus(status as StatusCheckout);
+            return ControllerHandler.ok("Checkouts retrieved successfully", res, checkoutStatus);
         } catch (error) {
-            next(error);
+            next(error)
         }
     }
 
-    async createOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const { shopping, amount } = req.body;
-        if (!shopping || !amount) return ControllerHandler.badRequest("Mandatory parameters missing: shopping and amount", res);
+    async getCheckoutsByUserController(req: Request, res: Response, next: NextFunction):Promise<any> {
+        const { userId } = req.params;
+        const user = parseInt(userId, 10)
         try {
-            const order = await this.checkoutService.createOrder(shopping, amount);
-            return ControllerHandler.ok("Order created successfully", res, order);
+            const checkoutUser = await this.checkoutService.getCheckoutsByUser(user);
+            return ControllerHandler.ok("Checkouts retrieved successfully", res, checkoutUser);
         } catch (error) {
             next(error);
         }
-    }
 
-    async captureOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const token = req.query.token as string;
-        const payerID = req.query.PayerID as string;
-        if (!token || !payerID) return ControllerHandler.badRequest("Token and PayerID are required", res);
-        try {
-            const checkoutRecords = await this.checkoutService.captureOrder(token, payerID);
-            return ControllerHandler.ok("Order captured successfully", res, checkoutRecords);
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    async cancelOrderController(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const token = req.query.token as string;
-        try {
-            if (!token) return ControllerHandler.badRequest("Order ID is required", res);
-            const order = await this.checkoutService.cancelOrder(token);
-            if(order.length === 0)
-                return ControllerHandler.badRequest("No orders found to cancel.", res);
-            return ControllerHandler.ok(`Order with ID ${token} has been canceled.`, res)
-        } catch (error) {
-            next(error);
-        }
     }
 
 }

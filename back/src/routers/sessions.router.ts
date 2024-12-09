@@ -7,14 +7,6 @@ const userController = new UserController();
 
 /**
  * @swagger
- * tags:
- *   name: Sessions
- *   description: API for managing sessions, including register, login, online, signout sessions and Google oauth.
- */
-
-/*
-*
- * @swagger
  * components:
  *   schemas:
  *     Checkout:

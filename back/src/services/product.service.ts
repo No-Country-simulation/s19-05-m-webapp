@@ -1,11 +1,19 @@
 import { productRepository } from "../repositories/product.repository";
 import { Product } from "../entity/Product.entity";
+import { platformRepository } from "../repositories/platform.repository";
+import { PlatformService } from "./platform.service";
+import { In } from "typeorm";
 
 export class ProductService {
+  private readonly platformService: PlatformService;
+
+  constructor() {
+    this.platformService = new PlatformService();
+  }
 
   async getAllProducts(): Promise<Product[]> {
     return await productRepository.find({
-      relations: ["platforms"], 
+      relations: ["platforms"],
     });
   }
 
@@ -26,7 +34,7 @@ export class ProductService {
     try {
       return await productRepository.findOne({
         where: { id_product: id },
-        relations: ["platforms"], 
+        relations: ["platforms"],
       });
     } catch (error) {
       console.error("Error in ProductService (getProductById):", error);
@@ -36,8 +44,22 @@ export class ProductService {
 
   async createProduct(productData: Partial<Product>): Promise<Product> {
     try {
-      const newProduct = productRepository.create(productData);
-      return await productRepository.save(newProduct);
+      const { platforms, ...productDetails } = productData;
+
+      //crear el producto sin plataformas
+      const newProduct = productRepository.create(productDetails);
+
+      if (platforms && Array.isArray(platforms)) {
+        //obtener o crear las plataformas
+        const allPlatforms = await this.platformService.findOrCreatePlatforms(
+          platforms
+        );
+        newProduct.platforms = allPlatforms;
+      }
+
+      await productRepository.save(newProduct);
+
+      return newProduct;
     } catch (error) {
       console.error("Error creating product (createProduct):", error);
       throw new Error("Failed to create product");
@@ -51,14 +73,39 @@ export class ProductService {
     try {
       const product = await productRepository.findOne({
         where: { id_product: id },
+        relations: ["platforms"],
       });
+      if (!product) return null;
 
-      if (!product) {
-        return null;
+      const { platforms, ...productDetails } = productData;
+
+      //actualizar el producto sin las pltformas (merge)
+      productRepository.merge(product, productDetails);
+      await productRepository.save(product);
+
+      if (platforms && Array.isArray(platforms)) {
+        //limpiar las plataforma actuales para asignar las nuevas
+        product.platforms = [];
+        await productRepository.save(product);
+
+        const allPlatforms = await this.platformService.findOrCreatePlatforms(
+          platforms
+        );
+
+        product.platforms = allPlatforms;
+        await productRepository.save(product);
+      } else {
+        //si no se proporcionan plataformas, se limpian las actuales
+        product.platforms = [];
+        await productRepository.save(product);
       }
 
-      productRepository.merge(product, productData); //merge es para combinar o actualizar (de typeorm)
-      return await productRepository.save(product);
+      const updatedProduct = await productRepository.findOne({
+        where: { id_product: id },
+        relations: ["platforms"],
+      });
+
+      return updatedProduct!;
     } catch (error) {
       console.error("Error updating product (updateProduct):", error);
       throw new Error("Failed to update product");
@@ -67,7 +114,9 @@ export class ProductService {
 
   async deleteProduct(id: number) {
     try {
-      const product = await productRepository.findOne({where: {id_product: id}});
+      const product = await productRepository.findOne({
+        where: { id_product: id },
+      });
       if (!product) throw new Error(`Product with ID ${id} not found`);
       return await productRepository.remove(product);
     } catch (error) {
@@ -91,7 +140,7 @@ export class ProductService {
 
   async getProductsByGenre(genre: string): Promise<Product[]> {
     try {
-        console.log("Searching for products with genre:", genre);
+      console.log("Searching for products with genre:", genre);
       return await productRepository.find({
         where: { genre },
         relations: ["platforms"],
@@ -102,6 +151,3 @@ export class ProductService {
     }
   }
 }
-
-    
-

@@ -247,16 +247,104 @@ export class CheckoutService {
 	}
 
 	async getAllCheckout(): Promise<Checkout[]> {
-		return await checkoutRepository.find();
-	}
+		const allCheckouts = await checkoutRepository.find({
+			relations: {
+				shopping: {
+					products: true,
+					users: true
+				}
+			}
+		});
 
-	async getCheckoutsWithStatus(status: StatusCheckout): Promise<Checkout[]> {
-		if (!Object.values(StatusCheckout).includes(status)) throw new Error(`Invalid status: ${status}`);
-		return await checkoutRepository.find({ where: { status: status } });
+		return this.transformCheckouts(allCheckouts);
 	}
 
 	async getCheckoutById(id: string): Promise<Checkout []> {
-		return await checkoutRepository.find({ where: { id_checkout: id } });
+		const idCheckouts = await checkoutRepository.find({ 
+			where: { id_checkout: id },
+			relations: {
+				shopping: {
+					products: true,
+					users: true
+				}
+			} 
+		});
+		
+		return this.transformCheckouts(idCheckouts);
+	}
+
+	async getCheckoutsByStatus(status: StatusCheckout): Promise<Checkout[]> {
+		const statusCheckouts = await checkoutRepository.find({
+			where: { status },
+			relations: {
+				shopping: {
+					products: true,
+					users: true
+				},
+			}
+		});
+		
+		return this.transformCheckouts(statusCheckouts);
+	}
+
+	async getCheckoutsByUser(userId: number): Promise<Checkout[]> {
+		const rawCheckouts = await checkoutRepository.find({
+			where: { shopping_user: userId },
+			relations: {
+				shopping: {
+					products: true,
+					users: true
+				}
+			}
+		});
+
+		return this.transformCheckouts(rawCheckouts);
+
+	}
+
+	private transformCheckouts(checkouts: any[]): any[] {
+
+		const grouped = checkouts.reduce((acc, item) => {
+			const {
+			  id_checkout,
+			  status,
+			  date_checkout,
+			  shopping_user,
+			  shopping_products,
+			  shopping,
+			} = item;
+
+			const userName = shopping.users?.name || "Name unknown";
+		
+			let existingCheckout = acc.find((c: any) => c.id_checkout === id_checkout);
+		
+			if (!existingCheckout) {
+			  existingCheckout = {
+				id_checkout,
+				status,
+				date_checkout,
+				shopping_user: userName,
+				shopping_products: [],
+				total: 0,
+			  };
+			  acc.push(existingCheckout);
+			}
+
+			const price = shopping.products?.price || 0;
+
+			existingCheckout.shopping_products.push({
+			  products_id: shopping.products_id,
+			  state: shopping.state,
+			  quantity: shopping.quantity,
+			  price,
+			});
+
+			existingCheckout.total += shopping.quantity * (price || 0);
+		
+			return acc;
+		  }, []);
+		
+		  return grouped;
 	}
 	
 }
