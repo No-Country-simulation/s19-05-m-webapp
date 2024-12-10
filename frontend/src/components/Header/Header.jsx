@@ -11,26 +11,39 @@ import { logout } from "../../store/slices/auth.slices";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
 
 const Header = () => {
-  const [inputSearch, setInputSearch] = useState();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { isModalOpen, openModal, closeModal } = useModal();
   const { totalQuantity } = useCart();
   const { isLoginOpen, openLogin, closeLogin } = useLogin();
-
-  const handleLinkClick = () => {
-    setMenuOpen(false);
-  };
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const [isWideViewport, setIsWideViewport] = useState(window.innerWidth > 992);
 
-  function handleSignOut(event) {
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWideViewport(window.innerWidth > 992);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleSignOut = () => {
     dispatch(logout());
     google.accounts.id.disableAutoSelect();
-  }
+    setIsDropdownOpen(false);
+  };
 
-  /* *********Search**************** */
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const handleLinkClick = () => {
+    setMenuOpen(false);
+    setIsDropdownOpen(false);
+  };
 
   const inputValue = useRef();
 
@@ -43,15 +56,6 @@ const Header = () => {
       }
     }
   };
-
-  /* ************************* */
-  useEffect(() => {
-    if (user) {
-      document.getElementById("iniciar-sesion-header").style.display = "none";
-    } else {
-      document.getElementById("iniciar-sesion-header").style.display = "block";
-    }
-  }, [user]);
 
   return (
     <header className="header-container">
@@ -113,25 +117,56 @@ const Header = () => {
               Productos
             </Link>
           </li>
-          <li
-            className="header-item header-item-link"
-            id="iniciar-sesion-header"
-            onClick={openLogin}
-          >
-            Iniciar sesión
-          </li>
-          <GoogleAuth isOpen={isLoginOpen} onClose={closeLogin} />
-          {user && (
-            <>
-              <li
-                className="header-item header-item-link"
-                onClick={handleSignOut}
-              >
-                Desconectarse
-              </li>
-              <li className="header-username">{user.name}</li>
-            </>
+          {user && isWideViewport ? (
+            <li
+              className="header-item header-username"
+              onClick={toggleDropdown}
+            >
+              {user.name}
+              {isDropdownOpen && (
+                <ul className="dropdown-menu">
+                  <li>
+                    <Link
+                      className="dropdown-item"
+                      to="/historial"
+                      onClick={handleLinkClick}
+                    >
+                      Historial
+                    </Link>
+                  </li>
+                  <li className="dropdown-item" onClick={handleSignOut}>
+                    Desconectarse
+                  </li>
+                </ul>
+              )}
+            </li>
+          ) : (
+            user && (
+              <>
+                <li className="header-item">
+                  <Link
+                    to="/historial"
+                    className="header-item-link"
+                    onClick={handleLinkClick}
+                  >
+                    Historial
+                  </Link>
+                </li>
+                <li
+                  className="header-item header-item-link"
+                  onClick={handleSignOut}
+                >
+                  Desconectarse
+                </li>
+              </>
+            )
           )}
+          {!user && (
+            <li className="header-item header-item-link" onClick={openLogin}>
+              Iniciar sesión
+            </li>
+          )}
+          <GoogleAuth isOpen={isLoginOpen} onClose={closeLogin} />
         </ul>
       </nav>
     </header>
