@@ -1,6 +1,6 @@
 import cors from "cors";
 import morgan from "morgan";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { errorHandler } from "./middlewares/errorHandler.mid";
 import { pathHandler } from "./middlewares/pathHandler.mid";
 import indexRouter from "./routers/index.router";
@@ -11,10 +11,16 @@ import { SECRET_KEY } from "./config/env";
 const server = express();
 
 server.use(cors({
-    origin: ['https://checkpoint-zone.vercel.app', 'http://localhost:5173'], // Agrega tu dominio de Vercel
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    //credentials: true,
+    origin: ['https://checkpoint-zone.vercel.app', 'http://localhost:5173'], // Dominios permitidos
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Métodos permitidos
+    credentials: true, // Permitir credenciales como cookies
 }));
+//Cross-Origin-*
+server.use((req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+    next();
+});
 server.use(express.json());
 server.use(express.urlencoded({ extended: true })); // middelware para leer los params
 server.use(morgan("dev"));

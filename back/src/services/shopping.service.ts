@@ -12,6 +12,10 @@ export class ShoppingService {
 		return await shoppingRepository.find({ relations: ["users", "products"] });
 	}
 
+	async getShoppingByUserId(id: number): Promise<Shopping[]> {
+		return await shoppingRepository.find({ where: { user_id: id }, relations: ["users", "products"] });
+	}
+
 	async createShopping(data: {user_id: number;products_id: number;quantity: number;}) {
 		try {
 

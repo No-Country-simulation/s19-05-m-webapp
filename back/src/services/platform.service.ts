@@ -17,7 +17,7 @@ export class PlatformService {
   // Crear una plataforma únicamente si no existe en la base de datos
   async createPlatformIfNotExists(data: PlatfomsDto): Promise<Platforms> {
     const existing = await platformRepository.findOne({
-      where: { name: data.name },
+      where: { model: data.model }, //por si existe una plataforma con el mismo modelo
     });
     if (existing) {
       return existing;
@@ -30,26 +30,30 @@ export class PlatformService {
   async findOrCreatePlatforms(
     platformDtos: PlatfomsDto[]
   ): Promise<Platforms[]> {
-    const platformNames = platformDtos.map((p) => p.name);
+    const platformModel = platformDtos.map((p) => p.model);
 
-    // Buscar plataformas existentes por nombre
+    // Buscar plataformas existentes por modelos
     const existingPlatforms = await platformRepository.find({
-      where: { name: In(platformNames) },
+      where: { model: In(platformModel) },
     });
+    const existingModel = existingPlatforms.map((p) => p.model);
 
-    const existingNames = existingPlatforms.map((p) => p.name);
+    const existingModels = existingPlatforms.map((p) => p.model);
 
     // Filtrar las que no existen
     const newPlatformDtos = platformDtos.filter(
-      (p) => !existingNames.includes(p.name)
+      (p) => !existingModels.includes(p.model)
     );
 
     // Crear las nuevas plataformas que no están en la base
-    const newPlatforms = await Promise.all(
-      newPlatformDtos.map((dto) => this.createPlatformIfNotExists(dto))
-    );
+    const platformsToCreate = platformRepository.create(newPlatformDtos);
 
-    // Unir las existentes con las nuevas
+    // Guardar todas las nuevas plataformas de una sola vez (una sola consulta)
+    const newPlatforms =
+      platformsToCreate.length > 0
+        ? await platformRepository.save(platformsToCreate)
+        : [];
+
     return [...existingPlatforms, ...newPlatforms];
   }
 
