@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { PaypalIcon } from "./PaypalIcon";
 import Loader from "../loader/Loader";
 import { useState } from "react";
@@ -16,10 +16,10 @@ export const Payment = ({
   error,
 }) => {
   const shipping = useSelector((state) => state.Shipping);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);  
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(""); // Estado para el estado del pago
 
   const handlePaypalClick = () => {
-    console.log("paymentId", paymentId);
     if (paymentUrl) {
       const popup = window.open(
         paymentUrl,
@@ -39,12 +39,14 @@ export const Payment = ({
               const check = resp[0];
 
               if (check.status === "PAID") {
+                setPaymentStatus("paid"); 
                 toast.success("Compra realizada con éxito");
-                
+                localStorage.removeItem("payment");
               } else if (check.status === "DECLINED") {
+                setPaymentStatus("cancelled");
                 toast.error("Compra rechazada");
+                localStorage.removeItem("payment");
               }
-
             } catch (err) {
               console.error(err);
               toast.error("Ocurrió un error al verificar el estado del pago");
@@ -59,14 +61,16 @@ export const Payment = ({
     }
   };
 
+  const handleRetry = () => {
+    window.location.reload(); // Refresca la página actual
+  };
+
   return (
     <div className="container">
       <Toaster richColors position="bottom-center" />
-      {/* Overlay que cubre la página */}
       {isPopupOpen && <div className="overlay"></div>}
 
       <div className={`checkout-box ${isPopupOpen ? "disabled" : ""}`}>
-        {/* Sección Resumen */}
         <div className="resume">
           <h2>Resumen</h2>
           <div className="summary-item">
@@ -86,14 +90,12 @@ export const Payment = ({
           </div>
         </div>
         <div className="shop">
-          {/* Sección Compra */}
           <h2>Compra</h2>
           {products.map((product, index) => (
             <div key={index} className="summary-item">
               <p>
-                Juego: {product.title} {/* ({product.platform}) */} - $
-                {product.price.toFixed(2)} {""}
-                &#40;{product.quantity}&#41;
+                Juego: {product.title} - ${product.price.toFixed(2)} &#40;
+                {product.quantity}&#41;
               </p>
             </div>
           ))}
@@ -102,7 +104,6 @@ export const Payment = ({
             <strong>Total:</strong> {totalAmount.toFixed(2)}$
           </p>
 
-          {/* Sección Total */}
           <div className="total-container">
             <h2 style={{ textAlign: "left" }}>Medio de pago</h2>
             <div className="pay-button">
@@ -110,6 +111,20 @@ export const Payment = ({
                 <Loader />
               ) : error ? (
                 <p className="error-message">{error}</p>
+              ) : paymentStatus === "paid" ? (
+                <div className="paid-section">
+                  <p className="success-message">Pagado</p>
+                  <Link to="/" className="return-button">
+                    Regresar a la tienda
+                  </Link>
+                </div>
+              ) : paymentStatus === "cancelled" ? (
+                <div className="cancelled-section">
+                  <p className="error-message">Cancelado</p>
+                  <button className="next-button" onClick={handleRetry}>
+                    Reintentar
+                  </button>
+                </div>
               ) : (
                 <button
                   className="next-button"
@@ -135,13 +150,16 @@ export const Payment = ({
           </div>
         </div>
       </div>
-      <button
-        className="back-button btn-box"
-        onClick={onGoBack}
-        disabled={isPopupOpen}
-      >
-        Regresar
-      </button>
+
+      {paymentStatus !== "paid" && paymentStatus !== "cancelled" && (
+        <button
+          className="back-button btn-box"
+          onClick={onGoBack}
+          disabled={isPopupOpen}
+        >
+          Regresar
+        </button>
+      )}
     </div>
   );
 };

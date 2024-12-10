@@ -36,6 +36,16 @@ export const CheckoutPage = () => {
         setIsLoading(true);
         setError("");
 
+        const storedPayment = JSON.parse(
+          localStorage.getItem("payment") || "{}"
+        );
+        if (storedPayment?.url && storedPayment?.id) {
+          console.log("Enlace de pago existente encontrado.");
+          setPaymentUrl(storedPayment.url);
+          setPaymentId(storedPayment.id);
+          return;
+        }
+
         const localUser = JSON.parse(localStorage.getItem("user") || "{}");
         if (!localUser?.id_users) {
           throw new Error("El usuario no tiene un ID válido.");
@@ -46,8 +56,14 @@ export const CheckoutPage = () => {
         );
 
         if (response.links && response.links[1]?.href) {
-          setPaymentUrl(response.links[1].href);
-          setPaymentId(response.id);
+          const newPayment = {
+            url: response.links[1].href,
+            id: response.id,
+          };
+          setPaymentUrl(newPayment.url);
+          setPaymentId(newPayment.id);
+
+          localStorage.setItem("payment", JSON.stringify(newPayment));
         } else {
           throw new Error("La respuesta no contiene el enlace de pago.");
         }
@@ -131,13 +147,13 @@ export const CheckoutPage = () => {
         )}
         {currentStep === 3 && (
           <Payment
-            onGoBack={previousStep}
-            products={products}
-            totalAmount={totalAmount}
-            paymentUrl={paymentUrl}
-            paymentId={paymentId}
-            isLoading={isLoading}
-            error={error}
+          products={products}
+          totalAmount={totalAmount}
+          paymentUrl={paymentUrl}
+          paymentId={paymentId}
+          isLoading={isLoading}
+          error={error}          
+          onGoBack={previousStep}
           />
         )}
       </div>
