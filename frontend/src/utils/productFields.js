@@ -57,6 +57,7 @@ const initialValues = {
     stock: 0,
     image: "",
     genre: "",
+    available: "",
     description: "",
     type: "videogame",
     platforms: [{ name: "", model: "" }]
