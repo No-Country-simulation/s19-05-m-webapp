@@ -182,6 +182,12 @@ export class CheckoutService {
 			let pendingShoppings = userShoppings.filter(
 				(shopping) => shopping.state === StateShopping.PENDING
 			);
+
+			const existingCheckout = await queryRunner.manager.findOne(Checkout, {
+				where: { shopping_user: user, status: StatusCheckout.PENDING },
+			});
+
+			if (existingCheckout) return [existingCheckout];
 			
 			if (pendingShoppings.length === 0) {
 				const shoppingsToReactivate = userShoppings.filter(
@@ -333,7 +339,7 @@ export class CheckoutService {
 			const price = shopping.products?.price || 0;
 
 			existingCheckout.shopping_products.push({
-			  products_id: shopping.products_id,
+			  title: shopping.products?.title || "Unknown title",
 			  state: shopping.state,
 			  quantity: shopping.quantity,
 			  price,
