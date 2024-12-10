@@ -39,6 +39,13 @@ const Form = ({ fields, onSubmit, initialValues, buttonText,
                 ...formValues,
                 [name]: booleanValue,
             }); 
+        } else if (name === 'stock') {
+            const stockValue = parseInt(value, 10); 
+            setFormValues({
+                ...formValues,
+                [name]: isNaN(stockValue) ? "" : stockValue, 
+                available: stockValue > 0,
+            });
         } else if (name === 'price') {
             const formattedValue = formatPrice(value);
             setFormValues({

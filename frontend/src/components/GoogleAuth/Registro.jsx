@@ -65,7 +65,7 @@ const Registro = () => {
       address: "",
       phone: ""
     };
-    userService.createUser(userData, setError)
+    userService.createUser(userData, setError);
     userService.checkGoogle(userObject.email, dispatch)
   }
 

@@ -7,8 +7,8 @@ import Modal from "../modal/Modal";
 import Cart from "../Cart/Cart";
 import { useCart } from "../../contexts/CartContext/CartContext";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../store/slices/auth.slices";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
+import userService from "../../services/register";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,20 +21,11 @@ const Header = () => {
   const user = useSelector((state) => state.auth.user);
   const [isWideViewport, setIsWideViewport] = useState(window.innerWidth > 992);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsWideViewport(window.innerWidth > 992);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const handleSignOut = () => {
-    dispatch(logout());
+  function handleSignOut() {
+    userService.signOut(user.email, dispatch);
     google.accounts.id.disableAutoSelect();
     setIsDropdownOpen(false);
-  };
+  }
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
