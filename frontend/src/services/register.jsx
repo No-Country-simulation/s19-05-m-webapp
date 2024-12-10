@@ -1,4 +1,5 @@
 import { setUser } from "../store/slices/auth.slices";
+import { logout } from "../store/slices/auth.slices";
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -34,6 +35,7 @@ const checkUser = async (userEmail, userPassword, setMessage, onClose, dispatch)
         }
 
         const data = await response.json();
+        console.log(data);
         if (data.user) {
             dispatch(setUser(data.user));
             onClose();
@@ -58,10 +60,25 @@ const checkGoogle = async (userEmail, dispatch) => {
     dispatch(setUser(data.data));
 }
 
+const signOut = async (userEmail, dispatch) => {
+    const response = await fetch(`${BASE_URL}/sessions/signout`, {
+        method: 'POST',
+        body: JSON.stringify({ email: userEmail }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+    console.log(data);
+    dispatch(logout());
+}
+
 const userService = {
 	createUser,
     checkUser,
-    checkGoogle
+    checkGoogle,
+    signOut
 };
 
 export default userService;

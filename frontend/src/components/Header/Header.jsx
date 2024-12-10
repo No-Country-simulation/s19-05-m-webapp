@@ -7,8 +7,8 @@ import Modal from "../modal/Modal";
 import Cart from "../Cart/Cart";
 import { useCart } from "../../contexts/CartContext/CartContext";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../store/slices/auth.slices";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
+import userService from "../../services/register";
 
 const Header = () => {
   const [inputSearch, setInputSearch] = useState();
@@ -25,8 +25,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
 
-  function handleSignOut(event) {
-    dispatch(logout());
+  function handleSignOut() {
+    userService.signOut( user.email, dispatch );
     google.accounts.id.disableAutoSelect();
   }
 
