@@ -1,9 +1,12 @@
 import "./Historial.css";
 import useFetch from "../../hooks/useFetch";
 import checkoutService from "../../services/checkouts";
+import { useSelector } from "react-redux";
 
 const Historial = () => {
-    const { data: checkout } = useFetch(checkoutService.getCheckoutUser, 2);
+    const user = useSelector((state) => state.auth.user);
+    const { data: checkout } = useFetch(checkoutService.getCheckoutUser, user.id_users);
+    console.log(user.id_users)
 
     return (
         <div id="table-container">
