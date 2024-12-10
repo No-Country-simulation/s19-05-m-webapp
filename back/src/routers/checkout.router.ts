@@ -13,7 +13,7 @@ const checkoutController = new CheckoutController();
 
 /**
  * @swagger
- * /checkouts/order:
+ * /api/checkouts/order:
  *   post:
  *     summary: Create a new order
  *     tags: [Checkout]
@@ -31,7 +31,7 @@ checkoutRouter.post(
 
 /**
  * @swagger
- * /checkouts/capture:
+ * /api/checkouts/capture:
  *   get:
  *     summary: Capture an order
  *     tags: [Checkout]
@@ -49,7 +49,7 @@ checkoutRouter.get(
 
 /**
  * @swagger
- * /checkouts/cancel:
+ * /api/checkouts/cancel:
  *   get:
  *     summary: Cancel an order
  *     tags: [Checkout]
