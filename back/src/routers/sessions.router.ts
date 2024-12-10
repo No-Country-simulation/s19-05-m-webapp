@@ -285,7 +285,8 @@ sessionRouter.get("/auth/google/callback", passport.authenticate("google", { ses
 function register(req: Request, res: Response, next: NextFunction): void {
     try {
         const user = req.user;
-        res.status(200).json({ message: "USER CREATED.", user });
+        const message = "USER CREATED.";
+        res.status(200).json({ message, user });
     } catch (error) {
         next(error);
     }
@@ -296,7 +297,9 @@ function login(req: Request, res: Response, next: NextFunction): void {
     try {
         const user = req.user;
         const token = req.token;
-        res.status(200).json({ message: "USER LOGGED IN", token, user });
+        const opts = { maxAge: 60 * 60 * 24 * 7, httpOnly: true };
+        const message = "USER LOGGED IN.";
+        res.status(200).cookie("token", token, opts).json({ message, user });
     } catch (error) {
         return next(error);
     };
@@ -305,8 +308,10 @@ function login(req: Request, res: Response, next: NextFunction): void {
 // Funcion para ver si esta online un usario.
 function online(req: Request, res: Response, next: NextFunction): void {
     try {
-        const user: any = req.user || undefined;
-        res.status(200).json({ message: `El usuario: ${user.email} is online`, token: req.token });
+        const message = req.user
+            ? `${(req.user as { email: string }).email.toUpperCase()} IS ONLINE`
+            : undefined;
+        res.status(200).json({ online: true, message });
     } catch (error) {
         return next(error);
     };
@@ -315,8 +320,9 @@ function online(req: Request, res: Response, next: NextFunction): void {
 // Funcion para signout un user.
 function signout(req: Request, res: Response, next: NextFunction): void {
     try {
-        const user = req.user;
-        res.status(200).json({ message: "USER SIGNOUT.", user });
+        req.user = {};
+        const message = "USER SIGNOUT.";
+        res.status(200).clearCookie("token").json(message);
     } catch (error) {
         next(error);
     }
@@ -325,8 +331,12 @@ function signout(req: Request, res: Response, next: NextFunction): void {
 // Funcion de respuesta de google auth callback.
 function google(req: Request, res: Response, next: NextFunction): void {
     try {
-        const user = req.user;
-        res.status(200).json({ message: "USER LOGGED IN", user });
+        // Extraemos el token del objt req.token.
+        const token = req.token;
+        // Opciones para la cookie que almacenara el token. Duracion 7 dias y con seguridad httpOnly.
+        const opts = { maxAge: 60 * 60 * 24 * 7, httpOnly: true };
+        const message = "USER LOGGED IN"
+        res.status(200).cookie("token", token, opts).redirect("/");
     } catch (error) {
         next(error);
     }
