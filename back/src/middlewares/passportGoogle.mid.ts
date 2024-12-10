@@ -2,11 +2,13 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as CustomStrategy } from "passport-custom";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
+import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { Request, Response, NextFunction } from "express";
 import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   BASE_URL,
+  SECRET_KEY
 } from "../config/env";
 import { UserService } from "../services/users.service";
 import { createHashUtil } from "../utils/hash.util";
@@ -27,6 +29,13 @@ declare global {
   }
 }
 
+interface JwtPayload {
+  user_id: number; // ID del usuario
+  role: string; // Rol del usuario
+  email: string; // Email del usuario
+  isOnline: boolean; // Estado del usuario
+}
+
 interface CustomError extends Error {
   statusCode?: number;
 }
@@ -45,10 +54,10 @@ passport.use("register", new LocalStrategy(
       };
 
       // Existencia de User con ese email
-      const one = await userService.readByEmail(email);
+      const existUser = await userService.readByEmail(email);
 
       // Validacion de User
-      if (one) {
+      if (existUser) {
         const error: CustomError = new Error("User already exists");
         error.statusCode = 409;
         return done(error);
@@ -71,24 +80,32 @@ passport.use("login", new LocalStrategy(
     try {
       // Existencia de User con ese email
       let user = await userService.readByEmail(email);
+      // SI no existe, la respuesta.
       if (!user) {
         const error: CustomError = new Error("USER NOT FOUND, INVALID EMAIL.");
         error.statusCode = 401;
         return done(error);
       }
+      // Obtenemos la contraseña hasheada dentro de la Base de datos.
       const dbPassword = user.password;
+      // Verificamos compatibilidad. {Password desde la BBDD} vs {password req.body}.
       const verify = verifyHashUtil(password, dbPassword);
+      // Si no es compatible, la respuesta.
       if (!verify) {
         const error: CustomError = new Error("INVALID PASSWORD");
         error.statusCode = 401;
         return done(error);
       }
-      req.token = createTokenUtil({
+      // Creamos el token, con la informacion que queramos.
+      const token = createTokenUtil({
         role: user.role,
-        user_id: user.id_users
+        user_id: user.id_users,
+        email: user.email,
+        isOnline: true
       });
-      user = await userService.updateUser(user.id_users, { isOnline: true });
-      user.password = "";
+      // Lo almacenamos en req.token. Para posterior manipulación. 
+      req.token = token;
+      //user = await userService.updateUser(user.id_users, { isOnline: true });
       return done(null, user);
     } catch (error) {
       return done(error);
@@ -97,41 +114,52 @@ passport.use("login", new LocalStrategy(
 )
 );
 
-passport.use("online", new CustomStrategy(async (req: Request, done: (error: any, user?: any) => void) => {
+passport.use("online", new JwtStrategy({
+  jwtFromRequest: ExtractJwt.fromExtractors([(req => req?.cookies?.token)]),
+  secretOrKey: SECRET_KEY
+}, async (data: JwtPayload, done) => {
   try {
-    // Consultar existencia del usuario.
-    const token = req.headers['token'] as string | undefined;
-    // Si no existe, INVALID TOKEN.
-    if (!token) {
-      const error: CustomError = new Error("INVALID TOKEN.");
+    // Extraemos el id y isOnline de la data del token.
+    const { user_id, isOnline } = data;
+    // Obtenemos el user.
+    const user = await userService.readById(user_id);
+    if (!user) {
+      const error: CustomError = new Error("USER NOT FOUND");
+      error.statusCode = 404;
+      return done(error);
+    }
+    // Si es false, respuesta.
+    if (!isOnline) {
+      const error: CustomError = new Error("USER IS NOT ONLINE");
       error.statusCode = 401;
       return done(error);
     }
-    const data: any = verifyTokenUtil(token);
-    const user_id = data.user_id;
-    const user = await userService.readById(user_id);
-    req.token = token;
+    return done(null, user);
+  } catch (error) {
+    return done(error);
+  }
+}
+
+)
+);
+
+passport.use("signout", new JwtStrategy({
+  jwtFromRequest: ExtractJwt.fromExtractors([(req => req?.cookies?.token)]),
+  secretOrKey: SECRET_KEY
+}, async (data: JwtPayload, done) => {
+  try {
+    const { user_id } = data;
+    // Consultamos al usuario desde la base de datos
+    let user: any = await userService.readById(user_id);
+    if (!user) {
+      const error: CustomError = new Error("USER NOT FOUND");
+      error.statusCode = 404;
+      return done(error);
+    }
     return done(null, user);
   } catch (error) {
     return done(error);
   };
-}
-)
-);
-
-passport.use("signout", new CustomStrategy(async (req: Request, done: (error: any, user?: any) => void) => {
-  try {
-    const token = req.headers['token'] as string | undefined;
-    if (!token) {
-      const error: CustomError = new Error("USER NOT LOGGED");
-      error.statusCode = 401;
-      return done(error);
-    }
-    delete req.token;
-    return done(null, { user: null });
-  } catch (error) {
-  return done(error);
-};
 }
 )
 );
@@ -154,7 +182,7 @@ passport.use("google", new GoogleStrategy(
       // Destructuro los datos de google. Id y foto.
       const { id, picture } = profile;
       // Buscar al usuario por email
-      let user = await userService.readByEmail(id);
+      let user: any | null | undefined  = await userService.readByEmail(id);
       // Si no existe, crearlo
       if (!user) {
         user = await userService.createUser({
@@ -165,12 +193,16 @@ passport.use("google", new GoogleStrategy(
           password: createHashUtil(id), // Usa un hash para la contraseña
           phone: "", // Asegúrate de incluir un valor aquí
         });
-      } else {
-        // Generar token y asignarlo al Request
-        req.token = createTokenUtil({ role: user.role, user: user.id_users });
-        req.session.role = user.role;
-        req.session.user_id = user.id_users;
       }
+      // Generar token y asignarlo al Request
+      const token = createTokenUtil({
+        role: user.role,
+        user_id: user.id_users,
+        email: user.email,
+        isOnline: true
+      });
+      // Lo almacenamos en req.token. Para posterior manipulación. 
+      req.token = token;
       return done(null, user);
     } catch (error) {
       return done(error);

@@ -7,6 +7,7 @@ import indexRouter from "./routers/index.router";
 import session from "express-session";
 import { setupSwagger } from "./swagger/config";
 import { SECRET_KEY } from "./config/env";
+import cookieParser from "cookie-parser";
 
 const server = express();
 
@@ -24,6 +25,7 @@ server.use((req: Request, res: Response, next: NextFunction) => {
 server.use(express.json());
 server.use(express.urlencoded({ extended: true })); // middelware para leer los params
 server.use(morgan("dev"));
+server.use(cookieParser());
 // Sessions
 server.use(
     session({
