@@ -49,104 +49,134 @@ import { CheckoutService } from "../services/checkout.service";
  *         quantity: 2
  */
 export class ShoppingController {
-	
 	private readonly shoppingService: ShoppingService;
 
 	constructor() {
-
 		const checkoutService = new CheckoutService(AppDataSource);
 		this.shoppingService = new ShoppingService(checkoutService);
 
 		this.paymentPurchasesController = this.paymentPurchasesController.bind(this);
 		this.getAllShoppingController = this.getAllShoppingController.bind(this);
+		this.getShoppingByUserIdController = this.getShoppingByUserIdController.bind(this);
 		this.createShoppingController = this.createShoppingController.bind(this);
 		this.updateShoppingController = this.updateShoppingController.bind(this);
 		this.deleteShoppingController = this.deleteShoppingController.bind(this);
 	}
 
-	async getAllShoppingController(req: Request, res: Response, next: NextFunction): Promise<any> {
+	async getAllShoppingController(req: Request, res: Response,	next: NextFunction): Promise<any> {
 		try {
-			
 			const shoppings = await this.shoppingService.getAllShopping();
 
-			if (!shoppings || shoppings.length === 0) return ControllerHandler.ok("No shopping data available", res, []);
-	
-			const userProductsMap = new Map<string, any>();
-	
-			shoppings.forEach((shopping) => {
-				const key = shopping.users.email;
-	
-				if (!key) {
-					console.warn("Skipping shopping record with missing user email:", shopping);
-					return;
-				}
-	
-				if (userProductsMap.has(key)) {
-					
-					const entry = userProductsMap.get(key);
-
-					entry.products.push({
-						name: shopping.products.title,
-						image: shopping.products.image,
-						description: shopping.products.description,
-						price: shopping.products.price,
-						genre: shopping.products.genre,
-						quantity: shopping.quantity,
-						platform: shopping.products.platforms ? shopping.products.platforms : "No platform specified",
-						state: shopping.state
-					});
-
-				} else {
-					userProductsMap.set(key, {
-						user: {
-							name: shopping.users.name,
-							phone: shopping.users.phone,
-							email: shopping.users.email,
-							address: shopping.users.address,
-						},
-						products: [
-							{
-								name: shopping.products.title,
-								image: shopping.products.image,
-								description: shopping.products.description,
-								price: shopping.products.price,
-								genre: shopping.products.genre,
-								quantity: shopping.quantity,
-								platform: shopping.products.platforms ? shopping.products.platforms : "No platform specified",
-								state: shopping.state,
-							},
-						]
-					});
-				}
-			});
-	
-			const formatted = Array.from(userProductsMap.values());
-
-			return ControllerHandler.ok("Shoppings retrieved successfully", res, formatted);
-
+			if (!shoppings || shoppings.length === 0)
+				return ControllerHandler.ok("No shopping data available", res, []);
+			
+			const formattedData = this.formatedShoppingData(shoppings);
+			return ControllerHandler.ok("Shoppings retrieved successfully", res, formattedData);
 		} catch (error) {
 			next(error);
 		}
 	}
 
-	async createShoppingController( req: Request, res: Response, next: NextFunction): Promise<any> {
+	async getShoppingByUserIdController(req: Request, res: Response, next: NextFunction): Promise<any> {
 		try {
+			const { id } = req.params;
+			const user_id = parseInt(id, 10);
+			
+			if (!user_id || typeof user_id !== "number")
+				return ControllerHandler.badRequest("User ID is required", res);
 
-			const {user_id, products_id, quantity} = req.body;
+			const shoppingUser = await this.shoppingService.getShoppingByUserId(user_id);
+			if (!shoppingUser || shoppingUser.length === 0)
+				return ControllerHandler.ok("User does not have purchase data", res, []);
+
+			const formattedData = this.formatedShoppingData(shoppingUser);
+			return ControllerHandler.ok("Shoppings retrieved successfully", res, formattedData);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	private formatedShoppingData(shoppings: Shopping[]): any[] {
+		const userProductsMap = new Map<string, any>();
+
+		shoppings.forEach((shopping) => {
+			const key = shopping.users.email;
+
+			if (!key) {
+				console.warn("Skipping shopping record with missing user email:", shopping);
+				return;
+			}
+
+			if (userProductsMap.has(key)) {
+				const entry = userProductsMap.get(key);
+
+				entry.products.push({
+					name: shopping.products.title,
+					image: shopping.products.image,
+					description: shopping.products.description,
+					price: shopping.products.price,
+					genre: shopping.products.genre,
+					quantity: shopping.quantity,
+					platform: shopping.products.platforms ? shopping.products.platforms : "No platform specified",
+					state: shopping.state,
+				});
+			} else {
+				userProductsMap.set(key, {
+					user: {
+						name: shopping.users.name,
+						phone: shopping.users.phone,
+						email: shopping.users.email,
+						address: shopping.users.address,
+					},
+					products: [
+						{
+							name: shopping.products.title,
+							image: shopping.products.image,
+							description: shopping.products.description,
+							price: shopping.products.price,
+							genre: shopping.products.genre,
+							quantity: shopping.quantity,
+							platform: shopping.products.platforms ? shopping.products.platforms :"No platform specified",
+							state: shopping.state,
+						},
+					],
+				});
+			}
+		});
+
+		return Array.from(userProductsMap.values());
+	}
+
+	async createShoppingController(req: Request, res: Response, next: NextFunction): Promise<any> {
+		try {
+			const { user_id, products_id, quantity } = req.body;
 
 			if (!user_id || typeof user_id !== "number")
 				return ControllerHandler.badRequest("User ID is required", res);
 
 			if (!products_id || typeof products_id !== "number")
-				return ControllerHandler.badRequest("Product ID is required",res);
+				return ControllerHandler.badRequest(
+					"Product ID is required",
+					res
+				);
 
-			if(!quantity || typeof quantity !== "number")
-				return ControllerHandler.badRequest("Quantity is required", res);
+			if (!quantity || typeof quantity !== "number")
+				return ControllerHandler.badRequest(
+					"Quantity is required",
+					res
+				);
 
-			const newShopping = await this.shoppingService.createShopping({ user_id, products_id, quantity });
+			const newShopping = await this.shoppingService.createShopping({
+				user_id,
+				products_id,
+				quantity,
+			});
 
-			return ControllerHandler.ok("Shopping created successfully", res, newShopping);
-
+			return ControllerHandler.ok(
+				"Shopping created successfully",
+				res,
+				newShopping
+			);
 		} catch (error) {
 			next(error);
 		}
@@ -154,14 +184,16 @@ export class ShoppingController {
 
 	async updateShoppingController(req: Request, res: Response, next: NextFunction): Promise<any> {
 		try {
-            
 			const { user, product } = req.params;
 
 			const user_id = parseInt(user, 10);
 			const product_id = parseInt(product, 10);
 
 			if (isNaN(user_id) || isNaN(product_id)) {
-				return ControllerHandler.badRequest("User ID and Product ID must be valid numbers",res);
+				return ControllerHandler.badRequest(
+					"User ID and Product ID must be valid numbers",
+					res
+				);
 			}
 
 			const shoppingData: Partial<Shopping> = req.body;
@@ -188,15 +220,24 @@ export class ShoppingController {
 
 	async deleteShoppingController(req: Request, res: Response, next: NextFunction): Promise<any> {
 		try {
-
 			const { user, product } = req.params;
 			const user_id = parseInt(user, 10);
 			const product_id = parseInt(product, 10);
-			if (isNaN(user_id) || isNaN(product_id)) return ControllerHandler.badRequest("User ID and Product ID must be valid numbers",res);
-			const deletedShopping = await this.shoppingService.deleteShopping(user_id, product_id);
-			return ControllerHandler.ok("Shopping deleted successfully", res, deletedShopping);
-
-		} catch(error){
+			if (isNaN(user_id) || isNaN(product_id))
+				return ControllerHandler.badRequest(
+					"User ID and Product ID must be valid numbers",
+					res
+				);
+			const deletedShopping = await this.shoppingService.deleteShopping(
+				user_id,
+				product_id
+			);
+			return ControllerHandler.ok(
+				"Shopping deleted successfully",
+				res,
+				deletedShopping
+			);
+		} catch (error) {
 			next(error);
 		}
 	}
@@ -205,9 +246,19 @@ export class ShoppingController {
 		try {
 			const { user } = req.params;
 			const user_id = parseInt(user, 10);
-			if(isNaN(user_id)) return ControllerHandler.badRequest("User ID is required and must be a valid number", res);
-			const payment = await this.shoppingService.paymentPurchases(user_id);
-			return ControllerHandler.ok("Payment processed successfully", res, payment);
+			if (isNaN(user_id))
+				return ControllerHandler.badRequest(
+					"User ID is required and must be a valid number",
+					res
+				);
+			const payment = await this.shoppingService.paymentPurchases(
+				user_id
+			);
+			return ControllerHandler.ok(
+				"Payment processed successfully",
+				res,
+				payment
+			);
 		} catch (error) {
 			next(error);
 		}

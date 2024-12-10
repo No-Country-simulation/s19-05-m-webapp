@@ -81,31 +81,23 @@ export class ProductService {
 
       //actualizar el producto sin las pltformas (merge)
       productRepository.merge(product, productDetails);
-      await productRepository.save(product);
 
+      //si hay plataformas nuevas
       if (platforms && Array.isArray(platforms)) {
-        //limpiar las plataforma actuales para asignar las nuevas
-        product.platforms = [];
-        await productRepository.save(product);
-
         const allPlatforms = await this.platformService.findOrCreatePlatforms(
           platforms
         );
-
         product.platforms = allPlatforms;
-        await productRepository.save(product);
       } else {
-        //si no se proporcionan plataformas, se limpian las actuales
         product.platforms = [];
-        await productRepository.save(product);
       }
 
-      const updatedProduct = await productRepository.findOne({
-        where: { id_product: id },
-        relations: ["platforms"],
+      //gardar el producto al final
+      const updatedProduct = await productRepository.save(product, {
+        reload: true, //reload para evitar llamados extra
       });
 
-      return updatedProduct!;
+      return updatedProduct;
     } catch (error) {
       console.error("Error updating product (updateProduct):", error);
       throw new Error("Failed to update product");

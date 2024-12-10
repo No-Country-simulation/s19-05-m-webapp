@@ -32,20 +32,27 @@ export class PlatformService {
   ): Promise<Platforms[]> {
     const platformModel = platformDtos.map((p) => p.model);
 
-    // Buscar modelos de platafrmas existentes por nombre
+    // Buscar plataformas existentes por modelos
     const existingPlatforms = await platformRepository.find({
       where: { model: In(platformModel) },
     });
     const existingModel = existingPlatforms.map((p) => p.model);
 
-    // Filtrar los que no existen
+    const existingModels = existingPlatforms.map((p) => p.model);
+
+    // Filtrar las que no existen
     const newPlatformDtos = platformDtos.filter(
-      (p) => !existingModel.includes(p.model)
+      (p) => !existingModels.includes(p.model)
     );
 
-    const newPlatforms = await Promise.all(
-      newPlatformDtos.map((dto) => this.createPlatformIfNotExists(dto))
-    );
+    // Crear las nuevas plataformas que no están en la base
+    const platformsToCreate = platformRepository.create(newPlatformDtos);
+
+    // Guardar todas las nuevas plataformas de una sola vez (una sola consulta)
+    const newPlatforms =
+      platformsToCreate.length > 0
+        ? await platformRepository.save(platformsToCreate)
+        : [];
 
     return [...existingPlatforms, ...newPlatforms];
   }
