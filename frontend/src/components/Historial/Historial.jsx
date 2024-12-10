@@ -2,11 +2,27 @@ import "./Historial.css";
 import useFetch from "../../hooks/useFetch";
 import checkoutService from "../../services/checkouts";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Historial = () => {
     const user = useSelector((state) => state.auth.user);
-    const { data: checkout } = useFetch(checkoutService.getCheckoutUser, user.id_users);
-    console.log(user.id_users)
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
+
+    if (!user) {
+        return null;
+    }
+
+    const { data: checkout } = useFetch(
+        checkoutService.getCheckoutUser,
+        user?.id_users
+    );
 
     return (
         <div id="table-container">
