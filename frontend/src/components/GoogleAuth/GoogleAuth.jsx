@@ -46,7 +46,16 @@ const GoogleAuth = ({isOpen, onClose}) => {
 
     function handleCallbackResponse(response) {
         var userObject = jwtDecode(response.credential);
-        userService.checkGoogle(userObject.email, dispatch);
+        const userData = {
+            name: userObject.name,
+            email: userObject.email,
+            password: userObject.sub,
+            active: true,
+            address: "",
+            phone: ""
+            };
+        userService.createUser(userData, setError);
+        userService.checkGoogle(userObject.email, dispatch)
         onClose()
     }
 

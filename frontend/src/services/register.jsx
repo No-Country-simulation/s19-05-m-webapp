@@ -1,17 +1,18 @@
 import { setUser } from "../store/slices/auth.slices";
+import { logout } from "../store/slices/auth.slices";
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const createUser = async (userData, setMessage) => {
     try {
-        const response = await axios.post(`${BASE_URL}/users/`, userData);
+        const response = await axios.post(`${BASE_URL}/sessions/register`, userData);
         console.log('Creación de usuario exitosa', response.data);
         setMessage("¡Te has registrado exitosamente!");
     } catch (err) {
         const errorMessage = err.response?.data?.message || "Hubo un problema con el registro. Inténtalo nuevamente.";
         console.log(errorMessage);
-        if (errorMessage == "User email already exists.") {
+        if (errorMessage == "User email already exists." || "User already exists") {
             setMessage("El correo ya está en uso.");
         }else {
             setMessage("Ocurrió un error.");
@@ -21,32 +22,25 @@ const createUser = async (userData, setMessage) => {
 
 const checkUser = async (userEmail, userPassword, setMessage, onClose, dispatch) => {
     try {
-        const response = await fetch(`${BASE_URL}/users/readone`, {
+        const response = await fetch(`${BASE_URL}/sessions/login`, {
             method: 'POST',
-            body: JSON.stringify({ email: userEmail }),
+            body: JSON.stringify({ email: userEmail, password: userPassword }),
             headers: {
                 'Content-Type': 'application/json',
             },
         });
 
         if (!response.ok) {
-            throw new Error("No se pudo encontrar el usuario.");
+            throw new Error("El correo o la contraseña son incorrectos.");
         }
 
         const data = await response.json();
-
-        if (!data || !data.data) {
-            setMessage("No se ha encontrado una cuenta con ese correo.");
-            return;
-        }
-
-        if (userPassword === data.data.password) { //comparar contraseñas por backend
-            setMessage("La contraseña coincide");
-            dispatch(setUser(data.data));
+        console.log(data);
+        if (data.user) {
+            dispatch(setUser(data.user));
             onClose();
-        } else {
-            setMessage("La contraseña es incorrecta.");
         }
+
     } catch (error) {
         console.error(error);
         setMessage(error.message || "Ocurrió un error.");
@@ -66,10 +60,25 @@ const checkGoogle = async (userEmail, dispatch) => {
     dispatch(setUser(data.data));
 }
 
+const signOut = async (userEmail, dispatch) => {
+    const response = await fetch(`${BASE_URL}/sessions/signout`, {
+        method: 'POST',
+        body: JSON.stringify({ email: userEmail }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+    console.log(data);
+    dispatch(logout());
+}
+
 const userService = {
 	createUser,
     checkUser,
-    checkGoogle
+    checkGoogle,
+    signOut
 };
 
 export default userService;
