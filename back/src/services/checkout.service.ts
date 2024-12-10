@@ -250,7 +250,8 @@ export class CheckoutService {
 		const allCheckouts = await checkoutRepository.find({
 			relations: {
 				shopping: {
-					products: true
+					products: true,
+					users: true
 				}
 			}
 		});
@@ -259,7 +260,15 @@ export class CheckoutService {
 	}
 
 	async getCheckoutById(id: string): Promise<Checkout []> {
-		const idCheckouts = await checkoutRepository.find({ where: { id_checkout: id } });
+		const idCheckouts = await checkoutRepository.find({ 
+			where: { id_checkout: id },
+			relations: {
+				shopping: {
+					products: true,
+					users: true
+				}
+			} 
+		});
 		
 		return this.transformCheckouts(idCheckouts);
 	}
@@ -269,7 +278,8 @@ export class CheckoutService {
 			where: { status },
 			relations: {
 				shopping: {
-					products: true
+					products: true,
+					users: true
 				},
 			}
 		});
@@ -282,7 +292,8 @@ export class CheckoutService {
 			where: { shopping_user: userId },
 			relations: {
 				shopping: {
-					products: true
+					products: true,
+					users: true
 				}
 			}
 		});
@@ -302,6 +313,8 @@ export class CheckoutService {
 			  shopping_products,
 			  shopping,
 			} = item;
+
+			const userName = shopping.users?.name || "Name unknown";
 		
 			let existingCheckout = acc.find((c: any) => c.id_checkout === id_checkout);
 		
@@ -310,7 +323,7 @@ export class CheckoutService {
 				id_checkout,
 				status,
 				date_checkout,
-				shopping_user,
+				shopping_user: userName,
 				shopping_products: [],
 				total: 0,
 			  };

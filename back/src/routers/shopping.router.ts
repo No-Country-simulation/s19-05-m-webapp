@@ -34,6 +34,84 @@ shoppingRouter.get(
 
 /**
  * @swagger
+ * /api/shopping/user/{id}:
+ *   get:
+ *     summary: Get all shopping records for a specific user.
+ *     tags: [Shopping]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the user whose shopping records are being fetched.
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved the shopping records for the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: The ID of the shopping record.
+ *                     example: 1
+ *                   user_id:
+ *                     type: integer
+ *                     description: The ID of the user.
+ *                     example: 1
+ *                   products_id:
+ *                     type: integer
+ *                     description: The ID of the product.
+ *                     example: 3
+ *                   quantity:
+ *                     type: integer
+ *                     description: The quantity of the product in the shopping record.
+ *                     example: 2
+ *                   state:
+ *                     type: string
+ *                     description: The current state of the shopping record.
+ *                     example: "PENDING"
+ *                   users:
+ *                     type: object
+ *                     description: Details of the user associated with the shopping record.
+ *                   products:
+ *                     type: object
+ *                     description: Details of the product associated with the shopping record.
+ *       400:
+ *         description: Invalid user ID provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid user ID format."
+ *       404:
+ *         description: No shopping records found for the specified user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "No shopping records found for user ID: 1."
+ *       500:
+ *         description: Internal server error.
+ */
+shoppingRouter.get(
+  "/user/:id",
+  /* authJWTMiddleware, adminMiddleware, */ shoppingController.getShoppingByUserIdController
+);
+
+/**
+ * @swagger
  * /api/shopping:
  *   post:
  *     summary: Creates a new shopping cart for a user.
