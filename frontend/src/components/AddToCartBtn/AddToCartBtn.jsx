@@ -23,7 +23,7 @@ function AddToCartButton({ product }) {
             try {
                 const existingCart = await shoppingCartService.getCart(user_id);
 
-                if (existingCart && existingCart.products.some(p => p.id === product.id_product)) {
+                if (existingCart?.products && existingCart.products.some(p => p.id === product.id_product)) {
                     toast.info('Este producto ya está en el carrito.');
                     return;
                 }
