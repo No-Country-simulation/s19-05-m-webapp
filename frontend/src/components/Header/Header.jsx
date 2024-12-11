@@ -56,6 +56,7 @@ const Header = () => {
   };
 
   const handleLinkClick = () => {
+    setMenuOpen(false);
     setIsDropdownOpen(!false);
   };
 
