@@ -1,5 +1,7 @@
 import { userRepository } from "../repositories/users.repository";
 import { User } from "../entity/Users.entity";
+import { verifyHashUtil } from "../utils/hash.util";
+import { createTokenUtil } from "../utils/token.util";
 
 export class UserService {
   // Obtener usuario por ID
@@ -44,7 +46,13 @@ export class UserService {
     try {
       const newUser = userRepository.create(data);
       await userRepository.save(newUser);
-      return newUser
+
+      //crear token JWT
+      const token = createTokenUtil({
+        newUser,
+      });
+
+      return { token: token, user: newUser }; //devuelve el token y el usuario creado
     } catch (error) {
       console.error("Error in UserService (createUser):", error);
       throw new Error("Failed to create user");
