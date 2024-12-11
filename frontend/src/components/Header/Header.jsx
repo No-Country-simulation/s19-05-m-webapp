@@ -21,11 +21,21 @@ const Header = () => {
   const user = useSelector((state) => state.auth.user);
   const [isWideViewport, setIsWideViewport] = useState(window.innerWidth > 992);
 
-  function handleSignOut() {
-    userService.signOut(user.email, dispatch);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWideViewport(window.innerWidth > 992);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleSignOut = () => {
+    dispatch(logout());
     google.accounts.id.disableAutoSelect();
     setIsDropdownOpen(false);
-  }
+    navigate("/");
+  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
