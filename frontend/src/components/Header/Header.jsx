@@ -51,13 +51,13 @@ const Header = () => {
     navigate("/");
   }
 
-  const toggleDropdown = () => {
+  const toggleDropdown = (e) => {
+    e.stopPropagation();
     setIsDropdownOpen((prev) => !prev);
   };
 
   const handleLinkClick = () => {
     setMenuOpen(false);
-    setIsDropdownOpen(!false);
   };
 
   const inputValue = useRef();
