@@ -64,7 +64,7 @@ passport.use("register", new LocalStrategy(
   }
 )
 );
-
+//
 passport.use("login", new LocalStrategy(
   { passReqToCallback: true, usernameField: "email" },
   async (req: Request, email: string, password: string, done: (error: any, user?: any) => void) => {
