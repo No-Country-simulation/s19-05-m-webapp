@@ -62,7 +62,7 @@ export const Payment = ({
   };
 
   const handleRetry = () => {
-    window.location.reload(); // Refresca la página actual
+    window.location.reload();
   };
 
   return (

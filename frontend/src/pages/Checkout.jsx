@@ -31,18 +31,17 @@ export const CheckoutPage = () => {
   );
 
   useEffect(() => {
-    const fetchPaymentUrl = async () => {
+    const generatePaymentUrl = async () => {
       try {
         setIsLoading(true);
         setError("");
 
-        const storedPayment = JSON.parse(
-          localStorage.getItem("payment") || "{}"
-        );
+        // Revisar si ya existe en localStorage
+        const storedPayment = JSON.parse(localStorage.getItem("payment"));
         if (storedPayment?.url && storedPayment?.id) {
-          console.log("Enlace de pago existente encontrado.");
           setPaymentUrl(storedPayment.url);
           setPaymentId(storedPayment.id);
+          setIsLoading(false);
           return;
         }
 
@@ -51,26 +50,32 @@ export const CheckoutPage = () => {
           throw new Error("El usuario no tiene un ID válido.");
         }
 
+        // Llamada al servicio para obtener el ID de pago
         const response = await shoppingService.patchShopping(
           localUser.id_users
         );
+        console.log(response);
 
-        if (response.links && response.links[1]?.href) {
-          const newPayment = {
-            url: response.links[1].href,
-            id: response.id,
-          };
-          setPaymentUrl(newPayment.url);
-          setPaymentId(newPayment.id);
+        const paymentId = response.id || response[0].id_checkout;
 
-          localStorage.setItem("payment", JSON.stringify(newPayment));
+        if (paymentId) {
+          // Generar la URL a partir del ID
+          const generatedUrl = `https://www.sandbox.paypal.com/checkoutnow?token=${paymentId}`;
+          setPaymentUrl(generatedUrl);
+          setPaymentId(paymentId);
+
+          // Guardar en el almacenamiento local para referencia futura
+          localStorage.setItem(
+            "payment",
+            JSON.stringify({ url: generatedUrl, id: paymentId })
+          );
         } else {
-          throw new Error("La respuesta no contiene el enlace de pago.");
+          throw new Error("No se pudo generar el ID de pago.");
         }
       } catch (error) {
-        console.error("Error al obtener la URL de pago:", error);
+        console.error("Error al generar la URL de pago:", error);
         setError(
-          "Ocurrió un error al obtener el enlace de pago. Por favor, inténtelo más tarde."
+          "Ocurrió un error al generar el enlace de pago. Por favor, inténtelo más tarde."
         );
       } finally {
         setIsLoading(false);
@@ -78,7 +83,7 @@ export const CheckoutPage = () => {
     };
 
     if (user) {
-      fetchPaymentUrl();
+      generatePaymentUrl();
     }
   }, [user]);
 
@@ -147,13 +152,13 @@ export const CheckoutPage = () => {
         )}
         {currentStep === 3 && (
           <Payment
-          products={products}
-          totalAmount={totalAmount}
-          paymentUrl={paymentUrl}
-          paymentId={paymentId}
-          isLoading={isLoading}
-          error={error}          
-          onGoBack={previousStep}
+            products={products}
+            totalAmount={totalAmount}
+            paymentUrl={paymentUrl}
+            paymentId={paymentId}
+            isLoading={isLoading}
+            error={error}
+            onGoBack={previousStep}
           />
         )}
       </div>
