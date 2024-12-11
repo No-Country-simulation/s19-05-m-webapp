@@ -400,13 +400,15 @@ function register(req: Request, res: Response, next: NextFunction): void {
 
 // Funcion para loguear un usuario.
 function login(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user = req.user;
-    const token = req.token;
-    res.status(200).json({ message: "USER LOGGED IN", token, user });
-  } catch (error) {
-    return next(error);
-  }
+    try {
+        const user = req.user;
+        const token = req.token;
+        const opts = { maxAge: 60 * 60 * 24 * 7, secure: true, httpOnly: true };
+        const message = "USER LOGGED IN.";
+        res.status(200).cookie("token", token, opts).json({ message, user });
+    } catch (error) {
+        return next(error);
+    };
 }
 
 // Funcion para ver si esta online un usario.
@@ -436,12 +438,16 @@ function signout(req: Request, res: Response, next: NextFunction): void {
 
 // Funcion de respuesta de google auth callback.
 function google(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user = req.user;
-    res.status(200).json({ message: "USER LOGGED IN", user });
-  } catch (error) {
-    next(error);
-  }
+    try {
+        // Extraemos el token del objt req.token.
+        const token = req.token;
+        // Opciones para la cookie que almacenara el token. Duracion 7 dias y con seguridad httpOnly.
+        const opts = { maxAge: 60 * 60 * 24 * 7, secure: true, httpOnly: true };
+        const message = "USER LOGGED IN"
+        res.status(201).cookie("token", token, opts).redirect("/");
+    } catch (error) {
+        next(error);
+    }
 }
 
 export default sessionRouter;
