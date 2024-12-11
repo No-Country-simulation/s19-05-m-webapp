@@ -390,58 +390,53 @@ sessionRouter.get(
 
 // Funcion para registarr un usuario.
 function register(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user = req.user;
-    res.status(200).json({ message: "USER CREATED.", user });
-  } catch (error) {
-    next(error);
-  }
+    try {
+        const user = req.user;
+        res.status(200).json({ message: "USER CREATED.", user });
+    } catch (error) {
+        next(error);
+    }
 }
 
 // Funcion para loguear un usuario.
 function login(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user = req.user;
-    const token = req.token;
-    res.status(200).json({ message: "USER LOGGED IN", token, user });
-  } catch (error) {
-    return next(error);
-  }
+    try {
+        const user = req.user;
+        const token = req.token;
+        res.status(200).json({ message: "USER LOGGED IN", token, user });
+    } catch (error) {
+        return next(error);
+    };
 }
 
 // Funcion para ver si esta online un usario.
 function online(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user: any = req.user || undefined;
-    res
-      .status(200)
-      .json({
-        message: `El usuario: ${user.email} is online`,
-        token: req.token,
-      });
-  } catch (error) {
-    return next(error);
-  }
+    try {
+        const user: any = req.user || undefined;
+        res.status(200).json({ message: `El usuario: ${user.email} is online`, token: req.token });
+    } catch (error) {
+        return next(error);
+    };
 }
 
 // Funcion para signout un user.
 function signout(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user = req.user;
-    res.status(200).json({ message: "USER SIGNOUT.", user });
-  } catch (error) {
-    next(error);
-  }
+    try {
+        const user = req.user;
+        res.status(200).json({ message: "USER SIGNOUT.", user });
+    } catch (error) {
+        next(error);
+    }
 }
 
 // Funcion de respuesta de google auth callback.
 function google(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user = req.user;
-    res.status(200).json({ message: "USER LOGGED IN", user });
-  } catch (error) {
-    next(error);
-  }
+    try {
+        const user = req.user;
+        res.status(200).json({ message: "USER LOGGED IN", user });
+    } catch (error) {
+        next(error);
+    }
 }
 
 export default sessionRouter;
