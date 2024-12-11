@@ -111,6 +111,7 @@ export class ShoppingController {
 				const entry = userProductsMap.get(key);
 
 				entry.products.push({
+					id_product: shopping.products.id_product,
 					name: shopping.products.title,
 					image: shopping.products.image,
 					description: shopping.products.description,
@@ -130,6 +131,7 @@ export class ShoppingController {
 					},
 					products: [
 						{
+							id_product: shopping.products.id_product,
 							name: shopping.products.title,
 							image: shopping.products.image,
 							description: shopping.products.description,
