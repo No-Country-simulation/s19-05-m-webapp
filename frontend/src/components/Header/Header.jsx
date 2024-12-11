@@ -51,13 +51,13 @@ const Header = () => {
     navigate("/");
   }
 
-  const toggleDropdown = () => {
+  const toggleDropdown = (e) => {
+    e.stopPropagation();
     setIsDropdownOpen((prev) => !prev);
   };
 
   const handleLinkClick = () => {
     setMenuOpen(false);
-    setIsDropdownOpen(false);
   };
 
   const inputValue = useRef();
@@ -139,6 +139,11 @@ const Header = () => {
               ref={dropdownRef}
             >
               {user.name}
+              <i
+                className={`bx ${
+                  isDropdownOpen ? "bx-chevron-up" : "bx-chevron-down"
+                } dropdown-icon`}
+              ></i>
               {isDropdownOpen && (
                 <ul className="dropdown-menu">
                   <li>

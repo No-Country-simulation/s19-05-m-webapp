@@ -200,32 +200,56 @@ nav ul.open {
 
   .header-username {
     position: relative;
+    display: flex;
+    align-items: center;
     cursor: pointer;
   }
 
+  .dropdown-icon {
+    font-size: 24px;
+    transition: transform 0.3s ease;
+  }
+
+  .bx-chevron-up,
+  .bx-chevron-down {
+    color: var(--second-color);
+  }
+
+  .bx-chevron-up {
+    transform: rotate(180deg);
+  }
+
+  .bx-chevron-down {
+    transform: rotate(180deg);
+  }
+
   .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    height: 80px;
-    width: 135px;
-    background-color: var(--optional-color-2);
-    padding: 2rem auto;
-    list-style: none;
-    z-index: 1000;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    position: absolute;
+    top: 100%;
+    right: 15%;
+    height: auto;
+    width: 135px;
+    background-color: var(--optional-color-2);
+    padding: 0.5rem;
+    border-radius: 5px;
+    list-style: none;
+    z-index: 1000;
   }
 
   .dropdown-item {
-    margin: 0.5rem 0;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    width: 100%;
     color: var(--second-color);
     text-decoration: none;
+    display: block;
+    user-select: none;
   }
 
-  .dropdown-menu li:hover,
-  a:hover {
+  .dropdown-item:hover {
     background-color: var(--second-color);
     color: var(--first-color);
   }
