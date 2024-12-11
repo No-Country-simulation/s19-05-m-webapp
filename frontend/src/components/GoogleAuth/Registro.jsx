@@ -51,7 +51,7 @@ const Registro = () => {
         phone: ""
       }
       setError("Cargando...");
-      userService.createUser(userData, setError);
+      userService.createUser(userData, setError, dispatch);
     }
   };
 
@@ -65,8 +65,8 @@ const Registro = () => {
       address: "",
       phone: ""
     };
-    userService.createUser(userData, setError);
-    userService.checkGoogle(userObject.email, dispatch)
+    userService.createUser(userData, setError, dispatch);
+    userService.checkUser(userData.email, userData.password, setError, dispatch);
   }
 
   useEffect(() => {

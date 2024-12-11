@@ -208,6 +208,7 @@ nav ul.open {
     top: 100%;
     right: 0;
     height: 80px;
+    width: 135px;
     background-color: var(--optional-color-2);
     padding: 2rem auto;
     list-style: none;

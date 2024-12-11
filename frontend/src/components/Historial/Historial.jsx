@@ -19,10 +19,7 @@ const Historial = () => {
         return null;
     }
 
-    const { data: checkout } = useFetch(
-        checkoutService.getCheckoutUser,
-        user?.id_users
-    );
+    const { data: checkout } = useFetch(checkoutService.getCheckoutUser, user?.id_users);
 
     return (
         <div id="table-container">

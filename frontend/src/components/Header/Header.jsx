@@ -13,6 +13,7 @@ import userService from "../../services/register";
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const { isModalOpen, openModal, closeModal } = useModal();
   const { totalQuantity } = useCart();
   const { isLoginOpen, openLogin, closeLogin } = useLogin();
@@ -26,16 +27,29 @@ const Header = () => {
       setIsWideViewport(window.innerWidth > 992);
     };
 
+    const handleOutsideClick = (event) => {
+      // Cierra el dropdown si el clic ocurre fuera de este
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
   }, []);
 
-  const handleSignOut = () => {
-    dispatch(logout());
+  function handleSignOut() {
+    userService.signOut(dispatch);
+
     google.accounts.id.disableAutoSelect();
     setIsDropdownOpen(false);
     navigate("/");
-  };
+  }
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -122,6 +136,7 @@ const Header = () => {
             <li
               className="header-item header-username"
               onClick={toggleDropdown}
+              ref={dropdownRef}
             >
               {user.name}
               {isDropdownOpen && (
