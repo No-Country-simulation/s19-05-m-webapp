@@ -195,9 +195,9 @@ const userController = new UserController();
  */
 // Registrar usuarios.
 sessionRouter.post(
-  "/register",
-  passport.authenticate("register", { session: false }),
-  register
+    "/register",
+    passport.authenticate("register", { session: false }),
+    register
 );
 /**
  * @swagger
@@ -276,9 +276,9 @@ sessionRouter.post(
  */
 // Loguear usuarios.
 sessionRouter.post(
-  "/login",
-  passport.authenticate("login", { session: false }),
-  login
+    "/login",
+    passport.authenticate("login", { session: false }),
+    login
 );
 /**
  * @swagger
@@ -312,9 +312,9 @@ sessionRouter.post(
  */
 // Consultar si está online.
 sessionRouter.post(
-  "/online",
-  passport.authenticate("online", { session: false }),
-  online
+    "/online",
+    passport.authenticate("online", { session: false }),
+    online
 );
 /**
  * @swagger
@@ -349,9 +349,9 @@ sessionRouter.post(
  */
 // Cerrar sesión de usuarios.
 sessionRouter.post(
-  "/signout",
-  passport.authenticate("signout", { session: false }),
-  signout
+    "/signout",
+    passport.authenticate("signout", { session: false }),
+    signout
 );
 /**
  * @swagger
@@ -377,15 +377,15 @@ sessionRouter.post(
  */
 // Autenticar con Google. A la pantalla de consentimiento.
 sessionRouter.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+    "/auth/google",
+    passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
 // Callback de Google Auth.
 sessionRouter.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { session: false }),
-  google
+    "/auth/google/callback",
+    passport.authenticate("google", { session: false }),
+    google
 );
 
 // Funcion para registarr un usuario.
@@ -403,7 +403,9 @@ function login(req: Request, res: Response, next: NextFunction): void {
     try {
         const user = req.user;
         const token = req.token;
-        res.status(200).json({ message: "USER LOGGED IN", token, user });
+        const opts = { maxAge: 60 * 60 * 24 * 7, secure: true, httpOnly: true };
+        const message = "USER LOGGED IN.";
+        res.status(200).cookie("token", token, opts).json({ message, user });
     } catch (error) {
         return next(error);
     };
@@ -413,10 +415,15 @@ function login(req: Request, res: Response, next: NextFunction): void {
 function online(req: Request, res: Response, next: NextFunction): void {
     try {
         const user: any = req.user || undefined;
-        res.status(200).json({ message: `El usuario: ${user.email} is online`, token: req.token });
+        res
+            .status(200)
+            .json({
+                message: `El usuario: ${user.email} is online`,
+                token: req.token,
+            });
     } catch (error) {
         return next(error);
-    };
+    }
 }
 
 // Funcion para signout un user.
@@ -432,8 +439,12 @@ function signout(req: Request, res: Response, next: NextFunction): void {
 // Funcion de respuesta de google auth callback.
 function google(req: Request, res: Response, next: NextFunction): void {
     try {
-        const user = req.user;
-        res.status(200).json({ message: "USER LOGGED IN", user });
+        // Extraemos el token del objt req.token.
+        const token = req.token;
+        // Opciones para la cookie que almacenara el token. Duracion 7 dias y con seguridad httpOnly.
+        const opts = { maxAge: 60 * 60 * 24 * 7, secure: true, httpOnly: true };
+        const message = "USER LOGGED IN"
+        res.status(201).cookie("token", token, opts).redirect("/");
     } catch (error) {
         next(error);
     }
