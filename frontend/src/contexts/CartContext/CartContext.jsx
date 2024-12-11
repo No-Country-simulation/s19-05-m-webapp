@@ -35,8 +35,18 @@ const cartReducer = (state, action) => { //Estado actual y acción sobre como mo
 //Se usa el reducer para manejar el estado y las acciones(dispatch)
 //Children = quienes consumen el contexto
 export const CartProvider = ({ children }) => {
+
+    const safeParseJSON = (jsonString) => {
+        try {
+            return JSON.parse(jsonString);
+        } catch (error) {
+            console.warn('Error al analizar JSON:', error);
+            return [];
+        }
+    };
+
     const [cookies, setCookie] = useCookies(['cart']);
-    const [state, dispatch] = useReducer(cartReducer, cookies.cart ? JSON.parse(cookies.cart) : []);
+    const [state, dispatch] = useReducer(cartReducer, cookies.cart ? safeParseJSON(cookies.cart) : []);
     const totalQuantity = state.reduce((total, item) => total + item.quantity, 0);
     console.log('Cookies iniciales:', cookies.cart);
     
