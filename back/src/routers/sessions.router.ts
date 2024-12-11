@@ -382,7 +382,7 @@ function login(req: Request, res: Response, next: NextFunction): void {
     try {
         const user = req.user;
         const token = req.token;
-        const opts = { maxAge: 60 * 60 * 24 * 7, httpOnly: true };
+        const opts = { maxAge: 60 * 60 * 24 * 7, secure: true, httpOnly: true };
         const message = "USER LOGGED IN.";
         res.status(200).cookie("token", token, opts).json({ message, user });
     } catch (error) {
@@ -419,7 +419,7 @@ function google(req: Request, res: Response, next: NextFunction): void {
         // Extraemos el token del objt req.token.
         const token = req.token;
         // Opciones para la cookie que almacenara el token. Duracion 7 dias y con seguridad httpOnly.
-        const opts = { maxAge: 60 * 60 * 24 * 7, httpOnly: true };
+        const opts = { maxAge: 60 * 60 * 24 * 7, secure: true, httpOnly: true };
         const message = "USER LOGGED IN"
         res.status(201).cookie("token", token, opts).redirect("/");
     } catch (error) {
