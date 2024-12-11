@@ -116,6 +116,7 @@ const userController = new UserController();
  *       additionalProperties: false
  */
 
+
 /**
  * @swagger
  * /api/sessions/register:
@@ -194,17 +195,13 @@ const userController = new UserController();
  *         description: Internal server error.
  */
 // Registrar usuarios.
-sessionRouter.post(
-    "/register",
-    passport.authenticate("register", { session: false }),
-    register
-);
+sessionRouter.post("/register", passport.authenticate("register", { session: false }), register);
 /**
  * @swagger
  * /api/sessions/login:
  *   post:
  *     summary: Authenticate a user and generate a session token in a cookie.
- *     tags:
+ *     tags: 
  *       - Sessions
  *     requestBody:
  *       required: true
@@ -275,17 +272,13 @@ sessionRouter.post(
  *         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE2ODMwMDAwMDB9.tYMCfBPWEXMxHPZi8U5VL23_HdYAH_vWXQGpdcwUMcA"
  */
 // Loguear usuarios.
-sessionRouter.post(
-    "/login",
-    passport.authenticate("login", { session: false }),
-    login
-);
+sessionRouter.post("/login", passport.authenticate("login", { session: false }), login);
 /**
  * @swagger
  * /api/sessions/online:
  *   post:
  *     summary: Check if the user is online based on the JWT token in the cookie.
- *     tags:
+ *     tags: 
  *       - Sessions
  *     responses:
  *       200:
@@ -303,25 +296,21 @@ sessionRouter.post(
  *                   example: "BENJAPEY@GMAIL.COM IS ONLINE"
  *       401:
  *         description: Unauthorized. The user is not authenticated or the token is expired.
- *
+ *         
  *       500:
  *         description: Internal server error.
- *
+ *         
  *     security:
  *       - cookieAuth: []
  */
 // Consultar si está online.
-sessionRouter.post(
-    "/online",
-    passport.authenticate("online", { session: false }),
-    online
-);
+sessionRouter.post("/online", passport.authenticate("online", { session: false }), online);
 /**
  * @swagger
  * /api/sessions/signout:
  *   post:
  *     summary: Logout the user and remove the session token in the cookie.
- *     tags:
+ *     tags: 
  *       - Sessions
  *     responses:
  *       200:
@@ -336,10 +325,10 @@ sessionRouter.post(
  *                   example: "USER SIGNOUT."
  *       401:
  *         description: Unauthorized. The user is not authenticated or the token is invalid/expired.
- *
+ * 
  *       500:
  *         description: Internal server error.
- *
+ *         
  *     security:
  *       - cookieAuth: []
  *     cookies:
@@ -348,11 +337,7 @@ sessionRouter.post(
  *         description: The token cookie will be cleared on successful signout.
  */
 // Cerrar sesión de usuarios.
-sessionRouter.post(
-    "/signout",
-    passport.authenticate("signout", { session: false }),
-    signout
-);
+sessionRouter.post("/signout", passport.authenticate("signout", { session: false }), signout);
 /**
  * @swagger
  * /api/sessions/auth/google:
@@ -376,23 +361,17 @@ sessionRouter.post(
  *     security: []
  */
 // Autenticar con Google. A la pantalla de consentimiento.
-sessionRouter.get(
-    "/auth/google",
-    passport.authenticate("google", { scope: ["email", "profile"] })
-);
+sessionRouter.get("/auth/google", passport.authenticate("google", { scope: ["email", "profile"] }));
 
 // Callback de Google Auth.
-sessionRouter.get(
-    "/auth/google/callback",
-    passport.authenticate("google", { session: false }),
-    google
-);
+sessionRouter.get("/auth/google/callback", passport.authenticate("google", { session: false }), google);
 
 // Funcion para registarr un usuario.
 function register(req: Request, res: Response, next: NextFunction): void {
     try {
         const user = req.user;
-        res.status(200).json({ message: "USER CREATED.", user });
+        const message = "USER CREATED.";
+        res.status(201).json({ message, user });
     } catch (error) {
         next(error);
     }
@@ -403,7 +382,7 @@ function login(req: Request, res: Response, next: NextFunction): void {
     try {
         const user = req.user;
         const token = req.token;
-        const opts = { maxAge: 60 * 60 * 24 * 7, secure: true, httpOnly: true };
+        const opts = { maxAge: 60 * 60 * 24 * 7, httpOnly: true };
         const message = "USER LOGGED IN.";
         res.status(200).cookie("token", token, opts).json({ message, user });
     } catch (error) {
@@ -414,23 +393,21 @@ function login(req: Request, res: Response, next: NextFunction): void {
 // Funcion para ver si esta online un usario.
 function online(req: Request, res: Response, next: NextFunction): void {
     try {
-        const user: any = req.user || undefined;
-        res
-            .status(200)
-            .json({
-                message: `El usuario: ${user.email} is online`,
-                token: req.token,
-            });
+        const message = req.user
+            ? `${(req.user as { email: string }).email.toUpperCase()} IS ONLINE`
+            : undefined;
+        res.status(200).json({ online: true, message });
     } catch (error) {
         return next(error);
-    }
+    };
 }
 
 // Funcion para signout un user.
 function signout(req: Request, res: Response, next: NextFunction): void {
     try {
-        const user = req.user;
-        res.status(200).json({ message: "USER SIGNOUT.", user });
+        req.user = {};
+        const message = "USER SIGNOUT.";
+        res.status(200).clearCookie("token").json({ message });
     } catch (error) {
         next(error);
     }
@@ -442,7 +419,7 @@ function google(req: Request, res: Response, next: NextFunction): void {
         // Extraemos el token del objt req.token.
         const token = req.token;
         // Opciones para la cookie que almacenara el token. Duracion 7 dias y con seguridad httpOnly.
-        const opts = { maxAge: 60 * 60 * 24 * 7, secure: true, httpOnly: true };
+        const opts = { maxAge: 60 * 60 * 24 * 7, httpOnly: true };
         const message = "USER LOGGED IN"
         res.status(201).cookie("token", token, opts).redirect("/");
     } catch (error) {
