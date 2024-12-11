@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
-import { useCookies } from 'react-cookie'; 
+import { useCookies } from 'react-cookie';
 
 const CartContext = createContext(); //Guarda y comparte estado y acciones
 
@@ -7,7 +7,7 @@ const cartReducer = (state, action) => { //Estado actual y acción sobre como mo
     switch (action.type) {
         case 'ADD_ITEM': {
             const existingItem = state.find((item) => item.id === action.payload.id);
-            //Si existe actualizo el prod encontrado
+            console.log(existingItem);
             if (existingItem) {
                 return state.map((item) =>
                     item.id === action.payload.id
@@ -26,6 +26,8 @@ const cartReducer = (state, action) => { //Estado actual y acción sobre como mo
                     ? { ...item, quantity: action.payload.quantity }
                     : item
             );
+        case 'SET_CART':
+            return action.payload;
         default:
             return state;
     }
@@ -34,11 +36,12 @@ const cartReducer = (state, action) => { //Estado actual y acción sobre como mo
 //Children = quienes consumen el contexto
 export const CartProvider = ({ children }) => {
     const [cookies, setCookie] = useCookies(['cart']);
-    const [state, dispatch] = useReducer(cartReducer, cookies.cart || []);
+    const [state, dispatch] = useReducer(cartReducer, cookies.cart ? JSON.parse(cookies.cart) : []);
     const totalQuantity = state.reduce((total, item) => total + item.quantity, 0);
-
+    console.log('Cookies iniciales:', cookies.cart);
+    
     useEffect(() => {
-        setCookie('cart', state, { path: '/', maxAge: 60 * 60 * 24 * 7 });
+        setCookie('cart', JSON.stringify(state), { path: '/', maxAge: 60 * 60 * 24 * 7 });
     }, [state, setCookie]);
 
     return (

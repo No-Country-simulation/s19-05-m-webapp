@@ -2,57 +2,54 @@ import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const getCart = async (userId) => {
-	try {
-		const response = await axios.get(`${BASE_URL}shopping`, {
-			params: { user: userId }, 
-		});
-		return response.data.data; 
-	} catch {
-		throw new Error("No se pudo cargar el carrito. Inténtalo de nuevo más tarde.");
-	}
-};
-
-const createCart = async (userId) => {
-	try {
-		const response = await axios.post(`${BASE_URL}shopping`, { user: userId });
-		return response.data.message; 
-	} catch {
-		throw new Error("No se pudo crear el carrito. Inténtalo de nuevo más tarde.");
-	}
-};
-
-const addOrUpdateProductInCart = async (userId, productId, quantity) => {
-	console.log({userId, productId, quantity});
-	try {
-		const response = await axios.post(`${BASE_URL}shopping`, {user_id:userId, products_id:productId, quantity },
-			{
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-			}
-		);
-		console.error("Error al actualizar el carrito:", error.response?.data || error.message);
-		return response.data.message; 
-	} catch {
-		throw new Error("No se pudo actualizar el producto en el carrito. Inténtalo de nuevo más tarde.");
-	}
-};
-
-const removeProductFromCart = async (userId, productId) => {
-	try {
-		const response = await axios.delete(`${BASE_URL}shopping/${userId}/${productId}`);
-		return response.data.message;
-	} catch {
-		throw new Error("No se pudo eliminar el producto del carrito. Inténtalo de nuevo más tarde.");
-	}
-};
-
 const shoppingCartService = {
-	getCart,
-	createCart,
-	addOrUpdateProductInCart,
-	removeProductFromCart,
+
+	getCart: async (user_id) => {
+		try {
+			const response = await axios.get(`${BASE_URL}/shopping/user/${user_id}`)
+			return response.data.data;
+		} catch (error) {
+			console.error("Error al cargar el carrito:", error.response?.data || error.message);
+			throw new Error("No se pudo cargar el carrito. Inténtalo de nuevo más tarde.");
+		}
+	},
+	
+	createCart: async (user_id, products_id, quantity) => {
+		try {
+			const response = await axios.post(`${BASE_URL}/shopping`, { user_id, products_id, quantity});
+			return response.data.message;
+		} catch (error){
+			console.error("Error al crear el carrito:", error.response?.data || error.message);
+			throw new Error("No se pudo crear el carrito. Inténtalo de nuevo más tarde.");
+		}
+	},
+
+	addOrUpdateProductInCart: async (user_id, products_id) => {
+		console.log({ user_id, products_id});
+		try {
+			const response = await axios.put(`${BASE_URL}/shopping/${user_id}/${products_id}`,
+				{
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+			return response.data.message;
+		} catch (error){
+			console.error("Error al actualizar el carrito:", error.response?.data || error.message);
+			throw new Error("No se pudo actualizar el producto en el carrito. Inténtalo de nuevo más tarde.");
+		}
+	},
+
+	removeProductFromCart: async (user_id, products_id) => {
+		try {
+			const response = await axios.delete(`${BASE_URL}/shopping/${user_id}/${products_id}`);
+			return response.data.message;
+		} catch (error){
+			console.error("Error al eliminar el producto del carrito:", error.response?.data || error.message);
+			throw new Error("No se pudo eliminar el producto del carrito. Inténtalo de nuevo más tarde.");
+		}
+	}
 };
 
 export default shoppingCartService;
