@@ -195,9 +195,9 @@ const userController = new UserController();
  */
 // Registrar usuarios.
 sessionRouter.post(
-  "/register",
-  passport.authenticate("register", { session: false }),
-  register
+    "/register",
+    passport.authenticate("register", { session: false }),
+    register
 );
 /**
  * @swagger
@@ -276,9 +276,9 @@ sessionRouter.post(
  */
 // Loguear usuarios.
 sessionRouter.post(
-  "/login",
-  passport.authenticate("login", { session: false }),
-  login
+    "/login",
+    passport.authenticate("login", { session: false }),
+    login
 );
 /**
  * @swagger
@@ -312,9 +312,9 @@ sessionRouter.post(
  */
 // Consultar si está online.
 sessionRouter.post(
-  "/online",
-  passport.authenticate("online", { session: false }),
-  online
+    "/online",
+    passport.authenticate("online", { session: false }),
+    online
 );
 /**
  * @swagger
@@ -349,9 +349,9 @@ sessionRouter.post(
  */
 // Cerrar sesión de usuarios.
 sessionRouter.post(
-  "/signout",
-  passport.authenticate("signout", { session: false }),
-  signout
+    "/signout",
+    passport.authenticate("signout", { session: false }),
+    signout
 );
 /**
  * @swagger
@@ -377,25 +377,25 @@ sessionRouter.post(
  */
 // Autenticar con Google. A la pantalla de consentimiento.
 sessionRouter.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+    "/auth/google",
+    passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
 // Callback de Google Auth.
 sessionRouter.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { session: false }),
-  google
+    "/auth/google/callback",
+    passport.authenticate("google", { session: false }),
+    google
 );
 
 // Funcion para registarr un usuario.
 function register(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user = req.user;
-    res.status(200).json({ message: "USER CREATED.", user });
-  } catch (error) {
-    next(error);
-  }
+    try {
+        const user = req.user;
+        res.status(200).json({ message: "USER CREATED.", user });
+    } catch (error) {
+        next(error);
+    }
 }
 
 // Funcion para loguear un usuario.
@@ -413,27 +413,27 @@ function login(req: Request, res: Response, next: NextFunction): void {
 
 // Funcion para ver si esta online un usario.
 function online(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user: any = req.user || undefined;
-    res
-      .status(200)
-      .json({
-        message: `El usuario: ${user.email} is online`,
-        token: req.token,
-      });
-  } catch (error) {
-    return next(error);
-  }
+    try {
+        const user: any = req.user || undefined;
+        res
+            .status(200)
+            .json({
+                message: `El usuario: ${user.email} is online`,
+                token: req.token,
+            });
+    } catch (error) {
+        return next(error);
+    }
 }
 
 // Funcion para signout un user.
 function signout(req: Request, res: Response, next: NextFunction): void {
-  try {
-    const user = req.user;
-    res.status(200).json({ message: "USER SIGNOUT.", user });
-  } catch (error) {
-    next(error);
-  }
+    try {
+        const user = req.user;
+        res.status(200).json({ message: "USER SIGNOUT.", user });
+    } catch (error) {
+        next(error);
+    }
 }
 
 // Funcion de respuesta de google auth callback.
