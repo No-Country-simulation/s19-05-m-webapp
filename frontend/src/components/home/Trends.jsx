@@ -26,6 +26,7 @@ const Trends = () => {
                 title={product.title}
                 category={product.category}
                 price={product.price}
+                image={product.image}
                 onClick={() => handleCard(product.id_product)}
               />
             ))}
