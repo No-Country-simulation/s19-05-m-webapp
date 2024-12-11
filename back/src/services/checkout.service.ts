@@ -11,6 +11,13 @@ import {
 } from "../config/env";
 import axios from "axios";
 
+interface CheckoutWithLinks extends Checkout {
+    links?: {
+        href: string;
+        rel: string;
+        method: string;
+    }[];
+}
 export class CheckoutService {
 	constructor(private dataSource: DataSource) {}
 
@@ -187,7 +194,21 @@ export class CheckoutService {
 				where: { shopping_user: user, status: StatusCheckout.PENDING },
 			});
 
-			if (existingCheckout) return [existingCheckout];
+			if (existingCheckout){
+				(existingCheckout as CheckoutWithLinks).links = [
+					{
+						href: `${PAYPAL_API}/v2/checkout/orders/${existingCheckout.id_checkout}`,
+						rel: "self",
+						method: "GET",
+					},
+					{
+						href: `https://www.sandbox.paypal.com/checkoutnow?token=${existingCheckout.id_checkout}`,
+						rel: "payer-action",
+						method: "GET",
+					},
+				];
+				return [existingCheckout];
+			}
 			
 			if (pendingShoppings.length === 0) {
 				const shoppingsToReactivate = userShoppings.filter(
@@ -240,7 +261,7 @@ export class CheckoutService {
 				newCheckout.push(checkout);
 			}
 
-			const savedCheckouts = await queryRunner.manager.save(Checkout, newCheckout);
+			await queryRunner.manager.save(Checkout, newCheckout);
 			await queryRunner.commitTransaction();
 			return orderDetails;
 		} catch (error) {
