@@ -22,7 +22,7 @@ const Header = () => {
   const [isWideViewport, setIsWideViewport] = useState(window.innerWidth > 992);
 
   function handleSignOut() {
-    userService.signOut(user.email, dispatch);
+    userService.signOut(dispatch);
     google.accounts.id.disableAutoSelect();
     setIsDropdownOpen(false);
   }

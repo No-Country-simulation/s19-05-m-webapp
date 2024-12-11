@@ -39,25 +39,25 @@ const GoogleAuth = ({isOpen, onClose}) => {
         if (errorMessage) {
           setError(errorMessage);
         } else {
-          setError("");
-          userService.checkUser(formData.email, formData.password, setError, onClose, dispatch);
+          setError("Cargando...");
+          userService.checkUserLogin(formData.email, formData.password, setError, onClose, dispatch);
         }
     };
 
     function handleCallbackResponse(response) {
         var userObject = jwtDecode(response.credential);
         const userData = {
-            name: userObject.name,
-            email: userObject.email,
-            password: userObject.sub,
-            active: true,
-            address: "",
-            phone: ""
-            };
-        userService.createUser(userData, setError);
-        userService.checkGoogle(userObject.email, dispatch)
-        onClose()
-    }
+          name: userObject.name,
+          email: userObject.email,
+          password: userObject.sub,
+          active: true,
+          address: "",
+          phone: ""
+        };
+        userService.createUser(userData, setError, dispatch);
+        userService.checkUser(userData.email, userData.password, setError, dispatch);
+        onClose();
+      }
 
     useEffect(() => {
         google.accounts.id.initialize({
