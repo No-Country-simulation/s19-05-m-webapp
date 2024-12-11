@@ -1,30 +1,50 @@
 const platformOptions = [
-    { value: 'Plataformas' },
-    { value: 'Nintendo Switch' },
+    { value: 'Seleccionar Plataforma', disabled: true },
+    { value: 'Nintendo' },
     { value: 'PlayStation' },
-    { value: 'PC' }
-];
-
-const modelOptions = [
-    { value: 'Modelos' },
-    { value: 'Standard Model' },
-    { value: 'OLED Model' },
-    { value: 'PlayStation 5' },
-    { value: 'PlayStation 4' },
-    { value: 'Windows 10' },
+    { value: 'PC' },
+    { value: 'Xbox' }
 ];
 
 const genreOptions = [
-    { value: 'Generos' },
-    { value: 'Fantasy' },
-    { value: 'Family' },
-    { value: 'Sports' },
-    { value: 'Adventure' },
-    { value: 'Sci-Fi' },
+    { value: 'Seleccionar Género', disabled: true },
+    { value: 'Deporte' },
+    { value: 'Aventura' },
+    { value: 'Accion' },
+    { value: 'Suspenso' },
+    { value: 'Carreras' },
 ];
 
+const modelOptionsByPlatform = {
+    PC: [
+        { value: 'Seleccionar Modelo', disabled: true },
+        { value: 'Windows' },
+        { value: 'Mac' },
+        { value: 'Linux' }
+    ],
+    PlayStation: [
+        { value: 'Seleccionar Modelo', disabled: true },
+        { value: 'PlayStation 4' },
+        { value: 'PlayStation 5' }
+    ],
+    Nintendo: [
+        { value: 'Seleccionar Modelo', disabled: true },
+        { value: 'Switch' }
+    ],
+    Xbox: [
+        { value: 'Seleccionar Modelo', disabled: true },
+        { value: 'One' },
+        { value: 'Series x|s' }
+    ],
+};
+
+const userActive = [
+    { value: 'Activo' },
+    { value: 'Inactivo' }
+]
+
 const countryOptions = [
-    { value: 'Países' },
+    { value: 'Seleccionar País' },
     { value: 'Argentina'},
     { value: 'Bolivia'},
     { value: 'Chile' },
@@ -35,13 +55,14 @@ const countryOptions = [
     { value: 'Peru' },
     { value: 'Uruguay'  },
     { value: 'Venezuela' },
-]
+];
 
 const options = {
     genreOptions,
     platformOptions,
-    modelOptions,
+    modelOptionsByPlatform,
     countryOptions,
+    userActive,
 }
 
 export default options;

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../card/Card";
 import Dropdown from "../dropdown/Dropdown";
@@ -10,7 +11,6 @@ import usePagination from "../../hooks/usePagination";
 import options from "../../utils/options";
 import useFilteredProducts from "../../hooks/useFilteredProducts";
 import "./products.css";
-import { useEffect } from "react";
 
 const Products = () => {
   const {
@@ -25,14 +25,17 @@ const Products = () => {
     loadMore,
     resetPagination,
   } = usePagination();
+  
   const navigate = useNavigate();
   const location = useLocation();
+  const [modelOptions, setModelOptions] = useState([]);
 
   const {
     values: selectedOptions,
     handleChange,
     reset,
-  } = useReset({ platform: "", genre: "", model: "" });
+  } = useReset({ 
+    platform: "Seleccionar Plataforma", genre: "Seleccionar Género", model: "Seleccionar Modelo" });
 
   const {
     data: productsByGenre,
@@ -40,7 +43,7 @@ const Products = () => {
     hasError: genreError,
     setHasError: setGenreError,
   } = useFetch(
-    selectedOptions.genre ? productService.getProductsByGenre : null,
+    selectedOptions.genre !== "Seleccionar Género" ? productService.getProductsByGenre : null,
     selectedOptions.genre
   );
 
@@ -50,7 +53,7 @@ const Products = () => {
     hasError: platformError,
     setHasError: setPlatformError,
   } = useFetch(
-    selectedOptions.platform ? productService.getProductsByPlatform : null,
+    selectedOptions.platform !== "Seleccionar Plataforma" ? productService.getProductsByPlatform : null,
     selectedOptions.platform
   );
 
@@ -62,11 +65,26 @@ const Products = () => {
     page
   );
 
+  useEffect(() => {
+    if (selectedOptions.platform) {
+      const newModelOptions = options.modelOptionsByPlatform[selectedOptions.platform] || [];
+      setModelOptions(newModelOptions);
+  
+      if (!newModelOptions.some(option => option.value === selectedOptions.model)) {
+        handleChange({ target: { name: 'model', value: 'Seleccionar Modelo' } });
+      }
+    } else {
+      setModelOptions([]);
+    }
+  }, [selectedOptions.platform, selectedOptions.model]);
+  
   const handleCard = (id) => {
     navigate(`/product/${id}`);
   };
 
-  const isFilterActive = selectedOptions.platform || selectedOptions.genre;
+  const isFilterActive = 
+    selectedOptions.platform !== "Seleccionar Plataforma" || 
+    selectedOptions.genre !== "Seleccionar Género";
 
   const handleResetFilters = () => {
     reset();
@@ -78,7 +96,6 @@ const Products = () => {
 
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
-  console.log(searchQuery);
 
   filteredProducts = filteredProducts?.filter((product) =>
     product.title.toLowerCase().includes(searchQuery)
@@ -101,9 +118,9 @@ const Products = () => {
           name="genre"
           disabled={!!productsError || !!genreError || !!platformError}
         />
-        {selectedOptions.platform && productsByPlatform && (
+        {selectedOptions.platform !== "Seleccionar Plataforma" && productsByPlatform && (
           <Dropdown
-            options={options.modelOptions}
+            options={modelOptions}
             value={selectedOptions.model}
             onChange={handleChange}
             name="model"
@@ -123,16 +140,19 @@ const Products = () => {
         ) : productsLoading || genreLoading || platformLoading ? (
           <Loader />
         ) : filteredProducts && filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <Card
-              key={product.id_product}
-              title={product.title}
-              genre={product.genre}
-              price={product.price}
-              onClick={() => handleCard(product.id_product)}
-            />
+          filteredProducts.reverse().map((product) => (
+            product.stock > 0 && (
+              <Card
+                key={product.id_product}
+                title={product.title}
+                image={product.image}
+                genre={product.genre}
+                price={product.price}
+                onClick={() => handleCard(product.id_product)}
+              />
+            )
           ))
-        ) : isFilterActive && filteredProducts.length === 0 ? (
+        ) : isFilterActive && filteredProducts?.length === 0 ? (
           <p>
             No se encontraron productos que coincidan con los filtros
             seleccionados.

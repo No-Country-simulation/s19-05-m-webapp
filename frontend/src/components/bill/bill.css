@@ -1,0 +1,38 @@
+.bill-logo {
+    width: 65%;
+}
+
+.bill-title {
+    padding-top: 40px;
+    padding-bottom: 20px;
+}
+
+.bill-list {
+    color: var(--accent-color);
+}
+
+.bill-total {
+    padding-top: 15px;
+    padding-bottom: 40px;
+}
+
+.bill-detail p, .bill-detail ul li {
+    padding-bottom: 5px;
+}
+
+.container-bill button {
+    background-color: transparent !important;
+    border: 1px solid var(--second-color);
+    border-radius: 8px;
+    color: var(--second-color) !important;
+    font-family: var(--text-font);
+    font-size: 16px;
+    padding: 10px;  
+    transition: all 500ms ease;
+    width: 100%;
+}
+
+.container-bill button:hover {
+    background-color: var(--second-color) !important;
+    color: var(--first-color) !important;
+}

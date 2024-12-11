@@ -47,12 +47,21 @@ const createProduct = async (newProduct) => {
 	}
 }
 
-const editProduct = async (id, updateProduct) => {
+const updateProduct = async (id, updateProduct) => {
 	try {
 		const response = await axios.put(`${BASE_URL}/products/${id}`, updateProduct);
 		return response.data.success;
 	} catch {
-		throw new Error("No se pudo editar el producto. Inténtalo de nuevo más tarde.");
+		throw new Error("No se pudo actualizar el producto. Inténtalo de nuevo más tarde.");
+	}
+}
+
+const deleteProduct = async (id) => {
+	try {
+		const response = await axios.delete(`${BASE_URL}/products/${id}`);
+		return response.data.success;
+	} catch {
+		throw new Error("No se pudo eliminar el producto. Inténtalo de nuevo más tarde.");
 	}
 }
 
@@ -62,7 +71,8 @@ const productService = {
 	getProductsByGenre,
 	getProductsByPlatform,
 	createProduct,
-	editProduct
+	updateProduct,
+	deleteProduct
 };
 
 export default productService;

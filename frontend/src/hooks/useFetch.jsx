@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 const useFetch = (api, params = null) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false); 
     const [hasError, setHasError] = useState(null);
 
-    useEffect(() => {
-        if (!api) return;
-
-        const getData = async () => {
+    const getData = useMemo(() => {
+        return async () => {
             setLoading(true);  
             setHasError(null);  
             setData(null);
@@ -17,19 +15,20 @@ const useFetch = (api, params = null) => {
                 const result = await api(params);
                 setData(result);  
             } catch (error) {
-                console.log(error)
                 const errorMessage = error.message || "Ha ocurrido un error inesperado.";
                 setHasError(errorMessage);
             } finally {
                 setLoading(false);  
             }
         };
-
-        getData();
-
     }, [api, params]);
 
-    return { data, loading, hasError, setHasError }; 
+    useEffect(() => {
+        if (!api) return;
+        getData();
+    }, [api, getData]);
+
+    return { data, loading, hasError, setHasError, refetch: getData };
 };
 
 export default useFetch;

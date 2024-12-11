@@ -62,29 +62,53 @@
     border-radius: 10px; 
 }
 
+.users {
+    height: 70vh !important
+}
+
 @media (min-width: 768px) {
     .modal-admin {
         width: 90% !important;
+    }
+
+    .users {
+        height: 70vh !important;
+        width: 400px !important;
     }
 }
 
 @media (min-width: 992px) {
     .modal-admin {
-        height: 76vh !important;
+        height: 78vh !important;
         width: 70% !important;
+    }
+
+    .users {
+        height: 50vh !important;
+        width: 400px !important;
     }
 }
 
 @media (min-width: 1200px) {
     .modal-admin {
-        height: 66vh !important;
+        height: 68vh !important;
         width: 50% !important;
+    }
+
+    .users {
+        height: 45vh !important;
+        width: 400px !important;
     }
 }
 
 @media (min-width: 1300px) {
     .modal-admin {
-        height: 86vh !important;
+        height: 90vh !important;
         width: 50% !important;
+    }
+
+    .users {
+        height: 60vh !important;
+        width: 400px !important;
     }
 }

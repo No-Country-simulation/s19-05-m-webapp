@@ -1,12 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./footer.css";
+import { useEffect } from "react";
 
 const Footer = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
     <section className="footer page-container">
       <article className="logo-footer">
         <Link to="/">
-          <img src="logo.png" alt="checkpoint logo" />
+          <img src="/logo.png" alt="checkpoint logo" />
         </Link>
         <p>Todos los derechos reservados</p>
       </article>

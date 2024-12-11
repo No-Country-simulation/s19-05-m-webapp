@@ -1,14 +1,19 @@
 import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../store/slices/auth.slices";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import "./GoogleAuth.css";
+import userService from "../../services/register";
 
 const GoogleAuth = ({isOpen, onClose}) => {
     if (!isOpen) return null; 
 
     const dispatch = useDispatch();
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+    const [error, setError] = useState("");
 
     const handleOverlayClick = (e) => {
         if (e.target === e.currentTarget) {
@@ -16,11 +21,43 @@ const GoogleAuth = ({isOpen, onClose}) => {
         }
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+      };
+    
+      const validateForm = () => {
+        if (!formData.email || !formData.password ) {
+          return "Todos los campos son obligatorios.";
+        }
+        return "";
+      };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const errorMessage = validateForm();
+        if (errorMessage) {
+          setError(errorMessage);
+        } else {
+          setError("Cargando...");
+          userService.checkUserLogin(formData.email, formData.password, setError, onClose, dispatch);
+        }
+    };
+
     function handleCallbackResponse(response) {
         var userObject = jwtDecode(response.credential);
-        dispatch(setUser(userObject));
+        const userData = {
+          name: userObject.name,
+          email: userObject.email,
+          password: userObject.sub,
+          active: true,
+          address: "",
+          phone: ""
+        };
+        userService.createUser(userData, setError, dispatch);
+        userService.checkUser(userData.email, userData.password, setError, dispatch);
         onClose();
-    }
+      }
 
     useEffect(() => {
         google.accounts.id.initialize({
@@ -39,8 +76,30 @@ const GoogleAuth = ({isOpen, onClose}) => {
             <div id="logInDiv">
                 <div id="logIn-container">
                     <h1>Iniciar Sesión</h1>
+                    {error && <div className="error"><h3>{error}</h3></div>}
+                    <form onSubmit={handleSubmit} id="login-form">
+                        <label>Correo</label>
+                        <input
+                            name="email"
+                            onChange={handleInputChange}
+                            className="input"
+                            value={formData.email}
+                            type="email"
+                        />
+
+                        <label>Contraseña</label>
+                        <input
+                            name="password"
+                            onChange={handleInputChange}
+                            className="input"
+                            value={formData.password}
+                            type="password"
+                        />
+
+                        <button id="boton-submit" type="submit">Ingresar</button>
+                    </form>
                     <div id="logInButton"></div>
-                    <Link to="/registro" id="link-login">
+                    <Link to="/registro" id="link-login" onClick={handleOverlayClick}>
                     ¿No estás registrado? Regístrate aquí.
                     </Link>
                     <div id="triangle-login"></div>

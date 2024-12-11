@@ -1,10 +1,10 @@
 import "./card.css";
 
-const imageUrl = "/crash-bandicoot.webp"; 
-
-const Card = ({ title, genre, price, onClick }) => { 
+const Card = ({ title, image, genre, price, onClick }) => { 
     return (
-        <div className="card" onClick={onClick} style={{ backgroundImage: `url(${imageUrl})` }}>
+        <div className="card" onClick={onClick} 
+            style={{ backgroundImage: `url(${image && image.startsWith('https') ? 
+            image : '/images/default-image.png'})` }}>
             <div className="card-content">
                 <h2 className="card-title">{title}</h2>
                 <p className="card-genre">{genre}</p>

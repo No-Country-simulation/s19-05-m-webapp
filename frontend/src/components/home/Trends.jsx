@@ -1,4 +1,3 @@
-import React from "react";
 import useFetch from "../../hooks/useFetch";
 import productService from "../../services/products";
 import { useNavigate } from "react-router-dom";
@@ -19,14 +18,15 @@ const Trends = () => {
       <div className="products-container">
         {products &&
           products
-            .slice(0, 4)
-            .map((product, index) => (
+            .slice(-4)
+            .reverse()
+            .map((product) => (
               <Card
-                key={index}
+                key={product.id_product}
                 title={product.title}
                 category={product.category}
                 price={product.price}
-                onClick={() => handleCard(index)}
+                onClick={() => handleCard(product.id_product)}
               />
             ))}
       </div>

@@ -5,7 +5,7 @@ import shippingMiddleware from "./middlewares/shipping.middleware";
 import authReducer from "./slices/auth.slices";
 
 const store = configureStore({
-  reducer: { ProductsGlobal, Shipping, auth:authReducer },
+  reducer: { ProductsGlobal, Shipping, auth:authReducer,},
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(shippingMiddleware),
 });
 
