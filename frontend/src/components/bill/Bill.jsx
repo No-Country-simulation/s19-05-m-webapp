@@ -2,6 +2,7 @@ import formatDate from "../../utils/formatDate";
 import "./bill.css";
 
 const Bill = ({ order }) => {
+    console.log(order)
     return (
         <div className="container-bill">
             <img src="/logo.png" alt="checkpoint logo" className="bill-logo" />
@@ -21,7 +22,7 @@ const Bill = ({ order }) => {
                 {
                     order.shopping_products.map((p) => (
                         <tr key={p.products_id}>
-                            <td>Producto</td>
+                            <td>{p.title}</td>
                             <td>{p.quantity}</td>
                             <td>${p.price}</td>
                         </tr>
