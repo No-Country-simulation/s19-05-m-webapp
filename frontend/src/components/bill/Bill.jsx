@@ -21,7 +21,7 @@ const Bill = ({ order }) => {
                 {
                     order.shopping_products.map((p) => (
                         <tr key={p.products_id}>
-                            <td>Producto</td>
+                            <td>{p.title}</td>
                             <td>{p.quantity}</td>
                             <td>${p.price}</td>
                         </tr>

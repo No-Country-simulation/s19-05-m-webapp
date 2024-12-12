@@ -175,7 +175,9 @@ const Header = () => {
                   <li>
                     <Link
                       className="dropdown-item"
-                      to="/historial"
+                      to={
+                        user.role === "ADMINISTRATOR" ? "/admin" : "/historial"
+                      }
                       onClick={handleLinkClick}
                     >
                       Historial
@@ -196,7 +198,7 @@ const Header = () => {
                     className="header-item-link"
                     onClick={handleLinkClick}
                   >
-                    Historial
+                    Dashboard
                   </Link>
                 </li>
                 <li
