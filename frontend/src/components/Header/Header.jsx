@@ -9,6 +9,7 @@ import { useCart } from "../../contexts/CartContext/CartContext";
 import { useDispatch, useSelector } from "react-redux";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
 import userService from "../../services/register";
+import shoppingService from "../../services/shopping";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,6 +22,31 @@ const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [isWideViewport, setIsWideViewport] = useState(window.innerWidth > 992);
+  const { dispatch: setCart } = useCart();
+  useEffect(() => {
+    const getCard = async () => {
+      try {
+        const localUser = JSON.parse(localStorage.getItem("user") || "{}");
+        if (!localUser?.id_users) {
+          throw new Error("El usuario no tiene un ID válido.");
+        }
+
+        const response = await shoppingService.getShopping(localUser.id_users);
+        const shopping = response;
+        if (shopping) {
+          const cartItems = shopping[0].products;
+
+          setCart({ type: "SET_CART", payload: cartItems });
+        }
+      } catch (error) {
+        console.error("Error al obtener el carrito:", error);
+      }
+    };
+    if (user) {
+      getCard();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     const handleResize = () => {
