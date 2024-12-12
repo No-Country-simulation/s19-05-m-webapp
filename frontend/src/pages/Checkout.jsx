@@ -54,8 +54,7 @@ export const CheckoutPage = () => {
         const response = await shoppingService.patchShopping(
           localUser.id_users
         );
-        console.log(response);
-
+        
         const paymentId = response.id || response[0].id_checkout;
 
         if (paymentId) {
