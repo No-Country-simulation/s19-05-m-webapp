@@ -13,7 +13,7 @@ const server = express();
 
 server.use(cors({
     origin: ['https://checkpoint-zone.vercel.app', 'http://localhost:5173'], // Dominios permitidos
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Métodos permitidos
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // Métodos permitidos
     credentials: true, // Permitir credenciales como cookies
 }));
 //Cross-Origin-*
