@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import ProductsPage from "../pages/Products";
 import ProductDetailPage from "../pages/ProductDetail";
@@ -11,8 +11,11 @@ import Historial from "../pages/Historial";
 import Admin from "../pages/Admin";
 import SuccessPage from "../pages/payment/SuccessPage";
 import CancelPage from "../pages/payment/CancelPage";
+import { useSelector } from "react-redux";
 
 const AppRoutes = () => {
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -23,9 +26,13 @@ const AppRoutes = () => {
       <Route path="/product/:id" element={<ProductDetailPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/registro" element={<Registro />} />
-      <Route path="/admin" element={<Admin />} />
+      {user && user.role === "ADMINISTRATOR" ? (
+        <Route path="/admin" element={<Admin />} />
+      ) : (
+        <Route path="/admin" element={<Navigate to="/" />} />
+      )}
       <Route path="/historial" element={<Historial />} />
-      <Route path="/success" element={<SuccessPage />} />      
+      <Route path="/success" element={<SuccessPage />} />
       <Route path="/cancel" element={<CancelPage />} />
     </Routes>
   );

@@ -1,88 +1,133 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../../contexts/CartContext/CartContext';
-import shoppingCartService from '../../services/shoppingCart';
-import './cart.css';
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../../contexts/CartContext/CartContext";
+import "./cart.css";
+import { useSelector } from "react-redux";
+import shoppingService from "../../services/shopping";
 
 function Cart({ onClose }) {
-    const { state, dispatch } = useCart();
-    const navigate = useNavigate();
-    const user_id = localStorage.getItem('user.id_users');
+  const { state, dispatch } = useCart();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
+  const isPaymentPending = JSON.parse(localStorage.getItem("payment")) !== null;
 
-    useEffect(() => {
-        const fetchCart = async () => {
-            if (!user_id) return;
-            try {
-                const cartItems = await shoppingCartService.getCart(user_id);
-                if (Array.isArray(cartItems)) {
-                    dispatch({ type: 'SET_CART', payload: cartItems }); // Usa SET_CART para inicializar
-                } else {
-                    console.error('Formato de datos incorrecto:', cartItems);
-                }
-            } catch (error) {
-                console.error('Error al cargar el carrito:', error);
-            }
-        };
-        fetchCart();
-    }, [dispatch, user_id]);
+  const removeItem = async (id) => {
+    try {
+      const localUser = JSON.parse(localStorage.getItem("user") || "{}");
+      if (!localUser?.id_users) {
+        throw new Error("El usuario no tiene un ID válido.");
+      }
+      const response = await shoppingService.deleteShopping(user.id_users, id);
 
-    const removeItem = async (id) => {
-        try {
-            dispatch({ type: 'REMOVE_ITEM', payload: { id } });
-            await shoppingCartService.removeProductFromCart(user_id, id);
-        } catch (error) {
-            console.error('Error al eliminar el producto:', error);
-        }
-    };
+      if (response.success) {
+        dispatch({ type: "REMOVE_ITEM", payload: id });
+      }
+    } catch (error) {
+      console.error("Error al eliminar el producto del carrito:", error);
+    }
+  };
 
-    const updateQuantity = async (id, quantity, stock) => {
-        if (quantity > stock || quantity <= 0) {
-            toast.error('Cantidad no válida o supera el stock disponible.');
-            return;
-        }
-        try {
-            await shoppingCartService.addOrUpdateProductInCart(user_id, id, quantity);
-            dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
-        } catch (error) {
-            console.error('Error al actualizar la cantidad:', error);
-        }
-    };
+  const updateQuantity = async (id, quantity, stock) => {
+    try {
+      if (quantity > stock) {
+        alert("No hay suficiente stock disponible.");
+        return;
+      }
 
-    const total = Array.isArray(state)
-        ? state.reduce((sum, item) => sum + item.price * item.quantity, 0)
-        : 0;
+      const localUser = JSON.parse(localStorage.getItem("user") || "{}");
+      if (!localUser?.id_users) {
+        throw new Error("El usuario no tiene un ID válido.");
+      }
 
-    const handleCheckout = () => {
-        onClose();
-        navigate('/checkout');
-    };
+      const response = await shoppingService.updateShopping(
+        user.id_users,
+        id,
+        quantity
+      );
 
-    return (
-        <div className='cart'>
-            {state.length === 0 && <p>Tu carrito está vacío.</p>}
-            {state.map((item) => (
-                <div key={item.id}>
-                    <h4>{item.title}</h4>
-                    <p>Precio unitario: ${item.price.toFixed(2)}</p>
-                    <p>Total: ${(item.price * item.quantity).toFixed(2)}</p>
-                    <input
-                        type="number"
-                        value={item.quantity}
-                        min="1"
-                        max={item.stock}
-                        onChange={(e) =>
-                            updateQuantity(item.id, parseInt(e.target.value, 10), item.stock)
-                        }
-                    />
-                    <button onClick={() => removeItem(item.id)}>Eliminar</button>
-                </div>
-            ))}
-            <h3>Total del carrito: ${total.toFixed(2)}</h3>
-            <div className=''>
-                <button onClick={handleCheckout}>Comprar</button>
-            </div>
+      dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } });
+    } catch (error) {
+      console.error("Error al actualizar la cantidad:", error);
+    }
+  };
+
+  const total = state.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const handleCheckout = () => {
+    onClose();
+    navigate("/checkout");
+  };
+
+  return (
+    <div className="cart">
+      {isPaymentPending && (
+        <div className="payment-pending">
+          <p>El pago está pendiente.</p>
         </div>
-    );
+      )}
+      {!isPaymentPending && state.length === 0 && (
+        <p className="cart-empty">Tu carrito está vacío.</p>
+      )}
+      {!isPaymentPending &&
+        state.map((item) => (
+          <div key={item.id} className="cart-item">
+            <h4>{item.title}</h4>
+            <p>Precio unitario: ${item.price.toFixed(2)}</p>
+            <p>Total: ${(item.price * item.quantity).toFixed(2)}</p>
+            <div className="number-input-container">
+              <button
+                className="number-input-button"
+                onClick={() =>
+                  updateQuantity(item.id, item.quantity - 1, item.stock)
+                }
+              >
+                -
+              </button>
+              <input
+                type="number"
+                value={item.quantity}
+                min="1"
+                max={item.stock}
+                onChange={(e) =>
+                  updateQuantity(
+                    item.id,
+                    parseInt(e.target.value, 10),
+                    item.stock
+                  )
+                }
+              />
+              <button
+                className="number-input-button"
+                onClick={() =>
+                  updateQuantity(item.id, item.quantity + 1, item.stock)
+                }
+              >
+                +
+              </button>
+
+              <button
+                className="cart-button"
+                onClick={() => removeItem(item.id)}
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
+      {state.length > 0 && (
+        <>
+          <h3 className="cart-total">Total del carrito: ${total.toFixed(2)}</h3>
+          <div className="cart-checkout">
+            <button className="cart-button" onClick={handleCheckout}>
+              Pagar
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default Cart;

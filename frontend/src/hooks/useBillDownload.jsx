@@ -34,7 +34,6 @@ const useBillDownload = (fileName) => {
             pdf.save(`${fileName}.pdf`);
         }
     };
-
     return { elementRef, downloadPDF };
 };
 

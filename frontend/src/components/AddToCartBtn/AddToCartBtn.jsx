@@ -1,66 +1,73 @@
-import { useCart } from '../../contexts/CartContext/CartContext';
-import { Toaster, toast } from 'sonner';
+import { useCart } from "../../contexts/CartContext/CartContext";
+import { Toaster, toast } from "sonner";
 import "./addToCartButton.css";
-import shoppingCartService from '../../services/shoppingCart';
-import { useState } from 'react';
-import Cookies from 'js-cookie';
+import shoppingService from "../../services/shopping";
 
 function AddToCartButton({ product }) {
-    const { dispatch } = useCart();
-    const userData = localStorage.getItem('user');
-    const [prueba, setPrueba] = useState(false);
+  //Usa el contexto para poder "mandar" las acciones
+  const { state, dispatch } = useCart();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const isProductInCart = state.some(
+    (cartItem) => cartItem.id === product.id_product
+  );
 
-    const addToCart = async () => {
-        if (userData) {
-            const user = JSON.parse(userData);
-            const user_id = user.id_users;
+  const isPaymentPending = JSON.parse(localStorage.getItem("payment")) !== null;
 
-            if (!user_id) {
-                toast.error('Debes iniciar sesión para agregar productos al carrito');
-                return;
-            }
+  const addToCart = async () => {
+    if (product.stock > 0) {
+      if (!user.id_users) {
+        toast.error("Debes iniciar sesión para añadir al carrito");
+        return;
+      }
+      if (!product) {
+        return toast.error("El producto no existe");
+      }
 
-            try {
-                const existingCart = await shoppingCartService.getCart(user_id);
+      const newProduct = await shoppingService.postShopping(
+        user.id_users,
+        product.id_product,
+        1
+      );
 
-                if (existingCart?.products && existingCart.products.some(p => p.id === product.id_product)) {
-                    toast.info('Este producto ya está en el carrito.');
-                    return;
-                }
+      if (!newProduct) {
+        return toast.error("No se pudo agregar al carrito");
+      }
 
-                const cart = Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : [];
-                const updatedCart = [...cart, { id: product.id_product, quantity: 1 }];
+      dispatch({
+        type: "ADD_ITEM",
+        payload: { ...product, id: product.id_product },
+      });
+      toast.success("Artículo añadido al carrito");
+    } else {
+      toast.error("El producto no tiene stock disponible");
+    }
+  };
 
-                if (product.stock > 0) {
-                    await shoppingCartService.createCart(user_id, product.id_product, 1);
-                    Cookies.set('cart', JSON.stringify(updatedCart), { expires: 7 });
-                    dispatch({
-                        type: 'ADD_ITEM',
-                        payload: { ...product, id: product.id_product, user_id, quantity: 1 }
-                    });
-
-                    toast.success('Artículo añadido al carrito');
-                    setPrueba(true);
-                } else {
-                    toast.error('El producto no tiene stock disponible');
-                }
-            } catch (error) {
-                toast.error('Error al añadir el producto al carrito');
-                console.error("Error al añadir producto al carrito:", error);
-            }
-        }
-    };
-
-    return (
-        <>
-            <Toaster
-                richColors
-                position="bottom-center"
-            />
-            <button className="add-cart" onClick={addToCart} disabled={prueba}>
-                <i className="bx bxs-cart"></i> Añadir al carrito
-            </button>
-        </>
-    );
+  return (
+    <>
+      <Toaster
+        richColors
+        //closeButton
+        position="bottom-center"
+      />
+      {isPaymentPending ? (
+        <p>El pago está pendiente. No puedes añadir más productos.</p>
+      ) : isProductInCart ? (
+        <p>Este producto ya está en tu carrito.</p>
+      ) : (
+        <button
+          className="add-cart"
+          onClick={() => {
+            addToCart();
+          }}
+          disabled={product.stock === 0}
+        >
+          {" "}
+          <i className="bx bxs-cart"></i> Añadir al carrito{" "}
+        </button>
+      )}
+    </>
+  );
 }
+
 export default AddToCartButton;
