@@ -34,14 +34,16 @@ const cartReducer = (state, action) => {
         ...item,
         id: item.id_product,
         title: item.name,
-      }));
+      }));     
+      // Filtrar los elementos con "state": "PENDING"
+      const pendingItems = newCart.filter(item => item.state === "PENDING");
       return state
         .map((existingItem) => {
-          const newItem = newCart.find((item) => item.id === existingItem.id);
+          const newItem = pendingItems.find((item) => item.id === existingItem.id);
           return newItem ? { ...existingItem, ...newItem } : existingItem;
         })
         .concat(
-          newCart.filter(
+          pendingItems.filter(
             (item) => !state.some((existingItem) => existingItem.id === item.id)
           )
         );

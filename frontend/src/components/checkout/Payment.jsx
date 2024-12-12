@@ -2,22 +2,76 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { PaypalIcon } from "./PaypalIcon";
 import Loader from "../loader/Loader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import checkoutService from "../../services/checkouts";
 import { toast, Toaster } from "sonner";
+import shoppingService from "../../services/shopping";
 
-export const Payment = ({
-  onGoBack,
-  products,
-  totalAmount,
-  paymentUrl,
-  paymentId,
-  isLoading,
-  error,
-}) => {
+export const Payment = ({ onGoBack, products, totalAmount }) => {
   const shipping = useSelector((state) => state.Shipping);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(""); // Estado para el estado del pago
+  const [isLoading, setIsLoading] = useState(true);
+  const [paymentUrl, setPaymentUrl] = useState("");
+  const [paymentId, setPaymentId] = useState("");
+  const [error, setError] = useState("");
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    const generatePaymentUrl = async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+
+        // Revisar si ya existe en localStorage
+        const storedPayment = JSON.parse(localStorage.getItem("payment"));
+        if (storedPayment?.url && storedPayment?.id) {
+          setPaymentUrl(storedPayment.url);
+          setPaymentId(storedPayment.id);
+          setIsLoading(false);
+          return;
+        }
+
+        const localUser = JSON.parse(localStorage.getItem("user") || "{}");
+        if (!localUser?.id_users) {
+          throw new Error("El usuario no tiene un ID válido.");
+        }
+
+        // Llamada al servicio para obtener el ID de pago
+        const response = await shoppingService.patchShopping(
+          localUser.id_users
+        );
+
+        const paymentId = response.id || response[0].id_checkout;
+
+        if (paymentId) {
+          // Generar la URL a partir del ID
+          const generatedUrl = `https://www.sandbox.paypal.com/checkoutnow?token=${paymentId}`;
+          setPaymentUrl(generatedUrl);
+          setPaymentId(paymentId);
+
+          // Guardar en el almacenamiento local para referencia futura
+          localStorage.setItem(
+            "payment",
+            JSON.stringify({ url: generatedUrl, id: paymentId })
+          );
+        } else {
+          throw new Error("No se pudo generar el ID de pago.");
+        }
+      } catch (error) {
+        console.error("Error al generar la URL de pago:", error);
+        setError(
+          "Ocurrió un error al generar el enlace de pago. Por favor, inténtelo más tarde."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (user) {
+      generatePaymentUrl();
+    }
+  }, [user]);
 
   const handlePaypalClick = () => {
     if (paymentUrl) {
@@ -39,7 +93,7 @@ export const Payment = ({
               const check = resp[0];
 
               if (check.status === "PAID") {
-                setPaymentStatus("paid"); 
+                setPaymentStatus("paid");
                 toast.success("Compra realizada con éxito");
                 localStorage.removeItem("payment");
               } else if (check.status === "DECLINED") {
