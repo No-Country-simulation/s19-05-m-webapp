@@ -109,7 +109,7 @@ Este proyecto se ha desarrollado con el siguiente stack:
 - [Javascript](https://developer.mozilla.org/es/docs/Web/JavaScript)
 - [Typescript](https://www.typescriptlang.org/)
 - [Vite.js](https://vite.dev/)
-- [Redux Toolkit]([https://vite.dev/](https://redux-toolkit.js.org/))
+- [Redux Toolkit](https://redux-toolkit.js.org/)
 - [Express.js](https://expressjs.com/)
 - [MySql](https://www.mysql.com/)
 - [Oauth 2.0](https://oauth.net/2/)
