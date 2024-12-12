@@ -75,8 +75,8 @@
 - **Medidas de seguridad**: Implementación completa para proteger la información del usuario durante el registro y el pago.
 
 <div style="display: flex; justify-content: center; align-items: center;">
-    <img src="https://i.gyazo.com/72da43998ec24f80334c8b637ffe2de5.png" width="500" >
-    <img src="https://i.gyazo.com/888940252f1c623b00a4059ff9434e0f.jpg" width="500" >
+    <img src="https://i.gyazo.com/72da43998ec24f80334c8b637ffe2de5.png" width="300" >
+    <img src="https://i.gyazo.com/888940252f1c623b00a4059ff9434e0f.jpg" width="300" >
 </div>
 
 ## Como usar ☝🤓
@@ -109,6 +109,7 @@ Este proyecto se ha desarrollado con el siguiente stack:
 - [Javascript](https://developer.mozilla.org/es/docs/Web/JavaScript)
 - [Typescript](https://www.typescriptlang.org/)
 - [Vite.js](https://vite.dev/)
+- [Redux Toolkit]([https://vite.dev/](https://redux-toolkit.js.org/))
 - [Express.js](https://expressjs.com/)
 - [MySql](https://www.mysql.com/)
 - [Oauth 2.0](https://oauth.net/2/)
