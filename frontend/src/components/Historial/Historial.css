@@ -1,0 +1,45 @@
+#table-container {
+    width: 90%;
+    margin: auto;
+    overflow-x: scroll;
+}
+
+#tabla-historial {
+    width: 100%;
+    min-width: 750px;
+    text-align: center;
+    margin: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: var(--accent-color);
+}
+
+#tabla-historial>thead>tr>th{
+    border-bottom: 1px solid var(--second-color);
+    color: var(--second-color);
+    font-family: var(--subtitle-font);
+    font-weight: 400;
+}
+
+#tabla-historial>tbody>tr {
+    height: 90px;
+}
+
+#tabla-historial>tbody>tr:hover {
+    background-color: rgba(241, 243, 245, 0.2);
+}
+
+.boton-factura {
+    background-color: var(--first-color);
+    color: var(--second-color);
+    border: 1px solid var(--second-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin: 0 0.5rem;
+    transition: all 500ms ease;
+}
+
+.boton-factura:hover {
+    color: var(--first-color);
+    background-color: var(--second-color);
+}

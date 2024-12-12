@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Federo&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anaheim:wght@400..800&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Federo&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anaheim:wght@400..800&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Federo&display=swap");
+
+:root {
+  --first-color: #000000;
+  --second-color: #ffc36b;
+  --accent-color: #f1f3f5;
+  --optional-color: #0c0a0a;
+  --optional-color-2: rgb(41, 38, 38);
+  --title-font: "Federo", sans-serif;
+  --subtitle-font: "Cousine", monospace;
+  --text-font: "Anaheim", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  box-sizing: inherit;
+  font-family: var(--text-font), sans-serif;
+  background-color: var(--first-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+.page-container {
+  padding: 20px 10px;
+}
+
+@media (min-width: 768px) {
+  .page-container {
+    padding: 20px 20px;
+  }
+}
+
+@media (min-width: 992px) {
+  .page-container {
+    padding: 20px 60px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .page-container {
+    padding: 20px 100px;
+  }
+}

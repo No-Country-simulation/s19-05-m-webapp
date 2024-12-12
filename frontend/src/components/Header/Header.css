@@ -1,0 +1,265 @@
+.header-container {
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  background-color: var(--first-color);
+  padding: 20px 10px;
+  top: 0;
+  z-index: 999;
+}
+
+.header-cart {
+  position: absolute;
+  top: 1.1rem;
+  right: 4.5rem;
+  cursor: pointer;
+}
+
+.menu {
+  display: flex;
+  position: absolute;
+  top: 1.1rem;
+  right: 0.5rem;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  width: 3rem;
+  height: 3rem;
+}
+
+.menu .bx-user,
+.menu .bx-close,
+.menu .bxs-cart,
+.header-cart {
+  font-size: 2.3rem;
+  color: var(--second-color);
+  line-height: 1;
+}
+
+.header-search {
+  display: flex;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.header-search input {
+  color: var(--accent-color);
+}
+
+.header-search-btn {
+  border: 1px solid var(--second-color);
+  background-color: var(--second-color);
+  border-radius: 40px 0 0 40px;
+}
+
+.btn-search-p {
+  font-size: 1.4em;
+  background-color: var(--second-color);
+  color: var(--first-color);
+}
+
+.header-search-prod {
+  border: 1px solid var(--second-color);
+  width: 180px;
+  border-radius: 0 40px 40px 0;
+  background-color: var(--first-color);
+  margin: 0;
+}
+
+.header-search-prod:focus {
+  outline: none;
+}
+
+.header-item {
+  width: 100%;
+  text-align: center;
+}
+
+.header-item-link {
+  display: block;
+  text-decoration: none;
+  color: var(--second-color);
+  border: 1px solid var(--second-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0.2rem auto;
+  transition: all 500ms ease;
+  cursor: pointer;
+}
+
+.header-item-link:hover {
+  color: var(--first-color);
+  background-color: var(--second-color);
+}
+
+nav {
+  display: none;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2rem;
+}
+
+nav ul {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  flex-direction: column;
+  margin-top: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+nav.open {
+  display: flex;
+}
+
+nav ul.open {
+  display: flex;
+}
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 4px 6px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .header-container {
+    padding: 20px 20px;
+  }
+
+  .menu {
+    right: 1.1rem;
+  }
+
+  .header-cart {
+    right: 5.2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .header-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+  }
+
+  .header-username {
+    color: var(--second-color);
+  }
+
+  .menu {
+    display: none;
+  }
+
+  nav,
+  nav ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 2rem;
+    min-height: 0;
+  }
+
+  .header-search {
+    margin: 0 0.5rem;
+  }
+
+  .header-item {
+    width: auto;
+    text-align: left;
+  }
+
+  .header-item-link {
+    margin: 0 0.5rem;
+  }
+
+  .header-cart .bxs-cart {
+    font-size: 2.6rem;
+  }
+
+  .header-cart {
+    right: 3.6rem;
+  }
+
+  .header-nav {
+    margin-right: 90px;
+  }
+
+  .header-username {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .dropdown-icon {
+    font-size: 24px;
+    transition: transform 0.3s ease;
+  }
+
+  .bx-chevron-up,
+  .bx-chevron-down {
+    color: var(--second-color);
+  }
+
+  .bx-chevron-up {
+    transform: rotate(180deg);
+  }
+
+  .bx-chevron-down {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: absolute;
+    top: 100%;
+    right: 15%;
+    height: auto;
+    width: 135px;
+    background-color: var(--optional-color-2);
+    padding: 0.5rem;
+    border-radius: 5px;
+    list-style: none;
+    z-index: 1000;
+  }
+
+  .dropdown-item {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    color: var(--second-color);
+    text-decoration: none;
+    display: block;
+    user-select: none;
+  }
+
+  .dropdown-item:hover {
+    background-color: var(--second-color);
+    color: var(--first-color);
+  }
+}
+
+@media (min-width: 1200px) {
+  .header-container {
+    padding: 20px 100px;
+  }
+  .header-cart {
+    right: 6.2rem;
+  }
+}

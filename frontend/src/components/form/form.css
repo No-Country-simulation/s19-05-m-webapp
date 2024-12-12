@@ -1,0 +1,84 @@
+.form-admin {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.form-admin .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+  
+input, select, textarea {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: var(--accent-color);
+    font-family: var(--text-font), sans-serif;
+    font-size: 15px;
+    margin-top: 5px;
+    padding: 10px;
+    width: 100%;
+}
+
+.form-admin button {
+    background-color: transparent !important;
+    border: 1px solid var(--second-color);
+    color: var(--second-color) !important;
+    font-family: var(--text-font);
+    font-size: 16px;
+    padding: 10px;  
+    transition: all 500ms ease;
+    width: 100%;
+    
+}
+
+.form-admin button:hover {
+    background-color: var(--second-color) !important;
+    color: var(--first-color) !important;
+}
+
+.input-error {
+    border: 1px solid #dc2626;
+}
+  
+.error-text {
+    color: #dc2626;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.users .form-admin .form-group {
+    width: 100% !important;
+}
+
+@media (min-width: 768px) {
+    .form-admin .form-group {
+        width: 49%;
+    }
+
+    .form-admin .form-group:nth-child(2),
+    .form-admin .form-group:nth-child(3) {
+        width: 23%;
+    }
+
+    .user .form-group {
+        width: 100% !important;
+    }
+
+    .form-admin .form-group:nth-child(6) {
+        width: 100%;
+    }
+}
+
+@media (min-width: 992px) {
+    .form-admin .form-group {
+        width: 49%;
+    }
+}

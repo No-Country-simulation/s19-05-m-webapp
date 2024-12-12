@@ -1,0 +1,49 @@
+import { useEffect, useState } from "react";
+
+const useFilteredProducts = (
+  selectedOptions,
+  products,
+  productsByGenre,
+  productsByPlatform,
+  page
+) => {
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
+  useEffect(() => {
+    let productsToShow = products;
+
+    if(selectedOptions.genre !== "Seleccionar Género" && productsByGenre) {
+        selectedOptions.platform !== "Seleccionar Plataforma" ? 
+            (productsToShow = productsByGenre.filter((product) =>
+                product.platforms.some(
+                  (platform) => platform.name === selectedOptions.platform
+                )
+            ))
+        : (productsToShow = productsByGenre);    
+    }
+    
+    if(selectedOptions.platform !== "Seleccionar Plataforma") {
+        if (productsByPlatform) {
+            selectedOptions.genre !== "Seleccionar Género" ? 
+                (productsToShow = productsByPlatform.filter(
+                    (product) => product.genre === selectedOptions.genre,
+                ))
+          : (productsToShow = productsByPlatform);
+        }
+
+        if (selectedOptions.model !== "Seleccionar Modelo" && productsToShow) {
+            productsToShow = productsToShow.filter((product) =>
+                product.platforms.some(
+                    (platform) => platform.model === selectedOptions.model
+                )
+            );
+        } 
+    }
+
+    setFilteredProducts(productsToShow?.slice(0, page * 10));
+  }, [selectedOptions, products, productsByGenre, productsByPlatform, page]);
+
+  return filteredProducts;
+};
+
+export default useFilteredProducts;
