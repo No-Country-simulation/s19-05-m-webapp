@@ -130,4 +130,4 @@ Este proyecto se ha desarrollado con el siguiente stack:
 | [`Marcel Yepes Alvarez`](https://www.linkedin.com/in/marcelyepesfrontend/)             | [marcelYepes](https://github.com/marcelYepes)           |
 | [`Marcos Soria`](https://www.linkedin.com/in/marcos-soria-dev/)                        | [Marcos1up](https://github.com/Marcos1up)               |
 | [`Maria Gabriela Alarcon`](https://www.linkedin.com/in/mariagaa993/)                   | [mariagaa993](https://github.com/mariagaa993)           |
-| [`Rocio Carle`](https://www.linkedin.com/in/fernando-andreoli/)                        | [Rocksyro](https://github.com/Rocksyro)                 |
+| [`Rocio Carle`](https://www.linkedin.com/in/rociocarle/)                               | [Rocksyro](https://github.com/Rocksyro)                 |
